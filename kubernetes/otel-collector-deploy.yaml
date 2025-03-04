@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otel-collector
+  template:
+    metadata:
+      labels:
+        app: otel-collector
+    spec:
+      containers:
+        - name: otel-collector
+          image: otel/opentelemetry-collector-contrib:0.113.0
+          args: ["--config=/etc/otel/otel-config.yml"]
+          ports:
+            - containerPort: 8888 # Prometheus metrics exposed by the collector
+            - containerPort: 8889 # Prometheus exporter metrics
+            - containerPort: 13133 # Health check extension
+            - containerPort: 4317 # OTLP gRPC receiver
+            - containerPort: 4318 # OTLP HTTP receiver
+            - containerPort: 55679 # Zpages extension
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/otel/otel-config.yml
+              subPath: otel-config.yml
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: config-volume
+          configMap:
+            name: otel-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otel-collector
+spec:
+  selector:
+    app: otel-collector
+  ports:
+    - protocol: TCP
+      name: collectors-metrics 
+      port: 8888
+      targetPort: 8888
+    - protocol: TCP
+      name: prometheus-exporter
+      port: 8889
+      targetPort: 8889
+    - protocol: TCP
+      name: health-check
+      port: 13133
+      targetPort: 13133
+    - protocol: TCP
+      name: otlp-grpc-receiver
+      port: 4317
+      targetPort: 4317
+    - protocol: TCP
+      name: otlp-http-receiver
+      port: 4318
+      targetPort: 4318
+    - protocol: TCP
+      name: zpages-extension
+      port: 55679
+      targetPort: 55679
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otel-config
+  namespace: default
+data:
+  otel-config.yml: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: "0.0.0.0:4317"
+          http:
+            endpoint: "0.0.0.0:4318"
+
+    exporters:
+      prometheus:
+        endpoint: "0.0.0.0:8889" 
+        namespace: "otelcol"
+
+      loki:
+        endpoint: http://loki:3100/loki/api/v1/push
+
+      otlp:
+        endpoint: tempo:4317
+        tls:
+          insecure: true
+
+    extensions:
+      health_check:
+        endpoint: "0.0.0.0:13133"
+
+      zpages:
+        endpoint: "0.0.0.0:55679"
+
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          exporters: [otlp]
+
+        metrics:
+          receivers: [otlp]
+          exporters: [prometheus]
+
+        logs:
+          receivers: [otlp]
+          exporters: [loki]

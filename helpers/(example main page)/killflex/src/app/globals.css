@@ -1,0 +1,28 @@
+@import 'tailwindcss';
+
+@theme {
+	--color-primary: #7a49fe;
+	--color-secondary: #f6cc1a;
+
+	--default-transition-duration: 0.3s;
+	--default-transition-timing-function: ease;
+}
+
+:root {
+	--background: #222436;
+	--foreground: #fff;
+	/* --background: #fff;
+	--foreground: #171717; */
+}
+
+html,
+body {
+	@apply h-full;
+}
+
+body {
+	@apply relative;
+	color: var(--foreground);
+	background: var(--background);
+	font-family: var(--font-montserrat), sans-serif;
+}

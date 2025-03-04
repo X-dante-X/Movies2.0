@@ -1,0 +1,83 @@
+# General OS files
+.DS_Store
+Thumbs.db
+*.log
+
+# Environment and configuration files
+*.env
+*.env.*
+.env.local
+
+# Node.js dependencies
+node_modules/
+**/node_modules/
+
+# .NET directories across all subdirectories
+*/bin/
+*/obj/
+*/.vs/
+*/.vscode/
+*/.idea/
+*/*.suo
+*/*.user
+*/*.userosscache
+*/*.sln.docstates
+
+*/*/bin/
+*/*/obj/
+*/*/.vs/
+*/*/.vscode/
+*/*/.idea/
+*/*/*.suo
+*/*/*.user
+*/*/*.userosscache
+*/*/*.sln.docstates
+
+*/*/*/bin/
+*/*/*/obj/
+*/*/*/.vs/
+*/*/*/.vscode/
+*/*/*/.idea/
+*/*/*/*.suo
+*/*/*/*.user
+*/*/*/*.userosscache
+*/*/*/*.sln.docstates
+
+
+
+# Temporary and build files for .NET projects
+*/*.Publish.xml
+*/*.cache/
+*/*.pdb
+*/*.exe
+*/*.dll
+*/*.app
+
+# .NET secret and user configuration files
+*/secrets.json
+
+# NuGet cache and artifacts
+*/.nuget/
+*/packages/
+*/*.nupkg
+*/*.snupkg
+*/artifacts/
+
+# Test results
+*/TestResults/
+*/*.TestResults.xml
+
+# Build and cache files for React, Vite, Bun frontend projects
+*/dist/
+*/out/
+*/.vite/
+*/.vite-cache/
+*/.eslintcache
+*/*.cache
+*/*.tsbuildinfo
+
+# IDE and editor configurations
+*/.vscode/
+*/.idea/
+*/*.sln*
+*/*.csproj.user

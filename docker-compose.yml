@@ -32,6 +32,12 @@ services:
     depends_on:
       - postgres
 
+  frontend:
+    build:
+      context: ./front/frontend
+    ports:
+      - "3000:3000"
+
   # backend:
   #   build:
   #     context: ./back/WeatherApi/WeatherApi
@@ -44,13 +50,6 @@ services:
   #   depends_on:
   #     - mongodb
 
-  # frontend:
-  #   build:
-  #     context: ./front
-  #   ports:
-  #     - "3000:80"
-  #   depends_on:
-  #     - backend
   # mongodb:
   #   image: mongo:latest
   #   ports:

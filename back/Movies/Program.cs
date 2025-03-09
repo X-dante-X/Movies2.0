@@ -1,8 +1,9 @@
-using GraphQL_DEMO.DBContext;
-using GraphQL_DEMO.GraphQL;
+using DBContext;
+using GraphQL;
 using HotChocolate.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Movies;
 using StackExchange.Redis;
 using System;
 
@@ -37,7 +38,10 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<Context>();
     db.Database.Migrate();
+    var serviceProvider = scope.ServiceProvider;
+    SeedData.Initialize(serviceProvider);
 }
+
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseWebSockets();
@@ -45,6 +49,7 @@ app.UseAuthorization();
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 app.MapControllers();
 app.MapGraphQL("/graphql");
+
 
 app.MapGet("/", () =>
 {

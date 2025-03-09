@@ -1,27 +1,25 @@
-﻿using GraphQL_DEMO.DBContext;
-using HotChocolate;
-using HotChocolate.Subscriptions;
+﻿using DBContext;
 using Models;
 
-namespace GraphQL_DEMO.GraphQL;
+namespace GraphQL;
 
 public class Mutation
 {
-    public Movie CreateBook(Movie movie, [Service] Context ctx)
+    public Movie CreateMovie(Movie movie, [Service] Context ctx)
     {
         ctx.Add(movie);
         ctx.SaveChangesAsync();
         return movie;
     }
 
-    public Movie UpdateBook(Movie movie, [Service] Context ctx)
+    public Movie UpdateMovie(Movie movie, [Service] Context ctx)
     {
         ctx.Update(movie);
         ctx.SaveChanges();
         return movie;
     }
 
-    public Movie DeleteBook(Movie movie, [Service] Context ctx)
+    public Movie DeleteMovie(Movie movie, [Service] Context ctx)
     {
         ctx.Remove(movie);
         ctx.SaveChanges();

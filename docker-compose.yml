@@ -1,7 +1,6 @@
 version: "3.9"
 
 services:
-
   nginx:
     image: nginx:latest
     volumes:
@@ -10,16 +9,6 @@ services:
       - "80:80"
     depends_on:
       - movies
-
-  movies:
-    build:
-      context: ./back/Movies
-    ports:
-      - "5000:8080"
-    environment:
-      - POSTGESQL=Host=postgres;Port=5432;Database=movies;Username=postgres;Password=postgres;
-    depends_on:
-      - postgres
 
   postgres:
     image: postgres:16
@@ -32,6 +21,16 @@ services:
       - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  movies:
+    build:
+      context: ./back/Movies
+    ports:
+      - "5000:8080"
+    environment:
+      - POSTGESQL=Host=postgres;Port=5432;Database=movies;Username=postgres;Password=postgres;
+    depends_on:
+      - postgres
 
   # backend:
   #   build:
@@ -124,5 +123,4 @@ services:
   #     - loki
 
 volumes:
-  mongo-data:
   postgres_data:

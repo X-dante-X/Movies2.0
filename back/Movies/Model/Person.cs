@@ -8,5 +8,5 @@ public class Person
     public DateTime DateOfBirth { get; set; }
     public Country Nationality { get; set; } = null!;
     public string Biography { get; set; } = null!;
-    public List<Movie> Filmography { get; set; } = [];
+    public List<Movie>? Filmography { get; set; }
 }

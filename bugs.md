@@ -1,6 +1,8 @@
 # Bug Report
 
-<!-- ## Bug: exmaple
+<!-- 
+
+## Bug: exmaple
 
 **Title:** Application crashes on startup
 
@@ -13,4 +15,6 @@ When the application is launched, it crashes immediately with an error message.
 The application should start without any issues.
 
 **Actual Result:**
-The application crashes with an error message. -->
+The application crashes with an error message. 
+
+-->

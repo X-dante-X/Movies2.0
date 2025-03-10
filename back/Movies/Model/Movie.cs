@@ -17,7 +17,7 @@ public class Movie
 
     public List<Tag> Tags { get; set; } = [];
     public List<Genre> Genre { get; set; } = [];
-    public List<MovieCast> MovieCasts { get; set; } = [];
+    public List<MovieCast>? MovieCasts { get; set; }
     public ProductionCompany? ProductionCompany { get; set; }
     public Language ProductionLanguage { get; set; } = null!;
     public Country ProductionCountry { get; set; } = null!;

@@ -3,13 +3,24 @@ export interface Genre {
     genreName: string;
 }
 
-export interface Person {
-    personId: string;
-    personName: string;
-    gender: string;
+export interface Tag {
+    tagId: string;
+    tagName: string;
 }
 
+export interface Person {
+    personId: number;
+    personName: string;
+    gender: string;
+    dateOfBirth: string;
+    nationality: Country;
+    biography: string;
+    filmography: Movie[];
+}
 export interface MovieCast {
+    movieId: string;
+    movie: Movie;
+    personId: string;
     person: Person;
     characterName: string;
     characterGender: string;
@@ -28,12 +39,12 @@ export interface ProductionCompany {
     country: Country;
 }
 
-export interface ProductionLanguage {
+export interface Language {
     languageId: string;
     languageName: string;
 }
 
-export interface ProductionCountry {
+export interface Country {
     countryId: string;
     countryName: string;
     countryIsoCode: string;
@@ -53,11 +64,23 @@ export interface Movie {
     pegi: string;
     genre: Genre[];
     movieCasts: MovieCast[];
-    productionCompany: ProductionCompany[];
-    productionLanguage: ProductionLanguage[];
-    productionCountry: ProductionCountry[];
+    productionCompany: ProductionCompany;
+    language: Language;
+    country: Country;
 }
 
 export interface GetMovieDetailsResponse {
     movies: Movie[];
+}
+
+export interface GetCountryDetailsResponse {
+    countries: Country[];
+}
+
+export interface GetSelectionsResponse {
+    countries: Country[];
+    languages: Language[];
+    productionCompanies: ProductionCompany[];
+    tags: Tag[];
+    genres: Genre[];
 }

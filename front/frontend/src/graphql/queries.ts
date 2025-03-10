@@ -1,5 +1,15 @@
 import { gql } from "@apollo/client";
 
+export const GET_COUNTRIES = gql`
+  query GetCountries {
+    countries {
+      countryId
+      countryName
+      countryIsoCode
+    }
+  }
+`;
+
 export const GET_MOVIES = gql`
   query GetMovies {
     movies {

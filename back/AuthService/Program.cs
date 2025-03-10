@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text;
 using AuthService.Services.Interfaces;
 using AuthService.Models;
+using AuthService.Models.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,32 @@ builder.Services.AddAuthentication(x =>
 
 
 var app = builder.Build();
+
+app.MapPost("/api/auth/register", async (IUserService userService, UserDTO userDto) =>
+{
+    try
+    {
+        var response = await userService.Register(userDto);
+        return Results.Ok(response);
+    }
+    catch (ApplicationException ex)
+    {
+        return Results.BadRequest(new { message = ex.Message });
+    }
+});
+
+app.MapPost("/api/auth/login", async (IUserService userService, LoginRequestModel loginDto) =>
+{
+    try
+    {
+        var response = await userService.Login(loginDto);
+        return Results.Ok(response);
+    }
+    catch (ApplicationException ex)
+    {
+        return Results.BadRequest(new { message = ex.Message });
+    }
+});
 
 
 using (var scope = app.Services.CreateScope())
@@ -101,7 +128,5 @@ app.UseAuthentication();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
-app.MapControllers();
 
 app.Run();

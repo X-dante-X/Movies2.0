@@ -63,7 +63,7 @@ namespace AuthService.Services.Interfaces
 
 
             user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(31);
             await _context.SaveChangesAsync();
 
             return new TokenResponse
@@ -91,8 +91,7 @@ namespace AuthService.Services.Interfaces
                 Email = userDto.Email,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                UserStatus = 0 // Prevents other people from setting up the admin for themselves
-                               // . Only other admins can promote a user to an admin, idk should we use Identity + Roles for that?
+                UserStatus = 0 
             };
 
             _context.Users.Add(user);
@@ -116,7 +115,7 @@ namespace AuthService.Services.Interfaces
             };
         }
 
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        private void CreatePasswordHash(string? password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
             {

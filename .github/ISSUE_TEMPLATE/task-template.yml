@@ -1,0 +1,35 @@
+name: Task
+title: "[task] "
+description: Add task for this project
+
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: Provide a title for this issue
+      placeholder: Enter the title of the task here
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      description: Which part of project does this feature request concern?
+      multiple: true
+      options:
+        - Api Gateway
+        - Frontend
+        - Auth Service
+        - User Service
+        - Movie Service
+        - Process File Service
+        - Infrastructure
+        - Documentation
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a detailed description of the task.
+
+

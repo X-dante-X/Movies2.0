@@ -11,6 +11,7 @@ Thumbs.db
 # Node.js dependencies
 node_modules/
 **/node_modules/
+**/.next/
 
 # .NET directories across all subdirectories
 */bin/

@@ -1,0 +1,29 @@
+name: Frontend Build Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+ 
+ 
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies for Next.js with Bun
+        run: bun install
+        working-directory: ./front/frontend
+
+      - name: Build Next.js project with Bun
+        run: bun run build
+        working-directory: ./front/frontend

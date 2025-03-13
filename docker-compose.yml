@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   nginx:
     image: nginx:latest
@@ -24,7 +22,7 @@ services:
 
   movies:
     build:
-      context: ./back/Movies
+      context: ./back/MovieService/MovieService
     ports:
       - "5000:8080"
     environment:

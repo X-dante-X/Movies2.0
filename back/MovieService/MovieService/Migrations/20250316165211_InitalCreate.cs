@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Movies.Migrations
+namespace MovieService.Migrations
 {
     /// <inheritdoc />
     public partial class InitalCreate : Migration
@@ -74,15 +74,15 @@ namespace Movies.Migrations
                     PersonName = table.Column<string>(type: "text", nullable: false),
                     Gender = table.Column<string>(type: "text", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    NationalityCountryId = table.Column<int>(type: "integer", nullable: false),
+                    CountryId = table.Column<int>(type: "integer", nullable: false),
                     Biography = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_People", x => x.PersonId);
                     table.ForeignKey(
-                        name: "FK_People_Countries_NationalityCountryId",
-                        column: x => x.NationalityCountryId,
+                        name: "FK_People_Countries_CountryId",
+                        column: x => x.CountryId,
                         principalTable: "Countries",
                         principalColumn: "CountryId",
                         onDelete: ReferentialAction.Cascade);
@@ -124,23 +124,23 @@ namespace Movies.Migrations
                     VoteAverage = table.Column<decimal>(type: "numeric", nullable: true),
                     VoteCount = table.Column<int>(type: "integer", nullable: true),
                     PEGI = table.Column<string>(type: "text", nullable: false),
-                    ProductionCompanyCompanyId = table.Column<int>(type: "integer", nullable: true),
-                    ProductionLanguageLanguageId = table.Column<int>(type: "integer", nullable: false),
-                    ProductionCountryCountryId = table.Column<int>(type: "integer", nullable: false),
+                    ProductionCompanyId = table.Column<int>(type: "integer", nullable: true),
+                    LanguageId = table.Column<int>(type: "integer", nullable: false),
+                    CountryId = table.Column<int>(type: "integer", nullable: false),
                     PersonId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Movies", x => x.MovieId);
                     table.ForeignKey(
-                        name: "FK_Movies_Countries_ProductionCountryCountryId",
-                        column: x => x.ProductionCountryCountryId,
+                        name: "FK_Movies_Countries_CountryId",
+                        column: x => x.CountryId,
                         principalTable: "Countries",
                         principalColumn: "CountryId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Movies_Languages_ProductionLanguageLanguageId",
-                        column: x => x.ProductionLanguageLanguageId,
+                        name: "FK_Movies_Languages_LanguageId",
+                        column: x => x.LanguageId,
                         principalTable: "Languages",
                         principalColumn: "LanguageId",
                         onDelete: ReferentialAction.Cascade);
@@ -150,8 +150,8 @@ namespace Movies.Migrations
                         principalTable: "People",
                         principalColumn: "PersonId");
                     table.ForeignKey(
-                        name: "FK_Movies_ProductionCompanies_ProductionCompanyCompanyId",
-                        column: x => x.ProductionCompanyCompanyId,
+                        name: "FK_Movies_ProductionCompanies_ProductionCompanyId",
+                        column: x => x.ProductionCompanyId,
                         principalTable: "ProductionCompanies",
                         principalColumn: "CompanyId");
                 });
@@ -242,24 +242,24 @@ namespace Movies.Migrations
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Movies_CountryId",
+                table: "Movies",
+                column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Movies_LanguageId",
+                table: "Movies",
+                column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Movies_PersonId",
                 table: "Movies",
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Movies_ProductionCompanyCompanyId",
+                name: "IX_Movies_ProductionCompanyId",
                 table: "Movies",
-                column: "ProductionCompanyCompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Movies_ProductionCountryCountryId",
-                table: "Movies",
-                column: "ProductionCountryCountryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Movies_ProductionLanguageLanguageId",
-                table: "Movies",
-                column: "ProductionLanguageLanguageId");
+                column: "ProductionCompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MovieTag_TagsTagId",
@@ -267,9 +267,9 @@ namespace Movies.Migrations
                 column: "TagsTagId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_People_NationalityCountryId",
+                name: "IX_People_CountryId",
                 table: "People",
-                column: "NationalityCountryId");
+                column: "CountryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductionCompanies_CountryId",

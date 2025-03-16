@@ -7,13 +7,8 @@ import { GetCountryDetailsResponse } from "@/types/movie.types";
 
 const CREATE_PRODUCTION_COMPANY = gql`
   mutation CreateProductionCompany($companyName: String!, $countryId: Int!) {
-    createProductionCompany(
-      productionCompany: { companyId: 0, companyName: $companyName, country: { countryId: $countryId, countryName: "", countryIsoCode: "" } }
-    ) {
+    createProductionCompany(productionCompanyDTO: { companyName: $companyName, countryId: $countryId }) {
       companyName
-      country {
-        countryName
-      }
     }
   }
 `;
@@ -76,11 +71,7 @@ export default function Page() {
         </button>
       </form>
       {error && <p className="text-red-500 mt-2">Error: {error.message}</p>}
-      {data && (
-        <p className="text-green-500 mt-2">
-          Created company: {data.createProductionCompany.companyName} ({data.createProductionCompany.country.countryName})
-        </p>
-      )}
+      {data && <p className="text-green-500 mt-2">Created company: {data.createProductionCompany.companyName}</p>}
     </div>
   );
 }

@@ -7,20 +7,8 @@ import { GetCountryDetailsResponse } from "@/types/movie.types";
 
 const CREATE_PERSON = gql`
   mutation CreatePerson($personName: String!, $gender: String!, $dateOfBirth: DateTime!, $countryId: Int!, $biography: String!) {
-    createPerson(
-      person: {
-        personId: 0
-        personName: $personName
-        gender: $gender
-        dateOfBirth: $dateOfBirth
-        nationality: { countryId: $countryId, countryName: "", countryIsoCode: "" }
-        biography: $biography
-      }
-    ) {
+    createPerson(personDTO: { personName: $personName, gender: $gender, dateOfBirth: $dateOfBirth, countryId: $countryId, biography: $biography }) {
       personName
-      nationality {
-        countryName
-      }
     }
   }
 `;
@@ -117,11 +105,7 @@ export default function Page() {
         </button>
       </form>
       {error && <p className="text-red-500 mt-2">Error: {error.message}</p>}
-      {data && (
-        <p className="text-green-500 mt-2">
-          Created person: {data.createPerson.personName} ({data.createPerson.nationality.countryName})
-        </p>
-      )}
+      {data && <p className="text-green-500 mt-2">Created person: {data.createPerson.personName}</p>}
     </div>
   );
 }

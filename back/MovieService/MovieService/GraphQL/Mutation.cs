@@ -1,6 +1,7 @@
 ﻿using DBContext;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.DTO;
 using System;
 using System.Linq;
 using Tag = Models.Tag;
@@ -10,46 +11,56 @@ namespace GraphQL;
 
 public class Mutation
 {
-    public async Task<Movie> CreateMovie(Movie movie, [Service] Context ctx)
+    public async Task<MovieDTO> CreateMovie(MovieDTO movieDTO, [Service] Context ctx)
     {
-        var country = await ctx.Countries.FirstOrDefaultAsync(c => c.CountryId == movie.ProductionCountry.CountryId);
-        if (country != null)
-        {
-            movie.ProductionCountry = country;
-        }
+        var tags = await ctx.Tags.Where(t => movieDTO.Tags.Contains(t.TagId)).ToListAsync();
 
-        var language = await ctx.Languages.FirstOrDefaultAsync(c => c.LanguageId == movie.ProductionLanguage.LanguageId);
-        if (language != null)
-        {
-            movie.ProductionLanguage = language;
-        }
+        var genres = await ctx.Genres.Where(g => movieDTO.Genre.Contains(g.GenreId)).ToListAsync();
 
-        var productionCompany = await ctx.ProductionCompanies.FirstOrDefaultAsync(c => c.CompanyId == movie.ProductionCompany!.CompanyId);
-        if (productionCompany != null)
+        var movie = new Movie()
         {
-            movie.ProductionCompany = productionCompany;
-        }
+            Title = movieDTO.Title,
+            ReleaseDate = movieDTO.ReleaseDate,
+            Budget = movieDTO.Budget,
+            Description = movieDTO.Description,
+            Popularity = movieDTO.Popularity,
+            Runtime = movieDTO.Runtime,
+            MovieStatus = movieDTO.MovieStatus,
+            VoteAverage = movieDTO.VoteAverage,
+            VoteCount = movieDTO.VoteCount,
+            PEGI = movieDTO.PEGI,
+            ProductionCompanyId = movieDTO.ProductionCompanyId,
+            CountryId = movieDTO.CountryId,
+            LanguageId = movieDTO.LanguageId,
+            Genre = genres??= [],
+            Tags = tags??= [],
+        };
 
-        var tags = await ctx.Tags.Where(t => movie.Tags.Select(tag => tag.TagId).Contains(t.TagId)).ToListAsync();
-        if (tags.Any())
-        {
-            movie.Tags = tags;
-        }
 
-        var genres = await ctx.Genres.Where(g => movie.Genre.Select(genre => genre.GenreId).Contains(g.GenreId)).ToListAsync();
-        if (genres.Any())
-        {
-            movie.Genre = genres;
-        }
-
-        ctx.Add(movie);
+        await ctx.Movies.AddAsync(movie);
         await ctx.SaveChangesAsync();
 
-        return movie;
+        if (movieDTO.movieCasts != null)
+        {
+            List<MovieCast> moviecasts = [];
+            foreach(var moviecast in movieDTO.movieCasts)
+            {
+                moviecasts.Add(new MovieCast()
+                {
+                    MovieId = movie.MovieId,
+                    PersonId = moviecast.PersonId,
+                    Job = moviecast.Job,
+                    CharacterGender = moviecast.CharacterGender,
+                    CharacterName = moviecast.CharacterName,
+                });
+            }
+
+            await ctx.MovieCasts.AddRangeAsync(moviecasts);
+            await ctx.SaveChangesAsync();
+        }
+
+        return movieDTO;
     }
-
-
-
 
     public Movie UpdateMovie(Movie movie, [Service] Context ctx)
     {
@@ -65,17 +76,20 @@ public class Mutation
         return movie;
     }
 
-    public Person CreatePerson(Person person, [Service] Context ctx)
+    public async Task<PersonDTO> CreatePerson(PersonDTO personDTO, [Service] Context ctx)
     {
-        var country = ctx.Countries.FirstOrDefault(c => c.CountryId == person.Nationality.CountryId);
-        if (country != null)
+        var person = new Person()
         {
-            ctx.Attach(country);
-            person.Nationality = country;
-        }
-        ctx.Add(person);
-        ctx.SaveChangesAsync();
-        return person;
+            PersonName = personDTO.PersonName,
+            Gender = personDTO.Gender,
+            DateOfBirth = personDTO.DateOfBirth,
+            CountryId = personDTO.CountryId,
+            Biography = personDTO.Biography,
+        };
+
+        ctx.People.Add(person);
+        await ctx.SaveChangesAsync();
+        return personDTO;
     }
 
     public Genre CreateGenre(Genre genre, [Service] Context ctx)
@@ -102,16 +116,17 @@ public class Mutation
         ctx.SaveChangesAsync();
         return tag;
     }
-    public ProductionCompany CreateProductionCompany(ProductionCompany productionCompany, [Service] Context ctx)
+    public async Task<ProductionCompanyDTO> CreateProductionCompany(ProductionCompanyDTO productionCompanyDTO, [Service] Context ctx)
     {
-        var country = ctx.Countries.FirstOrDefault(c => c.CountryId == productionCompany.Country.CountryId);
-        if (country != null)
+
+        var productionCompany = new ProductionCompany()
         {
-            ctx.Attach(country);
-            productionCompany.Country = country;
-        }
+            CompanyName = productionCompanyDTO.CompanyName,
+            CountryId = productionCompanyDTO.CountryId,
+        };
+
         ctx.Add(productionCompany);
-        ctx.SaveChangesAsync();
-        return productionCompany;
+        await ctx.SaveChangesAsync();
+        return productionCompanyDTO;
     }
 }

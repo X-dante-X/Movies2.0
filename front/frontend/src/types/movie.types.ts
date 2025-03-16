@@ -83,4 +83,12 @@ export interface GetSelectionsResponse {
     productionCompanies: ProductionCompany[];
     tags: Tag[];
     genres: Genre[];
+    people: Person[];
+}
+
+export interface MovieCastDTO {
+    personId: number;
+    characterName?: string;
+    characterGender?: string;
+    job: string;
 }

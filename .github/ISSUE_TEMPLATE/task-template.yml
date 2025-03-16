@@ -3,13 +3,6 @@ title: "[task] "
 description: Add task for this project
 
 body:
-  - type: input
-    id: title
-    attributes:
-      label: Title
-      description: Provide a title for this issue
-      placeholder: Enter the title of the task here
-
   - type: dropdown
     id: package
     attributes:

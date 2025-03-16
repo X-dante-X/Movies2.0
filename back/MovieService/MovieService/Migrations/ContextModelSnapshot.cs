@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Movies.Migrations
+namespace MovieService.Migrations
 {
     [DbContext(typeof(Context))]
     partial class ContextModelSnapshot : ModelSnapshot
@@ -103,9 +103,15 @@ namespace Movies.Migrations
                     b.Property<int?>("Budget")
                         .HasColumnType("integer");
 
+                    b.Property<int>("CountryId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("MovieStatus")
                         .IsRequired()
@@ -121,13 +127,7 @@ namespace Movies.Migrations
                     b.Property<decimal?>("Popularity")
                         .HasColumnType("numeric");
 
-                    b.Property<int?>("ProductionCompanyCompanyId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductionCountryCountryId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductionLanguageLanguageId")
+                    b.Property<int?>("ProductionCompanyId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("ReleaseDate")
@@ -148,13 +148,13 @@ namespace Movies.Migrations
 
                     b.HasKey("MovieId");
 
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("LanguageId");
+
                     b.HasIndex("PersonId");
 
-                    b.HasIndex("ProductionCompanyCompanyId");
-
-                    b.HasIndex("ProductionCountryCountryId");
-
-                    b.HasIndex("ProductionLanguageLanguageId");
+                    b.HasIndex("ProductionCompanyId");
 
                     b.ToTable("Movies");
                 });
@@ -196,6 +196,9 @@ namespace Movies.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("CountryId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp with time zone");
 
@@ -203,16 +206,13 @@ namespace Movies.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("NationalityCountryId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("PersonName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("PersonId");
 
-                    b.HasIndex("NationalityCountryId");
+                    b.HasIndex("CountryId");
 
                     b.ToTable("People");
                 });
@@ -288,25 +288,25 @@ namespace Movies.Migrations
 
             modelBuilder.Entity("Models.Movie", b =>
                 {
+                    b.HasOne("Models.Country", "ProductionCountry")
+                        .WithMany("Movies")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Language", "ProductionLanguage")
+                        .WithMany("Movies")
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Models.Person", null)
                         .WithMany("Filmography")
                         .HasForeignKey("PersonId");
 
                     b.HasOne("Models.ProductionCompany", "ProductionCompany")
                         .WithMany()
-                        .HasForeignKey("ProductionCompanyCompanyId");
-
-                    b.HasOne("Models.Country", "ProductionCountry")
-                        .WithMany("Movies")
-                        .HasForeignKey("ProductionCountryCountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Language", "ProductionLanguage")
-                        .WithMany("Movies")
-                        .HasForeignKey("ProductionLanguageLanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductionCompanyId");
 
                     b.Navigation("ProductionCompany");
 
@@ -338,7 +338,7 @@ namespace Movies.Migrations
                 {
                     b.HasOne("Models.Country", "Nationality")
                         .WithMany()
-                        .HasForeignKey("NationalityCountryId")
+                        .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

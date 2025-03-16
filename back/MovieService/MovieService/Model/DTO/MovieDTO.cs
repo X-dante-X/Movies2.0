@@ -1,11 +1,9 @@
-﻿
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Models;
+namespace Models.DTO;
 
-public class Movie
+public class MovieDTO
 {
-    public int MovieId { get; set; }
     public string Title { get; set; } = null!;
     public DateTime? ReleaseDate { get; set; }
     public int? Budget { get; set; }
@@ -17,19 +15,12 @@ public class Movie
     public int? VoteCount { get; set; }
     public string PEGI { get; set; } = null!;
 
-    public List<Tag> Tags { get; set; } = [];
-    public List<Genre> Genre { get; set; } = [];
-    public List<MovieCast>? MovieCasts { get; set; }
+    public List<int> Tags { get; set; } = [];
+    public List<int> Genre { get; set; } = [];
 
-    [ForeignKey("ProductionCompany")]
     public int? ProductionCompanyId { get; set; }
-    public ProductionCompany? ProductionCompany { get; set; }
-
-    [ForeignKey("Language")]
     public int LanguageId { get; set; }
-    public Language ProductionLanguage { get; set; } = null!;
-
-    [ForeignKey("Country")]
     public int CountryId { get; set; }
-    public Country ProductionCountry { get; set; } = null!;
+
+    public List<MovieCastDTO>? movieCasts { get; set; }
 }

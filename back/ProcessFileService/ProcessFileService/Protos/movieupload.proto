@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package movieupload;
+
+service MovieUpload {
+  rpc UploadMovie (stream MovieUploadRequest) returns (MovieUploadResponse);
+}
+
+message MovieUploadRequest {
+  string movieFilePath = 1;
+  bytes movieData = 2;
+}
+
+message MovieUploadResponse {
+  string message = 1;
+}

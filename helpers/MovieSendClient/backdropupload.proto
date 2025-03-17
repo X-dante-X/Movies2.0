@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package backdropupload;
+
+service BackdropUpload {
+  rpc UploadBackdrop (stream BackdropUploadRequest) returns (BackdropUploadResponse);
+}
+
+message BackdropUploadRequest {
+  string backdropFilePath = 1;
+  bytes backdropData = 2;
+}
+
+message BackdropUploadResponse {
+  string message = 1;
+}

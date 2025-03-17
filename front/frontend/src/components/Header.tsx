@@ -1,5 +1,5 @@
 import Link from "next/link";
-
+import { routes } from '../../src/app/routes'
 export function Header() {
   return (
     <header className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg w-screen flex items-center justify-between p-5">
@@ -18,6 +18,16 @@ export function Header() {
           href="/admin"
           className="text-xl font-semibold hover:underline">
           Admin
+        </Link>
+        <Link
+          href={routes.login.pattern}
+          className="text-xl font-semibold hover:underline">
+          Login
+        </Link>
+        <Link
+          href={routes.register.pattern}
+          className="text-xl font-semibold hover:underline">
+          Register
         </Link>
       </nav>
       <div className="flex items-center space-x-2">

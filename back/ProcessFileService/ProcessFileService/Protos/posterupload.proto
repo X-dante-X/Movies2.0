@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package posterupload;
+
+service PosterUpload {
+  rpc UploadPoster (stream PosterUploadRequest) returns (PosterUploadResponse);
+}
+
+message PosterUploadRequest {
+  string posterFilePath = 1;
+  bytes posterData = 2;
+}
+
+message PosterUploadResponse {
+  string message = 1;
+}

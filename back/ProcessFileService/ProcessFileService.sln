@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessFileService", "ProcessFileService\ProcessFileService.csproj", "{63A5BDF9-7D1F-484F-8393-EAA944F15DDC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{63A5BDF9-7D1F-484F-8393-EAA944F15DDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63A5BDF9-7D1F-484F-8393-EAA944F15DDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63A5BDF9-7D1F-484F-8393-EAA944F15DDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63A5BDF9-7D1F-484F-8393-EAA944F15DDC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AB6CE63B-CBD0-4245-BAA8-4B5FE139FFFF}
+	EndGlobalSection
+EndGlobal

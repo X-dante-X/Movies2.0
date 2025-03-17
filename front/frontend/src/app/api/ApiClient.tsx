@@ -33,7 +33,6 @@ export class ApiClient {
                 const json = await res.json()
                 return json as T
             } catch {
-                // we assume `T` would be void here
                 return null as unknown as T
             }
         }

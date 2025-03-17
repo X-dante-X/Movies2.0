@@ -1,7 +1,7 @@
 "use client"
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-export function useAsync<T extends any[], U>(
+export function useAsync<T extends unknown[], U>(
     promise: (...args: T) => Promise<U>
 ) {
     const [loading, setLoading] = useState(false)

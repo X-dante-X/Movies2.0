@@ -1,11 +1,11 @@
+
 "use client"
 import {
     Button,
     CircularProgress,
-    Grid,  // Using regular Grid
+    Grid,  
     TextField,
     Typography,
-    useTheme,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import * as React from 'react'
@@ -41,8 +41,6 @@ function LoginPage() {
         }
     }
 
-    // Using regular Grid but ignoring the deprecation warning
-    // @ts-ignore
     return (
         <Grid
             container
@@ -50,7 +48,7 @@ function LoginPage() {
             spacing={4}
             alignItems="center"
             justifyContent="center"
-            sx={{ minHeight: '100vh' }}  // Using sx prop instead of style
+            sx={{ minHeight: '100vh' }} 
         >
             <Grid item>
                 <TextField
@@ -76,7 +74,7 @@ function LoginPage() {
                 container
                 direction="row"
                 justifyContent="center"
-                spacing={4}  // Using spacing prop instead of gap
+                spacing={4} 
             >
                 <Grid item>
                     

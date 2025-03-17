@@ -5,7 +5,6 @@ import {
     Grid,  // Using regular Grid
     TextField,
     Typography,
-    useTheme,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import * as React from 'react'

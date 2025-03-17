@@ -12,18 +12,12 @@ import * as React from 'react'
 import { useState } from 'react'
 import { useAsync } from '../hooks/useAsync'
 import { useLoginStore } from '../stores/userStore'
-import { routes} from '../routes'
 import { useRouter } from "next/navigation"; 
 function dataTestAttr(id: string) {
   return { 'data-testid': id };
 }
 
-function dataTestInputProp(id: string) {
-  return { inputProps: { 'data-testid': id } };
-}
-
 function LoginPage() {
-    const theme = useTheme()
     const loginStore = useLoginStore()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')

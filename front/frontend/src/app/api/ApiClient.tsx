@@ -1,6 +1,5 @@
 import { EmailUsedError, UnauthorizedError } from '.'
 import { LoginResponse } from '../models/responses'
-import { User } from '../models/user'
 import { useLoginStore } from '../stores/userStore'
 
 export class ApiClient {
@@ -53,7 +52,7 @@ export class ApiClient {
         username: string,
         email: string,
         password: string,
-        userstatus: Number
+        userstatus: number
     ): Promise<LoginResponse> {
         try {
             return await this.baseRequest<LoginResponse>(`api/auth/register`, {
@@ -62,7 +61,7 @@ export class ApiClient {
                     username: username,
                     email: email,
                     password: password,
-                    userstatus: userstatus = 0
+                    userstatus: userstatus
                 }),
             })
         } catch (err) {

@@ -17,7 +17,7 @@ type LoginStore = {
     username: string,
     email: string,
     password: string,
-    userstatus: Number
+    userstatus: number
   ) => Promise<boolean>;
   logOut: () => void;
 };

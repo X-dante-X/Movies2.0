@@ -12,18 +12,12 @@ import * as React from 'react'
 import { useState } from 'react'
 import { useAsync } from '../hooks/useAsync'
 import { useLoginStore } from '../stores/userStore'
-import { routes} from '../routes'
 import { useRouter } from "next/navigation"; 
 function dataTestAttr(id: string) {
   return { 'data-testid': id };
 }
 
-function dataTestInputProp(id: string) {
-  return { inputProps: { 'data-testid': id } };
-}
-
 function RegisterPage() {
-    const theme = useTheme()
     const loginStore = useLoginStore()
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
@@ -50,8 +44,6 @@ function RegisterPage() {
         }
     }
 
-    // Using regular Grid but ignoring the deprecation warning
-    // @ts-ignore
     return (
         <Grid
             container
@@ -59,7 +51,7 @@ function RegisterPage() {
             spacing={4}
             alignItems="center"
             justifyContent="center"
-            sx={{ minHeight: '100vh' }}  // Using sx prop instead of style
+            sx={{ minHeight: '100vh' }} 
         >
             <Grid item>
                 <TextField
@@ -96,7 +88,7 @@ function RegisterPage() {
                 container
                 direction="row"
                 justifyContent="center"
-                spacing={4}  // Using spacing prop instead of gap
+                spacing={4}  
             >
                
                 <Grid item>

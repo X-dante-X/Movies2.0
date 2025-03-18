@@ -1,15 +1,15 @@
-import { EmailUsedError, UnauthorizedError } from '.'
-import { LoginResponse } from '../models/responses'
-import { useLoginStore } from '../stores/userStore'
+import { EmailUsedError, UnauthorizedError } from '.';
+import { LoginResponse } from '../models/responses';
+import { useLoginStore } from '../stores/userStore';
 
 export class ApiClient {
     constructor(private baseUrl: string) {
-        console.log(`Initialized ApiClient for ${baseUrl}`)
+        console.log(`Initialized ApiClient for ${baseUrl}`);
     }
 
-    private async baseRequest<T>(path: string, options: RequestInit = {}) {
-        const token = useLoginStore.getState().userData?.token
-        const { headers, ...otherOptions } = options
+    private async baseRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
+        const token = useLoginStore.getState().userData?.token;
+        const { headers, ...otherOptions } = options;
 
         const res = await fetch(`${this.baseUrl}/${path}`, {
             headers: {
@@ -18,33 +18,31 @@ export class ApiClient {
                 ...headers,
             },
             ...otherOptions,
-        })
+        });
 
         if (res.status === 401) {
             if (token !== undefined) {
-                console.log('Unauthorized, logging out')
-                useLoginStore.getState().logOut()
+                console.log('Unauthorized, logging out');
+                useLoginStore.getState().logOut();
             }
-            throw new UnauthorizedError()
+            throw new UnauthorizedError();
         } else if (!res.ok) {
-            throw new FailedRequestError(res)
-        } else {
-            try {
-                const json = await res.json()
-                return json as T
-            } catch {
-                return null as unknown as T
-            }
+            throw new FailedRequestError(res);
+        }
+
+        try {
+            const json = await res.json();
+            return json as T;
+        } catch {
+            return null as unknown as T;
         }
     }
 
     async logIn(email: string, password: string): Promise<LoginResponse> {
-        const res = await this.baseRequest<LoginResponse>(`api/auth/login`, {
+        return this.baseRequest<LoginResponse>(`api/auth/login`, {
             method: 'POST',
             body: JSON.stringify({ username: email, password }),
-        })
-        console.log(res)
-        return res
+        });
     }
 
     async register(
@@ -57,25 +55,23 @@ export class ApiClient {
             return await this.baseRequest<LoginResponse>(`api/auth/register`, {
                 method: 'POST',
                 body: JSON.stringify({
-                    username: username,
-                    email: email,
-                    password: password,
-                    userstatus: userstatus
+                    username,
+                    email,
+                    password,
+                    userstatus
                 }),
-            })
+            });
         } catch (err) {
-            if (
-                err instanceof FailedRequestError &&
-                err.response.status === 409
-            ) {
-                throw new EmailUsedError()
+            if (err instanceof FailedRequestError && err.response.status === 409) {
+                throw new EmailUsedError();
             }
-            throw err
+            throw err;
         }
     }
 }
+
 export class FailedRequestError extends Error {
     constructor(public response: Response) {
-        super()
+        super();
     }
 }

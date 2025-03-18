@@ -1,5 +1,5 @@
-
 "use client"
+
 import {
     Button,
     CircularProgress,
@@ -10,33 +10,32 @@ import {
 import { useSnackbar } from 'notistack'
 import * as React from 'react'
 import { useState } from 'react'
-import { useAsync } from '../hooks/useAsync'
-import { useLoginStore } from '../stores/userStore'
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation"
+import { apiClient } from '../api/index' 
+import { useLogin } from '../stores/userStore'
+
 function dataTestAttr(id: string) {
   return { 'data-testid': id };
 }
 
 function LoginPage() {
-    const loginStore = useLoginStore()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [credentialsError, setCredentialsError] = useState<
-        string | undefined
-    >(undefined)
-    const { call: logIn, loading, error } = useAsync(loginStore.logIn)
+    const [credentialsError, setCredentialsError] = useState<string | undefined>(undefined)
     const { enqueueSnackbar } = useSnackbar()
-    const router = useRouter();
+    const router = useRouter()
+    
+    const loginMutation = useLogin(apiClient)
     
     async function onSubmit() {
-        const success = await logIn(email, password)
-        console.log(success)
-        if (success === undefined) return
-
-        if (success) {
+        setCredentialsError(undefined)
+        
+        try {
+            await loginMutation.mutateAsync({ email, password })
             enqueueSnackbar('Login successful', { variant: 'success' })
             router.push("/")
-        } else {
+        } catch (error) {
+            console.error('Login error:', error)
             setCredentialsError('Wrong credentials')
         }
     }
@@ -57,6 +56,7 @@ function LoginPage() {
                     error={!!credentialsError}
                     helperText={credentialsError}
                     onChange={e => setEmail(e.target.value)}
+                    disabled={loginMutation.isPending}
                 />
             </Grid>
             <Grid item>
@@ -67,6 +67,7 @@ function LoginPage() {
                     error={!!credentialsError}
                     helperText={credentialsError}
                     onChange={e => setPassword(e.target.value)}
+                    disabled={loginMutation.isPending}
                 />
             </Grid>
             <Grid
@@ -84,21 +85,24 @@ function LoginPage() {
                         variant="contained"
                         size="large"
                         onClick={onSubmit}
+                        disabled={loginMutation.isPending}
                         {...dataTestAttr('login-login-button')}
                     >
                         Log in
                     </Button>
                 </Grid>
             </Grid>
-            {loading && (
+            {loginMutation.isPending && (
                 <Grid item>
                     <CircularProgress />
                 </Grid>
             )}
-            {error && (
+            {loginMutation.isError && (
                 <Grid item>
                     <Typography color="error">
-                        {error.toString()}
+                        {loginMutation.error instanceof Error 
+                            ? loginMutation.error.message 
+                            : 'An error occurred during login'}
                     </Typography>
                 </Grid>
             )}

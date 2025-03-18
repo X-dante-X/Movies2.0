@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { apiClient, EmailUsedError, UnauthorizedError } from "../api";
 import { LoginResponse } from "../models/responses";
-
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ApiClient } from '../api/ApiClient';
 const userDataStorageKey = "userData";
 
 export type UserData = {
@@ -12,17 +12,10 @@ export type UserData = {
 type LoginStore = {
   userData?: UserData;
   isLoggedIn: () => boolean;
-  logIn: (email: string, password: string) => Promise<boolean>;
-  register: (
-    username: string,
-    email: string,
-    password: string,
-    userstatus: number
-  ) => Promise<boolean>;
+  logIn: (loginResponse: LoginResponse) => void;
   logOut: () => void;
 };
 
-// ✅ Ensure localStorage is accessed only on the client
 const getStoredUserData = () => {
   if (typeof window !== "undefined") {
     const storedData = localStorage.getItem(userDataStorageKey);
@@ -38,43 +31,19 @@ export const useLoginStore = create<LoginStore>((set, get) => ({
     return get().userData !== undefined;
   },
 
-  async logIn(email, password) {
-    try {
-      const loginResponse = await apiClient.logIn(email, password);
-      const userData = loginResponseToUserData(loginResponse);
-      
-      set({ userData });
+  logIn(loginResponse: LoginResponse) {
+    const userData = loginResponseToUserData(loginResponse);
+    
+    set({ userData });
 
-      // ✅ Store user data only on the client
-      if (typeof window !== "undefined") {
-        localStorage.setItem(userDataStorageKey, JSON.stringify(userData));
-      }
-
-      return true;
-    } catch (err) {
-      if (err instanceof UnauthorizedError) {
-        return false;
-      }
-      throw err;
-    }
-  },
-
-  async register(username, email, password, userstatus) {
-    try {
-      await apiClient.register(username, email, password, userstatus);
-      return await get().logIn(username, password);
-    } catch (err) {
-      if (err instanceof EmailUsedError) {
-        return false;
-      }
-      throw err;
+    if (typeof window !== "undefined") {
+      localStorage.setItem(userDataStorageKey, JSON.stringify(userData));
     }
   },
 
   logOut() {
     set({ userData: undefined });
 
-    // ✅ Remove user data only on the client
     if (typeof window !== "undefined") {
       localStorage.removeItem(userDataStorageKey);
     }
@@ -86,4 +55,50 @@ function loginResponseToUserData(loginResponse: LoginResponse): UserData {
     isAdmin: loginResponse.isAdmin === 1,
     token: loginResponse.accessToken,
   };
+}
+
+export function useAuthToken(): string | undefined {
+  return useLoginStore(state => state.userData?.token);
+}
+
+export function useLogin(apiClient: ApiClient) {
+  const queryClient = useQueryClient();
+  const loginStore = useLoginStore();
+
+  return useMutation({
+      mutationFn: async ({ email, password }: { email: string; password: string }) => {
+          return await apiClient.logIn(email, password);
+      },
+      onSuccess: (data) => {
+          loginStore.logIn(data);
+          queryClient.invalidateQueries();
+      }
+  });
+}
+
+export function useRegister(apiClient: ApiClient) {
+  const queryClient = useQueryClient();
+  const loginStore = useLoginStore();
+
+  return useMutation({
+      mutationFn: async ({ 
+          username, 
+          email, 
+          password, 
+          userstatus 
+      }: { 
+          username: string; 
+          email: string; 
+          password: string; 
+          userstatus: number 
+      }) => {
+          const response = await apiClient.register(username, email, password, userstatus);
+          return response;
+      },
+      onSuccess: (data) => {
+          loginStore.logIn(data);
+          // Invalidate queries that might depend on authentication status
+          queryClient.invalidateQueries();
+      }
+  });
 }

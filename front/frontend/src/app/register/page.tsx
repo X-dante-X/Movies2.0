@@ -1,45 +1,60 @@
 "use client"
+
 import {
     Button,
     CircularProgress,
-    Grid,  // Using regular Grid
+    Grid,
     TextField,
     Typography,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import * as React from 'react'
 import { useState } from 'react'
-import { useAsync } from '../hooks/useAsync'
-import { useLoginStore } from '../stores/userStore'
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation"
+import { apiClient } from '../api/index' 
+import { useRegister } from '../stores/userStore'
+import { EmailUsedError } from '../api/index' 
+
 function dataTestAttr(id: string) {
   return { 'data-testid': id };
 }
 
 function RegisterPage() {
-    const loginStore = useLoginStore()
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [credentialsError, setCredentialsError] = useState<
-        string | undefined
-    >(undefined)
-    const { call: register, loading, error } = useAsync(loginStore.register)
+    const [credentialsError, setCredentialsError] = useState<string | undefined>(undefined)
     const { enqueueSnackbar } = useSnackbar()
-    const router = useRouter();
+    const router = useRouter()
+    
+    
+    // Use the register mutation hook
+    const registerMutation = useRegister(apiClient)
     
     async function onSubmit() {
+        // Reset any previous credential errors
+        setCredentialsError(undefined)
+        
         const userStatus = 0
-        const success = await register(username, email, password, userStatus)
-        console.log("hi")
-        console.log(success)
-        if (success === undefined) return
-
-        if (success) {
+        
+        try {
+           const success = await registerMutation.mutateAsync({ 
+                username, 
+                email, 
+                password, 
+                userstatus: userStatus 
+            })
+            console.log(success)
             enqueueSnackbar('Registration successful', { variant: 'success' })
             router.push("/")
-        } else {
-            setCredentialsError('Something went wrong')
+        } catch (error) {
+            console.error('Registration error:', error)
+            
+            if (error instanceof EmailUsedError) {
+                setCredentialsError('Email already in use')
+            } else {
+                setCredentialsError('Something went wrong')
+            }
         }
     }
 
@@ -59,6 +74,7 @@ function RegisterPage() {
                     error={!!credentialsError}
                     helperText={credentialsError}
                     onChange={e => setUsername(e.target.value)}
+                    disabled={registerMutation.isPending}
                 />
             </Grid>
             <Grid item>
@@ -68,6 +84,7 @@ function RegisterPage() {
                     error={!!credentialsError}
                     helperText={credentialsError}
                     onChange={e => setEmail(e.target.value)}
+                    disabled={registerMutation.isPending}
                 />
             </Grid>
             <Grid item>
@@ -78,9 +95,9 @@ function RegisterPage() {
                     error={!!credentialsError}
                     helperText={credentialsError}
                     onChange={e => setPassword(e.target.value)}
+                    disabled={registerMutation.isPending}
                 />
             </Grid>
-
 
             <Grid
                 item
@@ -89,27 +106,29 @@ function RegisterPage() {
                 justifyContent="center"
                 spacing={4}  
             >
-               
                 <Grid item>
                     <Button
                         variant="contained"
                         size="large"
                         onClick={onSubmit}
+                        disabled={registerMutation.isPending}
                         {...dataTestAttr('register-register-button')}
                     >
                         Register
                     </Button>
                 </Grid>
             </Grid>
-            {loading && (
+            {registerMutation.isPending && (
                 <Grid item>
                     <CircularProgress />
                 </Grid>
             )}
-            {error && (
+            {registerMutation.isError && (
                 <Grid item>
                     <Typography color="error">
-                        {error.toString()}
+                        {registerMutation.error instanceof Error 
+                            ? registerMutation.error.message 
+                            : 'An error occurred during registration'}
                     </Typography>
                 </Grid>
             )}

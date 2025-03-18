@@ -7,7 +7,7 @@ import { Header } from "@/components/Header";
 import { apolloClient } from "@/lib/apolloClient";
 import { ApolloProvider } from "@apollo/client";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactNode, useState } from 'react'
+import { useState } from 'react'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

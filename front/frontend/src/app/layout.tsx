@@ -6,6 +6,8 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { apolloClient } from "@/lib/apolloClient";
 import { ApolloProvider } from "@apollo/client";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useState } from 'react'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,11 +29,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [queryClient] = useState(() => new QueryClient())
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <QueryClientProvider client={queryClient}>
         <Header />
         <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );

@@ -1,5 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models;
 
@@ -17,8 +16,12 @@ public class Movie
     public int? VoteCount { get; set; }
     public string PEGI { get; set; } = null!;
 
-    public List<Tag> Tags { get; set; } = [];
-    public List<Genre> Genre { get; set; } = [];
+    public string? MoviePath { get; set; }
+    public string? PosterPath { get; set; }
+    public string? BackdropPath { get; set; }
+
+    public List<Tag> Tags { get; set; } = null!;
+    public List<Genre> Genre { get; set; } = null!;
     public List<MovieCast>? MovieCasts { get; set; }
 
     [ForeignKey("ProductionCompany")]

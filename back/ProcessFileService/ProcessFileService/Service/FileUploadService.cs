@@ -1,110 +1,152 @@
 ﻿using Minio.DataModel.Args;
 using Minio;
 using Grpc.Core;
-using Movieupload;
-using Posterupload;
-using Backdropupload;
+using Fileupload;
 
 namespace ProcessFileService.Service;
 
-public class MovieUploadService : MovieUpload.MovieUploadBase
+public class FileUploadService : FileUpload.FileUploadBase
 {
     private readonly IMinioClient _minioClient;
-    private const string MovieBucket = "uploads";
+    private const string Bucket = "uploads";
 
-    public MovieUploadService(IMinioClient minioClient)
+    public FileUploadService(IMinioClient minioClient)
     {
         _minioClient = minioClient;
     }
 
-    public override async Task<MovieUploadResponse> UploadMovie(IAsyncStreamReader<MovieUploadRequest> requestStream, ServerCallContext context)
+    public override async Task<Response> UploadMovie(IAsyncStreamReader<MovieUploadRequest> requestStream, ServerCallContext context)
     {
+        string absoluteFilePath = string.Empty;
+
         await foreach (var request in requestStream.ReadAllAsync())
         {
-            if (string.IsNullOrEmpty(request.MovieFilePath) || request.MovieData.Length == 0)
+            if (string.IsNullOrEmpty(request.MovieFileName) || request.MovieData.Length == 0)
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid file data"));
             }
 
             using var stream = new MemoryStream(request.MovieData.ToByteArray());
 
+            absoluteFilePath = "movie/movie/" + request.MovieFileName + ".mp4";
+
             var args = new PutObjectArgs()
-                .WithBucket(MovieBucket)
-                .WithObject(request.MovieFilePath)
+                .WithBucket(Bucket)
+                .WithObject(absoluteFilePath)
                 .WithStreamData(stream)
                 .WithObjectSize(request.MovieData.Length);
 
             await _minioClient.PutObjectAsync(args);
         }
 
-        return new MovieUploadResponse { Message = "Movie uploaded successfully" };
-    }
-}
-
-public class PosterUploadService : PosterUpload.PosterUploadBase
-{
-    private readonly IMinioClient _minioClient;
-    private const string PosterBucket = "uploads";
-
-    public PosterUploadService(IMinioClient minioClient)
-    {
-        _minioClient = minioClient;
+        return new Response { Message = "Movie uploaded successfully", AbsoluteFilePath = absoluteFilePath };
     }
 
-    public override async Task<PosterUploadResponse> UploadPoster(IAsyncStreamReader<PosterUploadRequest> requestStream, ServerCallContext context)
+    public override async Task<Response> UploadMoviePoster(IAsyncStreamReader<MoviePosterUploadRequest> requestStream, ServerCallContext context)
     {
+        string absoluteFilePath = string.Empty;
+
         await foreach (var request in requestStream.ReadAllAsync())
         {
-            if (string.IsNullOrEmpty(request.PosterFilePath) || request.PosterData.Length == 0)
+            if (string.IsNullOrEmpty(request.MoviePosterFileName) || request.MoviePosterData.Length == 0)
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid file data"));
             }
 
-            using var stream = new MemoryStream(request.PosterData.ToByteArray());
+            using var stream = new MemoryStream(request.MoviePosterData.ToByteArray());
+
+            absoluteFilePath = "movie/poster/" + request.MoviePosterFileName + ".jpg";
 
             var args = new PutObjectArgs()
-                .WithBucket(PosterBucket)
-                .WithObject(request.PosterFilePath)
+                .WithBucket(Bucket)
+                .WithObject(absoluteFilePath)
                 .WithStreamData(stream)
-                .WithObjectSize(request.PosterData.Length);
+                .WithObjectSize(request.MoviePosterData.Length);
 
             await _minioClient.PutObjectAsync(args);
         }
 
-        return new PosterUploadResponse { Message = "Poster uploaded successfully" };
-    }
-}
-
-public class BackdropUploadService : BackdropUpload.BackdropUploadBase
-{
-    private readonly IMinioClient _minioClient;
-    private const string BackdropBucket = "uploads";
-
-    public BackdropUploadService(IMinioClient minioClient)
-    {
-        _minioClient = minioClient;
+        return new Response { Message = "Movie uploaded successfully", AbsoluteFilePath = absoluteFilePath };
     }
 
-    public override async Task<BackdropUploadResponse> UploadBackdrop(IAsyncStreamReader<BackdropUploadRequest> requestStream, ServerCallContext context)
+    public override async Task<Response> UploadMovieBackdrop(IAsyncStreamReader<MovieBackdropUploadRequest> requestStream, ServerCallContext context)
     {
+        string absoluteFilePath = string.Empty;
+
         await foreach (var request in requestStream.ReadAllAsync())
         {
-            if (string.IsNullOrEmpty(request.BackdropFilePath) || request.BackdropData.Length == 0)
+            if (string.IsNullOrEmpty(request.MovieBackdropFileName) || request.MovieBackdropData.Length == 0)
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid file data"));
             }
 
-            using var stream = new MemoryStream(request.BackdropData.ToByteArray());
+            using var stream = new MemoryStream(request.MovieBackdropData.ToByteArray());
+
+            absoluteFilePath = "movie/backdrop/" + request.MovieBackdropFileName + ".jpg";
 
             var args = new PutObjectArgs()
-                .WithBucket(BackdropBucket)
-                .WithObject(request.BackdropFilePath)
+                .WithBucket(Bucket)
+                .WithObject(absoluteFilePath)
                 .WithStreamData(stream)
-                .WithObjectSize(request.BackdropData.Length);
+                .WithObjectSize(request.MovieBackdropData.Length);
 
             await _minioClient.PutObjectAsync(args);
         }
 
-        return new BackdropUploadResponse { Message = "Backdrop uploaded successfully" };
+        return new Response { Message = "Movie uploaded successfully", AbsoluteFilePath = absoluteFilePath };
+    }
+
+    public override async Task<Response> UploadCompanyLogo(IAsyncStreamReader<CompanyLogoUploadRequest> requestStream, ServerCallContext context)
+    {
+        string absoluteFilePath = string.Empty;
+
+        await foreach (var request in requestStream.ReadAllAsync())
+        {
+            if (string.IsNullOrEmpty(request.CompanyLogoFileName) || request.CompanyLogoData.Length == 0)
+            {
+                throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid file data"));
+            }
+
+            using var stream = new MemoryStream(request.CompanyLogoData.ToByteArray());
+
+            absoluteFilePath = "companylogo/" + request.CompanyLogoFileName + ".jpg";
+
+            var args = new PutObjectArgs()
+                .WithBucket(Bucket)
+                .WithObject(absoluteFilePath)
+                .WithStreamData(stream)
+                .WithObjectSize(request.CompanyLogoData.Length);
+
+            await _minioClient.PutObjectAsync(args);
+        }
+
+        return new Response { Message = "Movie uploaded successfully", AbsoluteFilePath = absoluteFilePath };
+    }
+
+    public override async Task<Response> UoloadPersonPhoto(IAsyncStreamReader<PersonPhotoUploadRequest> requestStream, ServerCallContext context)
+    {
+        string absoluteFilePath = string.Empty;
+
+        await foreach (var request in requestStream.ReadAllAsync())
+        {
+            if (string.IsNullOrEmpty(request.PersonPhotoFileName) || request.PersonPhotoData.Length == 0)
+            {
+                throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid file data"));
+            }
+
+            using var stream = new MemoryStream(request.PersonPhotoData.ToByteArray());
+
+            absoluteFilePath = "personphoto/" + request.PersonPhotoFileName + ".jpg";
+
+            var args = new PutObjectArgs()
+                .WithBucket(Bucket)
+                .WithObject(absoluteFilePath)
+                .WithStreamData(stream)
+                .WithObjectSize(request.PersonPhotoData.Length);
+
+            await _minioClient.PutObjectAsync(args);
+        }
+
+        return new Response { Message = "Movie uploaded successfully", AbsoluteFilePath = absoluteFilePath };
     }
 }

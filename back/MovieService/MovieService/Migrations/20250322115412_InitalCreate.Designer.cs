@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MovieService.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250316165211_InitalCreate")]
+    [Migration("20250322115412_InitalCreate")]
     partial class InitalCreate
     {
         /// <inheritdoc />
@@ -103,6 +103,9 @@ namespace MovieService.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MovieId"));
 
+                    b.Property<string>("BackdropPath")
+                        .HasColumnType("text");
+
                     b.Property<int?>("Budget")
                         .HasColumnType("integer");
 
@@ -115,6 +118,9 @@ namespace MovieService.Migrations
 
                     b.Property<int>("LanguageId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("MoviePath")
+                        .HasColumnType("text");
 
                     b.Property<string>("MovieStatus")
                         .IsRequired()
@@ -129,6 +135,9 @@ namespace MovieService.Migrations
 
                     b.Property<decimal?>("Popularity")
                         .HasColumnType("numeric");
+
+                    b.Property<string>("PosterPath")
+                        .HasColumnType("text");
 
                     b.Property<int?>("ProductionCompanyId")
                         .HasColumnType("integer");
@@ -213,6 +222,9 @@ namespace MovieService.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("PhotoPath")
+                        .HasColumnType("text");
+
                     b.HasKey("PersonId");
 
                     b.HasIndex("CountryId");
@@ -234,6 +246,9 @@ namespace MovieService.Migrations
 
                     b.Property<int>("CountryId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("LogoPath")
+                        .HasColumnType("text");
 
                     b.HasKey("CompanyId");
 

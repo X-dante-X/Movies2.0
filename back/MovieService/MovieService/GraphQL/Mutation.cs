@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.DTO;
-using System;
-using System.Linq;
+using MovieService.Helpers;
+using MovieService.Services.Interfaces;
 using Tag = Models.Tag;
 
 
@@ -11,31 +11,20 @@ namespace GraphQL;
 
 public class Mutation
 {
-    public async Task<MovieDTO> CreateMovie(MovieDTO movieDTO, [Service] Context ctx)
+    public async Task<MovieDTO> CreateMovie(MovieDTO movieDTO, [Service] Context ctx, [Service] IUploadService uploadService)
     {
         var tags = await ctx.Tags.Where(t => movieDTO.Tags.Contains(t.TagId)).ToListAsync();
 
         var genres = await ctx.Genres.Where(g => movieDTO.Genre.Contains(g.GenreId)).ToListAsync();
 
-        var movie = new Movie()
-        {
-            Title = movieDTO.Title,
-            ReleaseDate = movieDTO.ReleaseDate,
-            Budget = movieDTO.Budget,
-            Description = movieDTO.Description,
-            Popularity = movieDTO.Popularity,
-            Runtime = movieDTO.Runtime,
-            MovieStatus = movieDTO.MovieStatus,
-            VoteAverage = movieDTO.VoteAverage,
-            VoteCount = movieDTO.VoteCount,
-            PEGI = movieDTO.PEGI,
-            ProductionCompanyId = movieDTO.ProductionCompanyId,
-            CountryId = movieDTO.CountryId,
-            LanguageId = movieDTO.LanguageId,
-            Genre = genres??= [],
-            Tags = tags??= [],
-        };
+        var movieFileName = ExtractFileName.ExtractMovieFileName(movieDTO);
 
+        var moviePath = await uploadService.UploadMovieAsync(movieFileName, movieDTO.Movie);
+        var posterPath = await uploadService.UploadPosterAsync(movieFileName, movieDTO.Poster);
+        var backdropPath = await uploadService.UploadBackdropAsync(movieFileName, movieDTO.Backdrop);
+
+
+        var movie = Mapper.MovieDTOToMovie(movieDTO, moviePath, posterPath, backdropPath, genres, tags);
 
         await ctx.Movies.AddAsync(movie);
         await ctx.SaveChangesAsync();
@@ -43,16 +32,10 @@ public class Mutation
         if (movieDTO.movieCasts != null)
         {
             List<MovieCast> moviecasts = [];
+
             foreach(var moviecast in movieDTO.movieCasts)
             {
-                moviecasts.Add(new MovieCast()
-                {
-                    MovieId = movie.MovieId,
-                    PersonId = moviecast.PersonId,
-                    Job = moviecast.Job,
-                    CharacterGender = moviecast.CharacterGender,
-                    CharacterName = moviecast.CharacterName,
-                });
+                moviecasts.Add(Mapper.MovieCastDTOToMovieCast(moviecast, movie.MovieId));
             }
 
             await ctx.MovieCasts.AddRangeAsync(moviecasts);
@@ -76,16 +59,13 @@ public class Mutation
         return movie;
     }
 
-    public async Task<PersonDTO> CreatePerson(PersonDTO personDTO, [Service] Context ctx)
+    public async Task<PersonDTO> CreatePerson(PersonDTO personDTO, [Service] Context ctx, [Service] IUploadService uploadService)
     {
-        var person = new Person()
-        {
-            PersonName = personDTO.PersonName,
-            Gender = personDTO.Gender,
-            DateOfBirth = personDTO.DateOfBirth,
-            CountryId = personDTO.CountryId,
-            Biography = personDTO.Biography,
-        };
+        var photoName = ExtractFileName.ExtractPhotoFileName(personDTO);
+
+        var photoPath = await uploadService.UploadPersonPhotoAsync(photoName, personDTO.Photo);
+
+        var person = Mapper.PersonDTOToPerson(personDTO, photoPath);
 
         ctx.People.Add(person);
         await ctx.SaveChangesAsync();
@@ -116,14 +96,13 @@ public class Mutation
         ctx.SaveChangesAsync();
         return tag;
     }
-    public async Task<ProductionCompanyDTO> CreateProductionCompany(ProductionCompanyDTO productionCompanyDTO, [Service] Context ctx)
+    public async Task<ProductionCompanyDTO> CreateProductionCompany(ProductionCompanyDTO productionCompanyDTO, [Service] Context ctx, [Service] IUploadService uploadService)
     {
+        var logoName = ExtractFileName.ExtractLogoFileName(productionCompanyDTO);
 
-        var productionCompany = new ProductionCompany()
-        {
-            CompanyName = productionCompanyDTO.CompanyName,
-            CountryId = productionCompanyDTO.CountryId,
-        };
+        var logoPath = await uploadService.UploadLogoAsync(logoName, productionCompanyDTO.Logo);
+
+        var productionCompany = Mapper.ProductionCompanyDTOToProductionCompany(productionCompanyDTO, logoPath);
 
         ctx.Add(productionCompany);
         await ctx.SaveChangesAsync();

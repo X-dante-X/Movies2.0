@@ -1,5 +1,5 @@
 import { EmailUsedError, UnauthorizedError } from '.';
-import { LoginResponse } from '../models/responses';
+import { LoginResponse, verifyResponse } from '../models/responses';
 import { useLoginStore } from '../stores/userStore';
 
 export class ApiClient {
@@ -19,7 +19,7 @@ export class ApiClient {
             },
             ...otherOptions,
         });
-
+        console.log(res);
         if (res.status === 401) {
             if (token !== undefined) {
                 console.log('Unauthorized, logging out');
@@ -42,6 +42,13 @@ export class ApiClient {
         return this.baseRequest<LoginResponse>(`api/auth/login`, {
             method: 'POST',
             body: JSON.stringify({ username: email, password }),
+        });
+    }
+    
+    async verify(userName: string): Promise<verifyResponse> {
+        return this.baseRequest<verifyResponse>(`api/auth/verify`, {
+            method: 'POST',
+            body: JSON.stringify({ username: userName }),
         });
     }
 

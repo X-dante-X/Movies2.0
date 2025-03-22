@@ -1,7 +1,11 @@
 export interface LoginResponse {
-    username: string,
+    userName: string,
     accessToken: string
     refreshToken: string
     expiration: string
     isAdmin: number
+}
+
+export interface verifyResponse {
+    isAdmin: boolean
 }

@@ -46,6 +46,14 @@ public class UserService : IUserService
         };
     }
 
+    public async Task<VerifyResponse> Verify(isAdminRequestModel username)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Username == username.UserName);
+        if (user is not null) return new VerifyResponse { isAdmin = user.IsAdmin };
+        throw new ApplicationException("User does not exist");
+    }
+
+
     public async Task<TokenResponse> RefreshToken(string accessToken, string refreshToken)
     {
 
@@ -97,6 +105,7 @@ public class UserService : IUserService
             Email = userDto.Email,
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
+            RefreshToken = String.Empty,
             UserStatus = 0 
         };
 

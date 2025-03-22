@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\back",
+    "\\back\\AuthService",
+    "\\back\\AuthService\\Context",
+    "\\back\\Movies",
+    "\\back\\Movies\\DBContext",
+    "\\back\\WeatherApi",
+    "\\helpers"
+  ],
+  "SelectedNode": "\\back\\AuthService\\Context\\AppDbContext.cs",
+  "PreviewInSolutionExplorer": false
+}

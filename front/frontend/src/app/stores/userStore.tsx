@@ -2,9 +2,11 @@ import { create } from "zustand";
 import { LoginResponse } from "../models/responses";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../api/ApiClient';
+import { apiClient } from "../api";
 const userDataStorageKey = "userData";
 
 export type UserData = {
+  username: string;
   token: string;
   isAdmin: boolean;
 };
@@ -52,9 +54,26 @@ export const useLoginStore = create<LoginStore>((set, get) => ({
 
 function loginResponseToUserData(loginResponse: LoginResponse): UserData {
   return {
+    username: loginResponse.userName,
     isAdmin: loginResponse.isAdmin === 1,
     token: loginResponse.accessToken,
   };
+}
+
+export async function verifyUser(apiClient: ApiClient): Promise<boolean> {
+  const data = useLoginStore.getState().userData;
+  const username = data?.username ?? " ";
+  try {
+    console.log(username)
+    const response = await apiClient.verify(username);
+    if (response?.isAdmin) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Error verifying user:", error);
+    return false;
+  }
 }
 
 export function useAuthToken(): string | undefined {

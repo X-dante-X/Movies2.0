@@ -10,5 +10,5 @@ public class User
     public int UserStatus { get; set; } = 0; 
     public bool IsAdmin => UserStatus == 1;
     public string RefreshToken { get; set; } = null!;
-    public DateTime RefreshTokenExpiry { get; set; }
+    public DateTime RefreshTokenExpiry { get; set; } = DateTime.UtcNow; 
 }

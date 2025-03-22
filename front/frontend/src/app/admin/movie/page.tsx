@@ -16,6 +16,9 @@ const CREATE_MOVIE = gql`
     $voteAverage: Decimal
     $voteCount: Int
     $pegi: String!
+    $movie: Upload!
+    $poster: Upload!
+    $backdrop: Upload!
     $tags: [Int!]!
     $genres: [Int!]!
     $productionCompanyId: Int
@@ -35,6 +38,9 @@ const CREATE_MOVIE = gql`
         voteAverage: $voteAverage
         voteCount: $voteCount
         pegi: $pegi
+        movie: $movie
+        poster: $poster
+        backdrop: $backdrop
         tags: $tags
         genre: $genres
         productionCompanyId: $productionCompanyId
@@ -91,6 +97,9 @@ export default function Page() {
   const [voteAverage, setVoteAverage] = useState("");
   const [voteCount, setVoteCount] = useState("");
   const [pegi, setPegi] = useState("");
+  const [movie, setMovie] = useState<File | null>(null);
+  const [poster, setPoster] = useState<File | null>(null);
+  const [backdrop, setBackdrop] = useState<File | null>(null);
   const [country, setCountry] = useState("");
   const [productionCompany, setProductionCompany] = useState("");
   const [language, setLanguage] = useState("");
@@ -115,7 +124,16 @@ export default function Page() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
 
-    if (type === "select-multiple") {
+    if (type === "file") {
+      const target = e.target as HTMLInputElement;
+      if (name === "movie") {
+        setMovie(target.files?.[0] || null);
+      } else if (name === "poster") {
+        setPoster(target.files?.[0] || null);
+      } else if (name === "backdrop") {
+        setBackdrop(target.files?.[0] || null);
+      }
+    } else if (type === "select-multiple") {
       const target = e.target as HTMLSelectElement;
       const selectedValues: number[] = [];
       for (let i = 0; i < target.options.length; i++) {
@@ -174,6 +192,7 @@ export default function Page() {
       }
     }
   };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -192,6 +211,9 @@ export default function Page() {
           voteAverage: voteAverage ? Number(voteAverage) : null,
           voteCount: voteCount ? Number(voteCount) : null,
           pegi,
+          movie,
+          poster,
+          backdrop,
           tags,
           genres,
           productionCompanyId: productionCompany ? Number(productionCompany) : null,
@@ -359,6 +381,36 @@ export default function Page() {
             </option>
           ))}
         </select>
+        <label className="p-2 border rounded cursor-pointer">
+          Choose movie
+          <input
+            type="file"
+            name="movie"
+            accept="video/*"
+            onChange={handleChange}
+            className="hidden"
+          />
+        </label>
+        <label className="p-2 border rounded cursor-pointer">
+          Choose poster
+          <input
+            type="file"
+            name="poster"
+            accept="image/*"
+            onChange={handleChange}
+            className="hidden"
+          />
+        </label>
+        <label className="p-2 border rounded cursor-pointer">
+          Choose backdrop
+          <input
+            type="file"
+            name="backdrop"
+            accept="image/*"
+            onChange={handleChange}
+            className="hidden"
+          />
+        </label>
         <button
           type="button"
           onClick={addMovieCast}

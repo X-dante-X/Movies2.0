@@ -2,8 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.DTO;
-using System;
-using System.Linq;
+using MovieService.Services.Interfaces;
 using Tag = Models.Tag;
 
 
@@ -11,11 +10,19 @@ namespace GraphQL;
 
 public class Mutation
 {
-    public async Task<MovieDTO> CreateMovie(MovieDTO movieDTO, [Service] Context ctx)
+    public async Task<MovieDTO> CreateMovie(MovieDTO movieDTO, [Service] Context ctx, [Service] IUploadService uploadService)
     {
         var tags = await ctx.Tags.Where(t => movieDTO.Tags.Contains(t.TagId)).ToListAsync();
 
         var genres = await ctx.Genres.Where(g => movieDTO.Genre.Contains(g.GenreId)).ToListAsync();
+
+        var releaseDate = movieDTO.ReleaseDate ?? DateTime.Now;
+        var movieFileName = movieDTO.Title + releaseDate.Year + releaseDate.Month + releaseDate.Day;
+
+        var moviePath = await uploadService.UploadMovieAsync(movieFileName, movieDTO.Movie);
+        var posterPath = await uploadService.UploadPosterAsync(movieFileName, movieDTO.Poster);
+        var backdropPath = await uploadService.UploadBackdropAsync(movieFileName, movieDTO.Backdrop);
+
 
         var movie = new Movie()
         {
@@ -29,6 +36,9 @@ public class Mutation
             VoteAverage = movieDTO.VoteAverage,
             VoteCount = movieDTO.VoteCount,
             PEGI = movieDTO.PEGI,
+            MoviePath = moviePath,
+            PosterPath = posterPath,
+            BackdropPath = backdropPath,
             ProductionCompanyId = movieDTO.ProductionCompanyId,
             CountryId = movieDTO.CountryId,
             LanguageId = movieDTO.LanguageId,
@@ -76,12 +86,17 @@ public class Mutation
         return movie;
     }
 
-    public async Task<PersonDTO> CreatePerson(PersonDTO personDTO, [Service] Context ctx)
+    public async Task<PersonDTO> CreatePerson(PersonDTO personDTO, [Service] Context ctx, [Service] IUploadService uploadService)
     {
+        var photoName = personDTO.PersonName + personDTO.DateOfBirth.Year + personDTO.DateOfBirth.Month + personDTO.DateOfBirth.Day;
+
+        var photoPath = await uploadService.UploadPersonPhotoAsync(photoName, personDTO.Photo);
+
         var person = new Person()
         {
             PersonName = personDTO.PersonName,
             Gender = personDTO.Gender,
+            PhotoPath = photoPath,
             DateOfBirth = personDTO.DateOfBirth,
             CountryId = personDTO.CountryId,
             Biography = personDTO.Biography,
@@ -116,12 +131,16 @@ public class Mutation
         ctx.SaveChangesAsync();
         return tag;
     }
-    public async Task<ProductionCompanyDTO> CreateProductionCompany(ProductionCompanyDTO productionCompanyDTO, [Service] Context ctx)
+    public async Task<ProductionCompanyDTO> CreateProductionCompany(ProductionCompanyDTO productionCompanyDTO, [Service] Context ctx, [Service] IUploadService uploadService)
     {
+        var logoName = productionCompanyDTO.CompanyName;
+
+        var logoPath = await uploadService.UploadLogoAsync(logoName, productionCompanyDTO.Logo);
 
         var productionCompany = new ProductionCompany()
         {
             CompanyName = productionCompanyDTO.CompanyName,
+            LogoPath = logoPath,
             CountryId = productionCompanyDTO.CountryId,
         };
 

@@ -4,24 +4,20 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>b4767c14-4388-4f67-9275-6e4cef36d5ea</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Protos\backdropupload.proto" />
-    <None Remove="Protos\posterupload.proto" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.70.0" />
     <PackageReference Include="Grpc.Net.Client" Version="2.70.0" />
     <PackageReference Include="Grpc.Tools" Version="2.70.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
     <PackageReference Include="Minio" Version="6.0.4" />
   </ItemGroup>
 	
   <ItemGroup>
-    <Protobuf Include="Protos\backdropupload.proto" />
-    <Protobuf Include="Protos\posterupload.proto" />
-    <Protobuf Include="Protos\movieupload.proto" />
+    <Protobuf Include="Protos\fileupload.proto" />
   </ItemGroup>
 
 </Project>

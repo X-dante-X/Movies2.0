@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package fileupload;
+
+service FileUpload {
+  rpc UploadMovie (stream MovieUploadRequest) returns (Response);
+  rpc UploadMovieBackdrop (stream MovieBackdropUploadRequest) returns (Response);
+  rpc UploadMoviePoster (stream MoviePosterUploadRequest) returns (Response);
+  rpc UoloadPersonPhoto (stream PersonPhotoUploadRequest) returns (Response);
+  rpc UploadCompanyLogo (stream CompanyLogoUploadRequest) returns (Response);
+}
+
+message MovieUploadRequest {
+  string movieFileName = 1;
+  bytes movieData = 2;
+}
+
+message MovieBackdropUploadRequest {
+  string movieBackdropFileName = 1;
+  bytes movieBackdropData = 2;
+}
+
+message MoviePosterUploadRequest {
+  string moviePosterFileName = 1;
+  bytes moviePosterData = 2;
+}
+
+message PersonPhotoUploadRequest {
+  string personPhotoFileName = 1;
+  bytes personPhotoData = 2;
+}
+
+message CompanyLogoUploadRequest {
+  string companyLogoFileName = 1;
+  bytes companyLogoData = 2;
+}
+
+
+message Response {
+  string message = 1;
+  string absoluteFilePath = 2;
+}

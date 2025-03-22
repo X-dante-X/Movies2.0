@@ -14,9 +14,7 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="backdropupload.proto" />
-		<Protobuf Include="posterupload.proto" />
-		<Protobuf Include="movieupload.proto" />
+		<Protobuf Include="fileupload.proto" />
 	</ItemGroup>
 
 	<ItemGroup>

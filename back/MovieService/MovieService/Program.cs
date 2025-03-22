@@ -1,33 +1,36 @@
 using DBContext;
+using Fileupload;
 using GraphQL;
-using HotChocolate.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Movies;
-using StackExchange.Redis;
-using System;
+using MovieService.Services.Interfaces;
+using MovieService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddGrpcClient<FileUpload.FileUploadClient>(o =>
+{
+    o.Address = new Uri(Environment.GetEnvironmentVariable("PROCESSFILESERVICE_URL")!);
+});
+
+builder.Services.AddSingleton<IUploadService, UploadService>();
+
+builder.Services.AddDbContext<Context>();
+
 builder.Services.AddGraphQLServer()
     .AddQueryType<Query>()
     .AddMutationType<Mutation>()
+    .AddType<UploadType>()
     .AddProjections()
     .AddFiltering()
     .AddSorting();
 
-
-builder.Services.AddDbContext<Context>();
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -53,7 +56,7 @@ app.MapGraphQL("/graphql");
 
 app.MapGet("/", () =>
 {
-    return Results.Ok("hello world");
+    return Results.Ok("hello world!");
 });
 
 app.Run();

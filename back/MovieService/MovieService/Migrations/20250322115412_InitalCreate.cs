@@ -73,6 +73,7 @@ namespace MovieService.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PersonName = table.Column<string>(type: "text", nullable: false),
                     Gender = table.Column<string>(type: "text", nullable: false),
+                    PhotoPath = table.Column<string>(type: "text", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CountryId = table.Column<int>(type: "integer", nullable: false),
                     Biography = table.Column<string>(type: "text", nullable: false)
@@ -95,6 +96,7 @@ namespace MovieService.Migrations
                     CompanyId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CompanyName = table.Column<string>(type: "text", nullable: false),
+                    LogoPath = table.Column<string>(type: "text", nullable: true),
                     CountryId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -124,6 +126,9 @@ namespace MovieService.Migrations
                     VoteAverage = table.Column<decimal>(type: "numeric", nullable: true),
                     VoteCount = table.Column<int>(type: "integer", nullable: true),
                     PEGI = table.Column<string>(type: "text", nullable: false),
+                    MoviePath = table.Column<string>(type: "text", nullable: true),
+                    PosterPath = table.Column<string>(type: "text", nullable: true),
+                    BackdropPath = table.Column<string>(type: "text", nullable: true),
                     ProductionCompanyId = table.Column<int>(type: "integer", nullable: true),
                     LanguageId = table.Column<int>(type: "integer", nullable: false),
                     CountryId = table.Column<int>(type: "integer", nullable: false),

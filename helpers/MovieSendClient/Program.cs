@@ -1,30 +1,26 @@
 ﻿using Grpc.Net.Client;
 using Google.Protobuf;
-using Movieupload;
-using Posterupload;
-using Backdropupload;
+using Fileupload;
+
 using System.Threading.Channels;
 
 class Program
 {
     static async Task Main(string[] args)
     {
-        var channel = GrpcChannel.ForAddress("https://localhost:7133");
 
-        var movieClient = new MovieUpload.MovieUploadClient(channel);
-        var posterClient = new PosterUpload.PosterUploadClient(channel);
-        var backdropClient = new BackdropUpload.BackdropUploadClient(channel);
+        var FileUploadClient = new FileUpload.FileUploadClient(GrpcChannel.ForAddress("http://localhost:5001"));
 
-        var movieUploadTask = UploadMovieAsync(movieClient, "daredevil.mp4");
-        var posterUploadTask = UploadPosterAsync(posterClient, "daredevil.jpg");
-        var backdropUploadTask = UploadBackdropAsync(backdropClient, "backdropdaredevil.jpg");
+        var movieUploadTask = UploadMovieAsync(FileUploadClient, "daredevil.mp4");
+        var posterUploadTask = UploadPosterAsync(FileUploadClient, "daredevil.jpg");
+        var backdropUploadTask = UploadBackdropAsync(FileUploadClient, "backdropdaredevil.jpg");
 
         await Task.WhenAll(movieUploadTask, posterUploadTask, backdropUploadTask);
 
         Console.WriteLine("Все файлы загружены.");
     }
 
-    static async Task UploadMovieAsync(MovieUpload.MovieUploadClient client, string filePath)
+    static async Task UploadMovieAsync(FileUpload.FileUploadClient client, string filePath)
     {
         using var call = client.UploadMovie();
         using var fileStream = File.OpenRead(filePath);
@@ -36,7 +32,7 @@ class Program
         {
             var request = new MovieUploadRequest
             {
-                MovieFilePath = "movies/" + filePath,
+                MovieFilePath = filePath,
                 MovieData = ByteString.CopyFrom(buffer, 0, bytesRead),
             };
 
@@ -48,9 +44,9 @@ class Program
         Console.WriteLine($"{filePath} загружен: {response.Message}");
     }
 
-    static async Task UploadPosterAsync(PosterUpload.PosterUploadClient client, string filePath)
+    static async Task UploadPosterAsync(FileUpload.FileUploadClient client, string filePath)
     {
-        using var call = client.UploadPoster();
+        using var call = client.UploadMoviePoster();
         using var fileStream = File.OpenRead(filePath);
 
         byte[] buffer = new byte[1024 * 1024];
@@ -58,10 +54,10 @@ class Program
 
         while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
         {
-            var request = new PosterUploadRequest
+            var request = new MoviePosterUploadRequest
             {
-                PosterFilePath = "posters/" + filePath,
-                PosterData = ByteString.CopyFrom(buffer, 0, bytesRead),
+                MoviePosterFilePath = filePath,
+                MoviePosterData = ByteString.CopyFrom(buffer, 0, bytesRead),
             };
 
             await call.RequestStream.WriteAsync(request);
@@ -72,9 +68,9 @@ class Program
         Console.WriteLine($"{filePath} загружен: {response.Message}");
     }
 
-    static async Task UploadBackdropAsync(BackdropUpload.BackdropUploadClient client, string filePath)
+    static async Task UploadBackdropAsync(FileUpload.FileUploadClient client, string filePath)
     {
-        using var call = client.UploadBackdrop();
+        using var call = client.UploadMovieBackdrop();
         using var fileStream = File.OpenRead(filePath);
 
         byte[] buffer = new byte[1024*1024];
@@ -82,10 +78,10 @@ class Program
 
         while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
         {
-            var request = new BackdropUploadRequest
+            var request = new MovieBackdropUploadRequest
             {
-                BackdropFilePath = "backdrops/" + filePath,
-                BackdropData = ByteString.CopyFrom(buffer, 0, bytesRead),
+                MovieBackdropFilePath = filePath,
+                MovieBackdropData = ByteString.CopyFrom(buffer, 0, bytesRead),
             };
 
             await call.RequestStream.WriteAsync(request);

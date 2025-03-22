@@ -9,3 +9,12 @@ export interface LoginResponse {
 export interface verifyResponse {
     isAdmin: boolean
 }
+
+export interface DecodedToken {
+  nameid: string,
+  unique_name: string,
+  IsAdmin: boolean,
+  nbf: number,
+  exp: number,
+  iat: number
+}

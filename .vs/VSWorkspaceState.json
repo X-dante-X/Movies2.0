@@ -3,12 +3,12 @@
     "",
     "\\back",
     "\\back\\AuthService",
-    "\\back\\AuthService\\Context",
+    "\\back\\AuthService\\Properties",
+    "\\back\\AuthService\\Services",
+    "\\back\\AuthService\\Services\\Interfaces",
     "\\back\\Movies",
-    "\\back\\Movies\\DBContext",
-    "\\back\\WeatherApi",
-    "\\helpers"
+    "\\config"
   ],
-  "SelectedNode": "\\back\\AuthService\\Context\\AppDbContext.cs",
+  "SelectedNode": "\\config\\nginx.conf",
   "PreviewInSolutionExplorer": false
 }

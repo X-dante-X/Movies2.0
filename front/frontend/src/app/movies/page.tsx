@@ -3,29 +3,10 @@ import { useQuery } from "@apollo/client";
 import { GET_MOVIES } from "@/graphql/queries";
 import Link from "next/link";
 import { Card } from "@/components/Card";
-import { verifyUser } from '../stores/userStore'
-import { apiClient } from '../api/index' 
-import { useRouter } from "next/navigation"
-import { useState } from "react";
-import { useEffect } from "react";
+
 
 export default function Page() {
   const { loading, error, data } = useQuery(GET_MOVIES);
-  const [isVerified, setIsVerified] = useState<boolean | null>(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    const checkAdmin = async () => {
-      const admin = await verifyUser(apiClient);
-      setIsVerified(admin);
-      if (!isVerified) {
-        router.push("/"); 
-      }
-    };
-
-    checkAdmin(); 
-  }, [apiClient, router]);
-
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;

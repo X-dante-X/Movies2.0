@@ -42,6 +42,16 @@ services:
       - PROCESSFILESERVICE_URL=http://processfile:8081
     depends_on:
       - postgres
+      
+  authservice:
+        build:
+            context: ./back/AuthService
+        ports:
+            - "8082:8080"
+        environment:
+            - DATABASE_URL=Host=postgres;Port=5432;Database=authdb;Username=postgres;Password=postgres;
+        depends_on:
+            - postgres
 
   processfile:
     build:

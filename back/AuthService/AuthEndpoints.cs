@@ -8,7 +8,7 @@ public static class AuthEndpoints
 {
     public static void MapAuthEndpoints(this WebApplication app)
     {
-        app.MapPost("/api/auth/register", async (IUserService userService, UserDTO userDto) =>
+        app.MapPost("/register", async (IUserService userService, UserDTO userDto) =>
         {
             try
             {
@@ -22,7 +22,7 @@ public static class AuthEndpoints
             }
         });
 
-        app.MapPost("/api/auth/verify", async (IUserService userService, isAdminRequestModel user) =>
+        app.MapPost("/verify", async (IUserService userService, isAdminRequestModel user) =>
         {
             try
             {
@@ -35,8 +35,11 @@ public static class AuthEndpoints
             }
         });
 
+        app.MapGet("/hello" , () => {
+            return Results.Ok("world");
+        });
 
-        app.MapPost("/api/auth/login", async (IUserService userService, LoginRequestModel loginDto) =>
+        app.MapPost("/login", async (IUserService userService, LoginRequestModel loginDto) =>
         {
             try
             {

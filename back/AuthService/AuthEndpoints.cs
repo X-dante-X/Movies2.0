@@ -13,6 +13,7 @@ public static class AuthEndpoints
             try
             {
                 var response = await userService.Register(userDto);
+                Console.WriteLine(response);
                 return Results.Ok(response);
             }
             catch (ApplicationException ex)
@@ -20,6 +21,20 @@ public static class AuthEndpoints
                 return Results.BadRequest(new { message = ex.Message });
             }
         });
+
+        app.MapPost("/api/auth/verify", async (IUserService userService, isAdminRequestModel user) =>
+        {
+            try
+            {
+                var response = await userService.Verify(user); 
+                return Results.Ok(response);
+            }
+            catch (ApplicationException ex)
+            {
+                return Results.BadRequest(new { message = ex.Message });
+            }
+        });
+
 
         app.MapPost("/api/auth/login", async (IUserService userService, LoginRequestModel loginDto) =>
         {

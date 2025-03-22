@@ -28,11 +28,9 @@ function RegisterPage() {
     const router = useRouter()
     
     
-    // Use the register mutation hook
     const registerMutation = useRegister(apiClient)
     
     async function onSubmit() {
-        // Reset any previous credential errors
         setCredentialsError(undefined)
         
         const userStatus = 0

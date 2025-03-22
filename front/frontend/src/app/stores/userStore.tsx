@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { LoginResponse } from "../models/responses";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../api/ApiClient';
-import { apiClient } from "../api";
 const userDataStorageKey = "userData";
 
 export type UserData = {

@@ -6,21 +6,11 @@ import { GET_COUNTRIES } from "@/graphql/queries";
 import { GetCountryDetailsResponse } from "@/types/movie.types";
 
 const CREATE_PERSON = gql`
-  mutation CreatePerson($personName: String!, $gender: String!, $dateOfBirth: DateTime!, $countryId: Int!, $biography: String!) {
+  mutation CreatePerson($personName: String!, $gender: String!, $photo: Upload!, $dateOfBirth: DateTime!, $countryId: Int!, $biography: String!) {
     createPerson(
-      person: {
-        personId: 0
-        personName: $personName
-        gender: $gender
-        dateOfBirth: $dateOfBirth
-        nationality: { countryId: $countryId, countryName: "", countryIsoCode: "" }
-        biography: $biography
-      }
+      personDTO: { personName: $personName, gender: $gender, photo: $photo, dateOfBirth: $dateOfBirth, countryId: $countryId, biography: $biography }
     ) {
       personName
-      nationality {
-        countryName
-      }
     }
   }
 `;
@@ -28,6 +18,7 @@ const CREATE_PERSON = gql`
 export default function Page() {
   const [personName, setPersonName] = useState("");
   const [gender, setGender] = useState("");
+  const [photo, setPhoto] = useState<File | null>(null);
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [countryId, setCountryId] = useState<number | null>(null);
   const [biography, setBiography] = useState("");
@@ -37,13 +28,14 @@ export default function Page() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!personName || !gender || !dateOfBirth || !countryId || !biography) return;
+    if (!personName || !gender || !photo || !dateOfBirth || !countryId || !biography) return;
 
     try {
       const formattedDateOfBirth = new Date(dateOfBirth + "T00:00:00Z").toISOString();
-      await createPerson({ variables: { personName, gender, dateOfBirth: formattedDateOfBirth, countryId, biography } });
+      await createPerson({ variables: { personName, gender, photo, dateOfBirth: formattedDateOfBirth, countryId, biography } });
       setPersonName("");
       setGender("");
+      setPhoto(null);
       setDateOfBirth("");
       setCountryId(null);
       setBiography("");
@@ -109,6 +101,16 @@ export default function Page() {
           placeholder="Enter biography"
           className="p-2 border rounded"
         />
+        <label className="p-2 border rounded cursor-pointer">
+          Choose photo
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setPhoto(e.target.files?.[0] || null)}
+            className="hidden"
+          />
+        </label>
+
         <button
           type="submit"
           disabled={loading}
@@ -117,11 +119,7 @@ export default function Page() {
         </button>
       </form>
       {error && <p className="text-red-500 mt-2">Error: {error.message}</p>}
-      {data && (
-        <p className="text-green-500 mt-2">
-          Created person: {data.createPerson.personName} ({data.createPerson.nationality.countryName})
-        </p>
-      )}
+      {data && <p className="text-green-500 mt-2">Created person: {data.createPerson.personName}</p>}
     </div>
   );
 }

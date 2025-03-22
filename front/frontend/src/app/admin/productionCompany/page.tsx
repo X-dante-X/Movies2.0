@@ -6,14 +6,9 @@ import { GET_COUNTRIES } from "@/graphql/queries";
 import { GetCountryDetailsResponse } from "@/types/movie.types";
 
 const CREATE_PRODUCTION_COMPANY = gql`
-  mutation CreateProductionCompany($companyName: String!, $countryId: Int!) {
-    createProductionCompany(
-      productionCompany: { companyId: 0, companyName: $companyName, country: { countryId: $countryId, countryName: "", countryIsoCode: "" } }
-    ) {
+  mutation CreateProductionCompany($companyName: String!, $logo: Upload!, $countryId: Int!) {
+    createProductionCompany(productionCompanyDTO: { companyName: $companyName, logo: $logo, countryId: $countryId }) {
       companyName
-      country {
-        countryName
-      }
     }
   }
 `;
@@ -21,17 +16,19 @@ const CREATE_PRODUCTION_COMPANY = gql`
 export default function Page() {
   const [companyName, setCompanyName] = useState("");
   const [countryId, setCountryId] = useState<number | null>(null);
+  const [logo, setLogo] = useState<File | null>(null);
   const { data: countriesData, loading: countriesLoading } = useQuery<GetCountryDetailsResponse>(GET_COUNTRIES);
   const [createProductionCompany, { data, loading, error }] = useMutation(CREATE_PRODUCTION_COMPANY);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!companyName || !countryId) return;
+    if (!companyName || !logo || !countryId) return;
 
     try {
-      await createProductionCompany({ variables: { companyName, countryId } });
+      await createProductionCompany({ variables: { companyName, logo, countryId } });
       setCompanyName("");
       setCountryId(null);
+      setLogo(null);
     } catch (err) {
       console.error("Error creating production company:", err);
     }
@@ -68,6 +65,19 @@ export default function Page() {
             </option>
           ))}
         </select>
+        <label className="p-2 border rounded cursor-pointer">
+          Choose logo
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0] || null;
+              setLogo(file);
+            }}
+            className="hidden"
+          />
+        </label>
+
         <button
           type="submit"
           disabled={loading}
@@ -76,11 +86,7 @@ export default function Page() {
         </button>
       </form>
       {error && <p className="text-red-500 mt-2">Error: {error.message}</p>}
-      {data && (
-        <p className="text-green-500 mt-2">
-          Created company: {data.createProductionCompany.companyName} ({data.createProductionCompany.country.countryName})
-        </p>
-      )}
+      {data && <p className="text-green-500 mt-2">Created company: {data.createProductionCompany.companyName}</p>}
     </div>
   );
 }

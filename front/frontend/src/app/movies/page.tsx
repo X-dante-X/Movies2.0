@@ -17,10 +17,8 @@ export default function Page() {
   useEffect(() => {
     const checkAdmin = async () => {
       const admin = await verifyUser(apiClient);
-      console.log("Admin status:", admin);
       setIsVerified(admin);
-
-      if (!admin) {
+      if (!isVerified) {
         router.push("/"); 
       }
     };

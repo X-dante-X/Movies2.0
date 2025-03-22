@@ -46,10 +46,10 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<VerifyResponse> Verify(isAdminRequestModel username)
+    public Task<VerifyResponse> Verify(isAdminRequestModel username)
     {
         var user = _context.Users.FirstOrDefault(u => u.Username == username.UserName);
-        if (user is not null) return new VerifyResponse { isAdmin = user.IsAdmin };
+        if (user is not null) return Task.FromResult(new VerifyResponse { isAdmin = user.IsAdmin });
         throw new ApplicationException("User does not exist");
     }
 

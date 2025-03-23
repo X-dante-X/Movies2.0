@@ -1,7 +1,10 @@
 ﻿using AuthService.Context;
 using AuthService.Models;
 using AuthService.Models.DTO;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
+using System.Security.Claims;
 using System.Security.Cryptography;
 
 using System.Text;
@@ -46,13 +49,30 @@ public class UserService : IUserService
         };
     }
 
-    public Task<VerifyResponse> Verify(isAdminRequestModel username)
+    public async Task<ValidateResponse> Validate(string token)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Username == username.UserName);
-        if (user is not null) return Task.FromResult(new VerifyResponse { isAdmin = user.IsAdmin });
-        throw new ApplicationException("User does not exist");
-    }
+        if (string.IsNullOrEmpty(token))
+        {
+            return new ValidateResponse { Role = "" };
+        }
 
+        var claims = _jwtService.GetPrincipalFromExpiredToken(token);
+        var identity = claims.Identity;
+        if (claims == null || identity == null)
+        {
+            return new ValidateResponse { Role = "" };
+        }
+
+        var username = identity.Name;
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        if (user == null)
+        {
+            return new ValidateResponse { Role = "" };
+        }
+
+        return new ValidateResponse { Role = user.IsAdmin ? "admin" : "user" };
+    }
 
     public async Task<TokenResponse> RefreshToken(string accessToken, string refreshToken)
     {

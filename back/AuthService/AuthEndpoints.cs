@@ -20,24 +20,24 @@ public static class AuthEndpoints
             {
                 return Results.BadRequest(new { message = ex.Message });
             }
-        });
+        }).WithOpenApi();
 
-        app.MapPost("/verify", async (IUserService userService, isAdminRequestModel user) =>
+        app.MapPost("/validate", async (IUserService userService, ValidateRequest request) =>
         {
             try
             {
-                var response = await userService.Verify(user); 
+                var response = await userService.Validate(request.Token);
                 return Results.Ok(response);
             }
             catch (ApplicationException ex)
             {
                 return Results.BadRequest(new { message = ex.Message });
             }
-        });
+        }).WithOpenApi();
 
-        app.MapGet("/hello" , () => {
+        app.MapGet("/hello", () => {
             return Results.Ok("world");
-        });
+        }).WithOpenApi();
 
         app.MapPost("/login", async (IUserService userService, LoginRequestModel loginDto) =>
         {
@@ -50,7 +50,7 @@ public static class AuthEndpoints
             {
                 return Results.BadRequest(new { message = ex.Message });
             }
-        });
+        }).WithOpenApi(); ;
     }
 }
 

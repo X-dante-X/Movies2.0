@@ -9,6 +9,6 @@
     "\\back\\Movies",
     "\\config"
   ],
-  "SelectedNode": "\\config\\nginx.conf",
+  "SelectedNode": "\\docker-compose.yml",
   "PreviewInSolutionExplorer": false
 }

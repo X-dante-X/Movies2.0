@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\user\\Desktop\\Movies2.0\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\user\\Desktop\\Movies2.0\\config\\nginx.conf||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:config\\nginx.conf||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\AuthEndpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:back\\AuthService\\AuthEndpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:back\\AuthService\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\user\\Desktop\\Movies2.0\\config\\otel-config.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:config\\otel-config.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\user\\Desktop\\Movies2.0\\config\\nginx.conf||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:config\\nginx.conf||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:back\\AuthService\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\user\\Desktop\\Movies2.0\\docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -178,7 +182,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -186,19 +190,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\appsettings.json",
-              "RelativeDocumentMoniker": "back\\AuthService\\appsettings.json",
-              "ToolTip": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\appsettings.json",
-              "RelativeToolTip": "back\\AuthService\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-03-22T19:21:55.288Z"
+              "DocumentIndex": 2,
+              "Title": "otel-config.yml",
+              "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\config\\otel-config.yml",
+              "RelativeDocumentMoniker": "config\\otel-config.yml",
+              "ToolTip": "C:\\Users\\user\\Desktop\\Movies2.0\\config\\otel-config.yml",
+              "RelativeToolTip": "config\\otel-config.yml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2025-03-22T21:12:28.312Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "UserService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\Services\\Interfaces\\UserService.cs",
               "RelativeDocumentMoniker": "back\\AuthService\\Services\\Interfaces\\UserService.cs",
@@ -210,7 +215,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\MovieService\\MovieService\\appsettings.json",
               "RelativeDocumentMoniker": "back\\MovieService\\MovieService\\appsettings.json",
@@ -222,20 +227,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "nginx.conf",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\config\\nginx.conf",
               "RelativeDocumentMoniker": "config\\nginx.conf",
               "ToolTip": "C:\\Users\\user\\Desktop\\Movies2.0\\config\\nginx.conf",
               "RelativeToolTip": "config\\nginx.conf",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-03-22T17:39:42.991Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Dockerfile",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\Dockerfile",
               "RelativeDocumentMoniker": "back\\AuthService\\Dockerfile",
@@ -248,7 +253,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "docker-compose.yml",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\docker-compose.yml",
               "RelativeDocumentMoniker": "docker-compose.yml",
@@ -261,7 +266,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\appsettings.Development.json",
               "RelativeDocumentMoniker": "back\\AuthService\\appsettings.Development.json",
@@ -273,7 +278,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": ".dockerignore",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\.dockerignore",
               "RelativeDocumentMoniker": "back\\AuthService\\.dockerignore",
@@ -286,20 +291,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "AuthEndpoints.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\AuthEndpoints.cs",
               "RelativeDocumentMoniker": "back\\AuthService\\AuthEndpoints.cs",
               "ToolTip": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\AuthEndpoints.cs",
               "RelativeToolTip": "back\\AuthService\\AuthEndpoints.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAADwvyYAAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAADwvyUAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-22T18:55:58.905Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "SeedUsers.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\SeedUsers.cs",
               "RelativeDocumentMoniker": "back\\AuthService\\SeedUsers.cs",
@@ -311,7 +316,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\Program.cs",
               "RelativeDocumentMoniker": "back\\AuthService\\Program.cs",
@@ -324,7 +329,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 8,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\appsettings.json",
+              "RelativeDocumentMoniker": "back\\AuthService\\appsettings.json",
+              "ToolTip": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\appsettings.json",
+              "RelativeToolTip": "back\\AuthService\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-03-22T19:21:55.288Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\MovieService\\MovieService\\appsettings.Development.json",
               "RelativeDocumentMoniker": "back\\MovieService\\MovieService\\appsettings.Development.json",
@@ -336,7 +353,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "IJwtService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\Services\\Interfaces\\IJwtService.cs",
               "RelativeDocumentMoniker": "back\\AuthService\\Services\\Interfaces\\IJwtService.cs",
@@ -348,7 +365,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "JwtService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\Services\\Interfaces\\JwtService.cs",
               "RelativeDocumentMoniker": "back\\AuthService\\Services\\Interfaces\\JwtService.cs",
@@ -360,7 +377,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\MovieService\\MovieService\\Program.cs",
               "RelativeDocumentMoniker": "back\\MovieService\\MovieService\\Program.cs",
@@ -372,7 +389,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "SeedData.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\MovieService\\MovieService\\SeedData.cs",
               "RelativeDocumentMoniker": "back\\MovieService\\MovieService\\SeedData.cs",
@@ -384,7 +401,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "IUserService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\Services\\Interfaces\\IUserService.cs",
               "RelativeDocumentMoniker": "back\\AuthService\\Services\\Interfaces\\IUserService.cs",
@@ -396,7 +413,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "fileupload.proto",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\MovieService\\MovieService\\Protos\\fileupload.proto",
               "RelativeDocumentMoniker": "back\\MovieService\\MovieService\\Protos\\fileupload.proto",
@@ -408,7 +425,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": ".dockerignore",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\MovieService\\MovieService\\.dockerignore",
               "RelativeDocumentMoniker": "back\\MovieService\\MovieService\\.dockerignore",
@@ -420,7 +437,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "Dockerfile",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\MovieService\\MovieService\\Dockerfile",
               "RelativeDocumentMoniker": "back\\MovieService\\MovieService\\Dockerfile",
@@ -432,7 +449,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "MovieService.csproj",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\MovieService\\MovieService\\MovieService.csproj",
               "RelativeDocumentMoniker": "back\\MovieService\\MovieService\\MovieService.csproj",
@@ -444,7 +461,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 24,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\Context\\AppDbContext.cs",
               "RelativeDocumentMoniker": "back\\AuthService\\Context\\AppDbContext.cs",
@@ -456,7 +473,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "README.MD",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\README.MD",
               "RelativeDocumentMoniker": "README.MD",
@@ -468,7 +485,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 25,
               "Title": "WeatherForecast.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\WeatherForecast.cs",
               "RelativeDocumentMoniker": "back\\AuthService\\WeatherForecast.cs",
@@ -480,7 +497,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 26,
               "Title": "Dockerfile",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\Movies\\Dockerfile",
               "RelativeDocumentMoniker": "back\\Movies\\Dockerfile",
@@ -492,7 +509,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 27,
               "Title": ".dockerignore",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\Movies\\.dockerignore",
               "RelativeDocumentMoniker": "back\\Movies\\.dockerignore",
@@ -504,7 +521,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 28,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\Movies\\appsettings.Development.json",
               "RelativeDocumentMoniker": "back\\Movies\\appsettings.Development.json",
@@ -516,7 +533,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 29,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\Movies\\appsettings.json",
               "RelativeDocumentMoniker": "back\\Movies\\appsettings.json",
@@ -528,7 +545,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 30,
               "Title": "Context.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\Movies\\DBContext\\Context.cs",
               "RelativeDocumentMoniker": "back\\Movies\\DBContext\\Context.cs",
@@ -540,7 +557,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 23,
               "Title": ".gitignore",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\.gitignore",
               "RelativeDocumentMoniker": ".gitignore",
@@ -552,7 +569,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 31,
               "Title": "IntegrationTest.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\helpers\\(expamle Movies)\\Tests\\IntegrationTest.cs",
               "RelativeDocumentMoniker": "helpers\\(expamle Movies)\\Tests\\IntegrationTest.cs",
@@ -564,7 +581,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 32,
               "Title": "AdminService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\helpers\\(expamle Movies)\\Infrastructure\\Service\\AdminService.cs",
               "RelativeDocumentMoniker": "helpers\\(expamle Movies)\\Infrastructure\\Service\\AdminService.cs",
@@ -576,7 +593,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 33,
               "Title": "InformationService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\helpers\\(expamle Movies)\\Infrastructure\\Service\\InformationService.cs",
               "RelativeDocumentMoniker": "helpers\\(expamle Movies)\\Infrastructure\\Service\\InformationService.cs",
@@ -588,7 +605,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 34,
               "Title": "UserService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\helpers\\(expamle Movies)\\Infrastructure\\Service\\UserService.cs",
               "RelativeDocumentMoniker": "helpers\\(expamle Movies)\\Infrastructure\\Service\\UserService.cs",
@@ -600,7 +617,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 35,
               "Title": "IAdminService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\helpers\\(expamle Movies)\\MoviesCore\\Interfaces\\IAdminService.cs",
               "RelativeDocumentMoniker": "helpers\\(expamle Movies)\\MoviesCore\\Interfaces\\IAdminService.cs",
@@ -612,7 +629,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 36,
               "Title": "IInformationService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\helpers\\(expamle Movies)\\MoviesCore\\Interfaces\\IInformationService.cs",
               "RelativeDocumentMoniker": "helpers\\(expamle Movies)\\MoviesCore\\Interfaces\\IInformationService.cs",
@@ -624,7 +641,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 37,
               "Title": "IUserService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\helpers\\(expamle Movies)\\MoviesCore\\Interfaces\\IUserService.cs",
               "RelativeDocumentMoniker": "helpers\\(expamle Movies)\\MoviesCore\\Interfaces\\IUserService.cs",
@@ -636,7 +653,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 38,
               "Title": "Movie.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\Movies\\Model\\Movie.cs",
               "RelativeDocumentMoniker": "back\\Movies\\Model\\Movie.cs",
@@ -648,7 +665,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 39,
               "Title": "Genre.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\Movies\\Model\\Genre.cs",
               "RelativeDocumentMoniker": "back\\Movies\\Model\\Genre.cs",
@@ -660,7 +677,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 40,
               "Title": "Tag.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\Movies\\Model\\Tag.cs",
               "RelativeDocumentMoniker": "back\\Movies\\Model\\Tag.cs",
@@ -672,7 +689,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 41,
               "Title": "Mutation.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\Movies\\GraphQL\\Mutation.cs",
               "RelativeDocumentMoniker": "back\\Movies\\GraphQL\\Mutation.cs",
@@ -684,7 +701,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 42,
               "Title": "Query.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\Movies\\GraphQL\\Query.cs",
               "RelativeDocumentMoniker": "back\\Movies\\GraphQL\\Query.cs",

@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\user\\Desktop\\Movies2.0\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\user\\Desktop\\Movies2.0\\docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\user\\Desktop\\Movies2.0\\config\\nginx.conf||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:config\\nginx.conf||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
@@ -17,10 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:back\\AuthService\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\user\\Desktop\\Movies2.0\\docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\.dockerignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
@@ -182,7 +182,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -190,7 +190,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "otel-config.yml",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\config\\otel-config.yml",
               "RelativeDocumentMoniker": "config\\otel-config.yml",
@@ -198,8 +198,7 @@
               "RelativeToolTip": "config\\otel-config.yml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
-              "WhenOpened": "2025-03-22T21:12:28.312Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-22T21:12:28.312Z"
             },
             {
               "$type": "Document",
@@ -227,13 +226,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "nginx.conf",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\config\\nginx.conf",
               "RelativeDocumentMoniker": "config\\nginx.conf",
               "ToolTip": "C:\\Users\\user\\Desktop\\Movies2.0\\config\\nginx.conf",
               "RelativeToolTip": "config\\nginx.conf",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-03-22T17:39:42.991Z",
               "EditorCaption": ""
@@ -248,18 +247,17 @@
               "RelativeToolTip": "back\\AuthService\\Dockerfile",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-03-22T19:17:28.252Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-22T19:17:28.252Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "docker-compose.yml",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\docker-compose.yml",
               "RelativeDocumentMoniker": "docker-compose.yml",
               "ToolTip": "C:\\Users\\user\\Desktop\\Movies2.0\\docker-compose.yml",
               "RelativeToolTip": "docker-compose.yml",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAAC4AAAACAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAAC4AAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
               "WhenOpened": "2025-03-10T20:02:00.094Z",
               "EditorCaption": ""
@@ -286,12 +284,11 @@
               "RelativeToolTip": "back\\AuthService\\.dockerignore",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-03-22T19:21:40.39Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-22T19:21:40.39Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "AuthEndpoints.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\AuthEndpoints.cs",
               "RelativeDocumentMoniker": "back\\AuthService\\AuthEndpoints.cs",
@@ -299,8 +296,7 @@
               "RelativeToolTip": "back\\AuthService\\AuthEndpoints.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAADwvyUAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-22T18:55:58.905Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-22T18:55:58.905Z"
             },
             {
               "$type": "Document",
@@ -316,7 +312,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Movies2.0\\back\\AuthService\\Program.cs",
               "RelativeDocumentMoniker": "back\\AuthService\\Program.cs",
@@ -324,8 +320,7 @@
               "RelativeToolTip": "back\\AuthService\\Program.cs",
               "ViewState": "AgIAACEAAAAAAAAAAAAUwDUAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-10T20:02:52.624Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-10T20:02:52.624Z"
             },
             {
               "$type": "Document",

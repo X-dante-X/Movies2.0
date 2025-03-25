@@ -1,44 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken' // Import JWT for decoding tokens
-import { DecodedToken } from './app/models/responses';
+import { jwtVerify, JWTPayload} from 'jose'
 
-const SECRET_KEY = "YourSuperSecretKeyHereMakeItLongEnoughAtLeast32BytesLong1234567890"
+interface DecodedToken extends JWTPayload {
+    IsAdmin: boolean;
+}
+const SECRET_KEY = new TextEncoder().encode("YourSuperSecretKeyHereMakeItLongEnoughAtLeast32BytesLong1234567890")
 
 export async function middleware(request: NextRequest) {
-	const { url, cookies } = request
+    const {url } = request;
+    const IsAdminPage = url.includes('/admin')
+    const token = request.cookies.get("token")?.value;
 
-	const refreshToken = cookies.get("token")?.value;
-	console.log(refreshToken);
-	const isAuthPage = url.includes('/login')
-	const isMoviesPage = url.includes('/movies')
+    if (!token) {
+        return NextResponse.redirect(new URL("/login", request.url));
+    }
+    try {
+        const { payload } = await jwtVerify(token, SECRET_KEY);
+        const decoded = payload as DecodedToken;
 
-	if (isAuthPage && refreshToken) {
-		return NextResponse.redirect(new URL("/", url))
-	}
+        const isAdmin = String(decoded.IsAdmin ?? "").toLowerCase() === "true";
 
-	if (isAuthPage) {
-		return NextResponse.next()
-	}
-
-	if (!refreshToken) {
-		return NextResponse.redirect(new URL('/login', request.url))
-	}
-
-	try {
-		const decodedToken  = jwt.verify(refreshToken, SECRET_KEY) as DecodedToken
-		const userRole = decodedToken?.IsAdmin;
-		console.log(userRole)
-		if (isMoviesPage && !userRole) {
-			return NextResponse.redirect(new URL("/", url))
-		}
-	} catch (error) {
-		console.log(error)
-		return NextResponse.redirect(new URL('/login', request.url))
-	}
-
-	return NextResponse.next()
+        if (IsAdminPage && !isAdmin) {
+            return NextResponse.redirect(new URL("/404", request.url));
+        }
+        return NextResponse.next();
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log(`[MIDDLEWARE] Token Verification Error: ${error.message}`);
+        }
+        return NextResponse.redirect(new URL("/login", request.url));
+    }
 }
 
 export const config = {
-	matcher: ['/movies/:path*', '/login/:path', '/i/:path*']
+    matcher: ['/admin/:path*']
 }

@@ -8,6 +8,6 @@ public interface IUserService
     Task<LoginResponseModel> Register(UserDTO userDto);
     Task<LoginResponseModel> Login(LoginRequestModel loginDto);
     Task<TokenResponse> RefreshToken(string accessToken, string refreshToken);
-    Task<VerifyResponse> Verify(isAdminRequestModel username);
+    Task<ValidateResponse> Validate(string token);
 
 }

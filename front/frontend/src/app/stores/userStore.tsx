@@ -2,12 +2,15 @@ import { create } from "zustand";
 import { LoginResponse } from "../models/responses";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../api/ApiClient';
+import Cookies from "js-cookie";
+
 const userDataStorageKey = "userData";
 
 export type UserData = {
   username: string;
   token: string;
   isAdmin: boolean;
+  refreshToken: string
 };
 
 type LoginStore = {
@@ -34,9 +37,13 @@ export const useLoginStore = create<LoginStore>((set, get) => ({
 
   logIn(loginResponse: LoginResponse) {
     const userData = loginResponseToUserData(loginResponse);
-    
     set({ userData });
-
+    Cookies.set('token', userData.token, {
+      path: '/',
+      secure: true,
+      sameSite: 'none',
+      expires: 7
+  })
     if (typeof window !== "undefined") {
       localStorage.setItem(userDataStorageKey, JSON.stringify(userData));
     }
@@ -54,8 +61,9 @@ export const useLoginStore = create<LoginStore>((set, get) => ({
 function loginResponseToUserData(loginResponse: LoginResponse): UserData {
   return {
     username: loginResponse.userName,
-    isAdmin: loginResponse.isAdmin === 1,
+    isAdmin: loginResponse.isAdmin,
     token: loginResponse.accessToken,
+    refreshToken: loginResponse.refreshToken
   };
 }
 

@@ -3,7 +3,7 @@ export interface LoginResponse {
     accessToken: string
     refreshToken: string
     expiration: string
-    isAdmin: number
+    isAdmin: boolean
 }
 
 export interface verifyResponse {

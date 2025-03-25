@@ -39,14 +39,14 @@ export class ApiClient {
     }
 
     async logIn(email: string, password: string): Promise<LoginResponse> {
-        return this.baseRequest<LoginResponse>(`api/auth/login`, {
+        return this.baseRequest<LoginResponse>(`login`, {
             method: 'POST',
             body: JSON.stringify({ username: email, password }),
         });
     }
     
     async verify(userName: string): Promise<verifyResponse> {
-        return this.baseRequest<verifyResponse>(`api/auth/verify`, {
+        return this.baseRequest<verifyResponse>(`validate`, {
             method: 'POST',
             body: JSON.stringify({ username: userName }),
         });
@@ -59,7 +59,7 @@ export class ApiClient {
         userstatus: number
     ): Promise<LoginResponse> {
         try {
-            return await this.baseRequest<LoginResponse>(`api/auth/register`, {
+            return await this.baseRequest<LoginResponse>(`register`, {
                 method: 'POST',
                 body: JSON.stringify({
                     username,

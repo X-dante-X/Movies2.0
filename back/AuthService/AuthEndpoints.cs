@@ -24,6 +24,7 @@ public static class AuthEndpoints
 
         app.MapPost("/validate", async (IUserService userService, ValidateRequest request) =>
         {
+            await Console.Out.WriteLineAsync("request:" + request.ToString());
             try
             {
                 var response = await userService.Validate(request.Token);

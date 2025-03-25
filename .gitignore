@@ -3,11 +3,6 @@
 Thumbs.db
 *.log
 
-# Environment and configuration files
-*.env
-*.env.*
-.env.local
-
 # Node.js dependencies
 node_modules/
 **/node_modules/

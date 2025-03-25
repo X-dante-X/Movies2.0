@@ -51,6 +51,7 @@ public class UserService : IUserService
 
     public async Task<ValidateResponse> Validate(string token)
     {
+        await Console.Out.WriteLineAsync(token);
         if (string.IsNullOrEmpty(token))
         {
             return new ValidateResponse { Role = "" };
@@ -70,7 +71,7 @@ public class UserService : IUserService
         {
             return new ValidateResponse { Role = "" };
         }
-
+        await Console.Out.WriteLineAsync(user.IsAdmin ? "admin" : "user");
         return new ValidateResponse { Role = user.IsAdmin ? "admin" : "user" };
     }
 

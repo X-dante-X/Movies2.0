@@ -8,8 +8,6 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-# COPY .env .env
-
 RUN bun run build
 
 FROM oven/bun:latest AS runner

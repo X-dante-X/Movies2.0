@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { jwtVerify, JWTPayload } from 'jose'
+import { EnumTokens } from './services/auth-token.service';
 
 interface DecodedToken extends JWTPayload {
     IsAdmin: boolean;
@@ -8,10 +9,12 @@ interface DecodedToken extends JWTPayload {
 const SECRET_KEY = new TextEncoder().encode(process.env.SECRET_KEY || "")
 
 export async function middleware(request: NextRequest) {
-    const {url } = request;
+    const { url, cookies } = request
+
+    const token = cookies.get(EnumTokens.ACCESS_TOKEN)?.value
+    
     const IsAdminPage = url.includes('/admin')
     const IsUserPage = url.includes('/user/')
-    const token = request.cookies.get("accessToken")?.value;
 
     if (IsUserPage && !token) {
         return NextResponse.redirect(new URL("/login", request.url));

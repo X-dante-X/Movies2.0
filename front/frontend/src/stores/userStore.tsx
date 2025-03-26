@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiClient } from '../api/index';
-import { getAccessToken } from '../services/auth-token.service';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "../api/index";
+import { getAccessToken } from "../services/auth-token.service";
 
 export type UserData = {
   username: string;
@@ -21,7 +21,7 @@ export function useLogin() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries();
-    }
+    },
   });
 }
 
@@ -29,28 +29,13 @@ export function useRegister() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ 
-      username, 
-      email, 
-      password, 
-      userstatus 
-    }: { 
-      username: string; 
-      email: string; 
-      password: string; 
-      userstatus: number 
-    }) => {
-      const response = await apiClient.register( 
-        username, 
-        email, 
-        password,
-        userstatus 
-      );
+    mutationFn: async ({ username, email, password, userstatus }: { username: string; email: string; password: string; userstatus: number }) => {
+      const response = await apiClient.register(username, email, password, userstatus);
       return response;
     },
     onSuccess: () => {
       queryClient.invalidateQueries();
-    }
+    },
   });
 }
 
@@ -76,6 +61,6 @@ export function useLogout() {
     },
     onSuccess: () => {
       queryClient.clear(); // Clear all queries on logout
-    }
+    },
   });
 }

@@ -8,21 +8,14 @@ interface DecodedToken extends JWTPayload {
 const SECRET_KEY = new TextEncoder().encode(process.env.SECRET_KEY || "")
 
 export async function middleware(request: NextRequest) {
-<<<<<<< HEAD
     const {url } = request;
     const IsAdminPage = url.includes('/admin')
     const IsUserPage = url.includes('/user/')
-=======
-    const { url } = request;
-    const IsAdminPage = url.includes('/admin');
-    const IsUserPage = url.includes('/user');
->>>>>>> b261998 (x)
     const token = request.cookies.get("accessToken")?.value;
 
     if (IsUserPage && !token) {
         return NextResponse.redirect(new URL("/login", request.url));
     }
-
     if (IsAdminPage) {
         if (!token) {
             return NextResponse.redirect(new URL("/404", request.url));
@@ -33,7 +26,7 @@ export async function middleware(request: NextRequest) {
             const decoded = payload as DecodedToken;
 
             const isAdmin = String(decoded.IsAdmin ?? "").toLowerCase() === "true";
-            console.log(isAdmin)
+
             if (!isAdmin) {
                 return NextResponse.redirect(new URL("/404", request.url));
             }

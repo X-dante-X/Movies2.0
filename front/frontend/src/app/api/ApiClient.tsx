@@ -1,6 +1,6 @@
 import { EmailUsedError, UnauthorizedError } from '.';
 import { LoginResponse, verifyResponse } from '../models/responses';
-import { useLoginStore } from '../stores/userStore';
+import { saveTokenStorage, removeFromStorage, getAccessToken } from '../services/auth-token.service';
 
 export class ApiClient {
     constructor(private baseUrl: string) {
@@ -8,7 +8,7 @@ export class ApiClient {
     }
 
     private async baseRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
-        const token = useLoginStore.getState().userData?.token;
+        const token = getAccessToken();
         const { headers, ...otherOptions } = options;
 
         const res = await fetch(`${this.baseUrl}/${path}`, {
@@ -19,12 +19,8 @@ export class ApiClient {
             },
             ...otherOptions,
         });
-        console.log(res);
+
         if (res.status === 401) {
-            if (token !== undefined) {
-                console.log('Unauthorized, logging out');
-                useLoginStore.getState().logOut();
-            }
             throw new UnauthorizedError();
         } else if (!res.ok) {
             throw new FailedRequestError(res);
@@ -37,21 +33,27 @@ export class ApiClient {
             return null as unknown as T;
         }
     }
-
+    
     async logIn(email: string, password: string): Promise<LoginResponse> {
-        return this.baseRequest<LoginResponse>(`login`, {
+        const response = await this.baseRequest<LoginResponse>(`login`, {
             method: 'POST',
             body: JSON.stringify({ username: email, password }),
         });
+
+        if (response.accessToken) {
+            saveTokenStorage(response.accessToken);
+        }
+
+        return response;
     }
     
-    async verify(userName: string): Promise<verifyResponse> {
+    async verify(token: string): Promise<verifyResponse> {
         return this.baseRequest<verifyResponse>(`validate`, {
             method: 'POST',
-            body: JSON.stringify({ username: userName }),
+            body: JSON.stringify({ token }),
         });
     }
-
+    
     async register(
         username: string,
         email: string,
@@ -59,7 +61,7 @@ export class ApiClient {
         userstatus: number
     ): Promise<LoginResponse> {
         try {
-            return await this.baseRequest<LoginResponse>(`register`, {
+            const response = await this.baseRequest<LoginResponse>(`register`, {
                 method: 'POST',
                 body: JSON.stringify({
                     username,
@@ -68,12 +70,37 @@ export class ApiClient {
                     userstatus
                 }),
             });
+
+            if (response.accessToken) {
+                saveTokenStorage(response.accessToken);
+            }
+
+            return response;
         } catch (err) {
             if (err instanceof FailedRequestError && err.response.status === 409) {
                 throw new EmailUsedError();
             }
             throw err;
         }
+    }
+    async getNewTokens() {
+		const response = await this.baseRequest<LoginResponse>(
+			'access-token'
+		)
+
+		//if (response.data.accessToken) saveTokenStorage(response.data.accessToken)
+
+		return response
+	}
+
+    async logout() {
+        const response = await this.baseRequest<boolean>('logout');
+        
+        if (response) {
+            removeFromStorage();
+        }
+
+        return response;
     }
 }
 

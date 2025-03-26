@@ -11,7 +11,6 @@ import { useSnackbar } from 'notistack'
 import * as React from 'react'
 import { useState } from 'react'
 import { useRouter } from "next/navigation"
-import { apiClient } from '../api/index' 
 import { useRegister } from '../stores/userStore'
 import { EmailUsedError } from '../api/index' 
 
@@ -28,7 +27,7 @@ function RegisterPage() {
     const router = useRouter()
     
     
-    const registerMutation = useRegister(apiClient)
+    const registerMutation = useRegister()
     
     async function onSubmit() {
         setCredentialsError(undefined)

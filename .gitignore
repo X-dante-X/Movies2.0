@@ -77,4 +77,4 @@ node_modules/
 */.vscode/
 */.idea/
 */*.sln*
-*/*.csproj.user
+*/*.csproj.user".vs/" 

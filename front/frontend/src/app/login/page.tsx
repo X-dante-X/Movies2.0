@@ -11,7 +11,6 @@ import { useSnackbar } from 'notistack'
 import * as React from 'react'
 import { useState } from 'react'
 import { useRouter } from "next/navigation"
-import { apiClient } from '../api/index' 
 import { useLogin } from '../stores/userStore'
 
 function dataTestAttr(id: string) {
@@ -25,7 +24,7 @@ function LoginPage() {
     const { enqueueSnackbar } = useSnackbar()
     const router = useRouter()
     
-    const loginMutation = useLogin(apiClient)
+    const loginMutation = useLogin()
     
     async function onSubmit() {
         setCredentialsError(undefined)

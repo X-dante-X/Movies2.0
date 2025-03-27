@@ -15,16 +15,18 @@ public class UserService : IUserService
 {
     private readonly AppDbContext _context;
     private readonly IJwtService _jwtService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UserService(AppDbContext context, IJwtService jwtService)
+    public UserService(AppDbContext context, IJwtService jwtService, IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
         _jwtService = jwtService;
+        _httpContextAccessor = httpContextAccessor; 
     }
 
     public async Task<LoginResponseModel> Login(LoginRequestModel loginDto)
     {
-        var user = _context.Users.SingleOrDefault(u => u.Username == loginDto.UserName);
+        var user = _context.Users.SingleOrDefault(u => u.Email == loginDto.Email);
         if (user == null)
             throw new ApplicationException("User not found");
 
@@ -42,12 +44,24 @@ public class UserService : IUserService
 
         return new LoginResponseModel
         {
-            UserName = user.Username,
+            Username = user.Username,
             RefreshToken = refreshToken,
             Expiration = DateTime.UtcNow.AddMinutes(15),
             AccessToken = token,
             IsAdmin = user.IsAdmin
         };
+    }
+
+    public Task<bool> Logout()
+    {
+        if (_httpContextAccessor?.HttpContext == null)
+        {
+            return Task.FromResult(false);
+        }
+
+        _httpContextAccessor.HttpContext.Response.Cookies.Delete("accessToken");
+
+        return Task.FromResult(true);
     }
 
     public async Task<ValidateResponse> Validate(string token)
@@ -110,7 +124,7 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<LoginResponseModel> Register(UserDTO userDto)
+    public async Task<LoginResponseModel> Register(RegisterRequest userDto)
     {
         if (_context.Users.Any(u => u.Username == userDto.Username))
             throw new ApplicationException("Username already exists");
@@ -146,7 +160,7 @@ public class UserService : IUserService
 
         return new LoginResponseModel
         {
-            UserName = user.Username,
+            Username = user.Username,
             AccessToken = token,
             RefreshToken = refreshToken,
             Expiration = DateTime.UtcNow.AddMinutes(15),

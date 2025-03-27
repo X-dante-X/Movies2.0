@@ -87,13 +87,21 @@ export class ApiClient {
   }
 
   async logout() {
-    const response = await this.baseRequest<boolean>("logout");
-
-    if (response) {
-      removeFromStorage();
+    const token = getAccessToken()
+    if (!token) {
+        console.warn('No access token found');
+        return false 
     }
-
-    return response;
+    try {
+      const response = await this.baseRequest<boolean>("logout", {
+        method: "POST"
+      });
+      if (response) removeFromStorage()
+      return response
+    } catch (error) {
+      console.error('Logout failed:', error)
+      throw error
+    }
   }
 }
 

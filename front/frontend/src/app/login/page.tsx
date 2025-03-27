@@ -13,7 +13,7 @@ function dataTestAttr(id: string) {
 }
 
 function LoginPage() {
-  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const router = useRouter();
@@ -31,7 +31,7 @@ function LoginPage() {
 
   function onSubmit() {
     setErrorMessage(undefined);
-    mutate({ userName, password } as IAuthLoginForm);
+    mutate({ email, password } as IAuthLoginForm);
   }
 
   return (
@@ -45,10 +45,10 @@ function LoginPage() {
       <Grid item>
         <TextField
           label="Email"
-          value={userName}
+          value={email}
           error={!!errorMessage}
           helperText={errorMessage}
-          onChange={(e) => setUserName(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           disabled={isPending}
         />
       </Grid>

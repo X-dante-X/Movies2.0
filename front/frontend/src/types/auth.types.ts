@@ -1,5 +1,5 @@
 export interface IAuthLoginForm {
-  userName: string;
+  email: string;
   password: string;
 }
 

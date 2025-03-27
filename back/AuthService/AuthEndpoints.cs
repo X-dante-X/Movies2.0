@@ -8,7 +8,7 @@ public static class AuthEndpoints
 {
     public static void MapAuthEndpoints(this WebApplication app)
     {
-        app.MapPost("/register", async (IUserService userService, UserDTO userDto) =>
+        app.MapPost("/register", async (IUserService userService, RegisterRequest userDto) =>
         {
             try
             {
@@ -28,6 +28,19 @@ public static class AuthEndpoints
             try
             {
                 var response = await userService.Validate(request.Token);
+                return Results.Ok(response);
+            }
+            catch (ApplicationException ex)
+            {
+                return Results.BadRequest(new { message = ex.Message });
+            }
+        }).WithOpenApi();
+
+        app.MapPost("/logout", async (IUserService userService) =>
+        {
+            try
+            {
+                var response = await userService.Logout();
                 return Results.Ok(response);
             }
             catch (ApplicationException ex)

@@ -1,6 +1,17 @@
 import Link from "next/link";
 import { routes } from '../../src/app/routes'
+import { useLogout } from '../../src/stores/userStore';
+import { useRouter } from "next/navigation";
+
 export function Header() {
+  const router = useRouter();
+  const logoutMutation = useLogout();
+
+  const handleLogout = async () => {
+    await logoutMutation.mutateAsync();
+    router.push(routes.login.pattern);
+  };
+
   return (
     <header className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg w-screen flex items-center justify-between p-5">
       <nav className="flex space-x-6">
@@ -29,6 +40,9 @@ export function Header() {
           className="text-xl font-semibold hover:underline">
           Register
         </Link>
+        <button onClick={handleLogout} className="text-xl font-semibold hover:underline">
+          Logout
+        </button>
       </nav>
       <div className="flex items-center space-x-2">
         <input

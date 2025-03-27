@@ -2,6 +2,6 @@
 {
     public class isAdminRequestModel
     {
-        public string UserName { get; set; } = null!;
+        public string Username { get; set; } = null!;
     }
 }

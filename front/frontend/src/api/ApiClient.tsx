@@ -97,6 +97,7 @@ export class ApiClient {
         method: "POST"
       });
       if (response) removeFromStorage()
+
       return response
     } catch (error) {
       console.error('Logout failed:', error)

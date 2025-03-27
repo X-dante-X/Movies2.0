@@ -1,4 +1,4 @@
-﻿namespace AuthService.Models.DTO;
+﻿namespace AuthService.Models;
 
 public class RegisterRequest
 {

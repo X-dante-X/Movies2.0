@@ -1,6 +1,5 @@
 ﻿using AuthService.Context;
 using AuthService.Models;
-using AuthService.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;

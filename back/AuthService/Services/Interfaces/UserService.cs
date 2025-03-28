@@ -2,8 +2,6 @@
 using AuthService.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Data;
-using System.Security.Claims;
 using System.Security.Cryptography;
 
 using System.Text;

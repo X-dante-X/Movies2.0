@@ -48,10 +48,6 @@ public static class AuthEndpoints
             }
         }).WithOpenApi();
 
-        app.MapGet("/hello", () => {
-            return Results.Ok("world");
-        }).WithOpenApi();
-
         app.MapPost("/login", async (IUserService userService, LoginRequestModel loginDto) =>
         {
             try
@@ -63,7 +59,11 @@ public static class AuthEndpoints
             {
                 return Results.BadRequest(new { message = ex.Message });
             }
-        }).WithOpenApi(); ;
+        }).WithOpenApi();
+
+        app.MapGet("/hello", () => {
+            return Results.Ok("world");
+        }).WithOpenApi();
     }
 }
 

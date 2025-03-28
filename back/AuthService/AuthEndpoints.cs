@@ -1,5 +1,4 @@
-﻿using AuthService.Models.DTO;
-using AuthService.Models;
+﻿using AuthService.Models;
 using AuthService.Services.Interfaces;
 
 namespace AuthService;
@@ -8,20 +7,48 @@ public static class AuthEndpoints
 {
     public static void MapAuthEndpoints(this WebApplication app)
     {
-        app.MapPost("/api/auth/register", async (IUserService userService, UserDTO userDto) =>
+        app.MapPost("/register", async (IUserService userService, RegisterRequest userDto) =>
         {
             try
             {
                 var response = await userService.Register(userDto);
+                Console.WriteLine(response);
                 return Results.Ok(response);
             }
             catch (ApplicationException ex)
             {
                 return Results.BadRequest(new { message = ex.Message });
             }
-        });
+        }).WithOpenApi();
 
-        app.MapPost("/api/auth/login", async (IUserService userService, LoginRequestModel loginDto) =>
+        app.MapPost("/validate", async (IUserService userService, ValidateRequest request) =>
+        {
+            await Console.Out.WriteLineAsync("request:" + request.ToString());
+            try
+            {
+                var response = await userService.Validate(request.Token);
+                return Results.Ok(response);
+            }
+            catch (ApplicationException ex)
+            {
+                return Results.BadRequest(new { message = ex.Message });
+            }
+        }).WithOpenApi();
+
+        app.MapPost("/logout", async (IUserService userService) =>
+        {
+            try
+            {
+                var response = await userService.Logout();
+                return Results.Ok(response);
+            }
+            catch (ApplicationException ex)
+            {
+                return Results.BadRequest(new { message = ex.Message });
+            }
+        }).WithOpenApi();
+
+        app.MapPost("/login", async (IUserService userService, LoginRequestModel loginDto) =>
         {
             try
             {
@@ -32,7 +59,11 @@ public static class AuthEndpoints
             {
                 return Results.BadRequest(new { message = ex.Message });
             }
-        });
+        }).WithOpenApi();
+
+        app.MapGet("/hello", () => {
+            return Results.Ok("world");
+        }).WithOpenApi();
     }
 }
 

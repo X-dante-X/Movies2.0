@@ -3,17 +3,13 @@
 Thumbs.db
 *.log
 
-# Environment and configuration files
-*.env
-*.env.*
-.env.local
-
 # Node.js dependencies
 node_modules/
 **/node_modules/
 **/.next/
 
 # .NET directories across all subdirectories
+.vs/
 */bin/
 */obj/
 */.vs/
@@ -81,4 +77,4 @@ node_modules/
 */.vscode/
 */.idea/
 */*.sln*
-*/*.csproj.user
+*/*.csproj.user".vs/" 

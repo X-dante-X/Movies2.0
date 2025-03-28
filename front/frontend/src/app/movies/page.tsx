@@ -4,6 +4,7 @@ import { GET_MOVIES } from "@/graphql/queries";
 import Link from "next/link";
 import { Card } from "@/components/Card";
 
+
 export default function Page() {
   const { loading, error, data } = useQuery(GET_MOVIES);
 

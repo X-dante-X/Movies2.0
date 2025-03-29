@@ -16,6 +16,7 @@ export const GET_MOVIES = gql`
       movieId
       title
       description
+      posterPath
     }
   }
 `;
@@ -34,9 +35,15 @@ export const GET_MOVIE_DETAILS = gql`
       voteAverage
       voteCount
       pegi
+      moviePath
+      backdropPath
       genre {
         genreId
         genreName
+      }
+      tags {
+        tagId
+        tagName
       }
       movieCasts {
         person {

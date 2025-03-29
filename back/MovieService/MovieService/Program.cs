@@ -12,6 +12,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = 1024 * 1024 * 1024;
+});
+
 builder.Services.AddGrpcClient<FileUpload.FileUploadClient>(o =>
 {
     o.Address = new Uri(Environment.GetEnvironmentVariable("PROCESSFILESERVICE_URL")!);

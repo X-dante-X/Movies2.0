@@ -368,8 +368,11 @@ public static class SeedData
                     new() { Person = people.First(p => p.PersonName == "Leonardo DiCaprio"), CharacterName = "Dom Cobb", CharacterGender = "Male", Job = "Actor" },
                     new() { Person = people.First(p => p.PersonName == "Tom Hardy"), CharacterName = "Eames", CharacterGender = "Male", Job = "Actor" },
                     new() { Person = people.First(p => p.PersonName == "Christopher Nolan"), CharacterGender = "Male", Job = "Director" }
-                ]
-            },
+                ],
+                MoviePath = "1.mp4",
+                PosterPath = "1.jpg",
+                BackdropPath ="1.jpg",
+},
             new()
             {
                 Title = "The Matrix",
@@ -391,7 +394,10 @@ public static class SeedData
                 [
                     new() { Person = people.First(p => p.PersonName == "Keanu Reeves"), CharacterName = "Neo", CharacterGender = "Male", Job = "Actor" },
                     new() { Person = people.First(p => p.PersonName == "Scarlett Johansson"), CharacterName = "Trinity", CharacterGender = "Female", Job = "Actor" }
-                ]
+                ],
+                MoviePath = "2.mp4",
+                PosterPath = "2.jpg",
+                BackdropPath ="2.jpg",
             },
             new()
             {
@@ -414,7 +420,10 @@ public static class SeedData
                 [
                     new() { Person = people.First(p => p.PersonName == "Leonardo DiCaprio"), CharacterName = "Jack Dawson", CharacterGender = "Male", Job = "Actor" },
                     new() { Person = people.First(p => p.PersonName == "James Cameron"), CharacterGender = "Male", Job = "Director" }
-                ]
+                ],
+                MoviePath = "3.mp4",
+                PosterPath = "3.jpg",
+                BackdropPath ="3.jpg",
             },
             new()
             {
@@ -436,7 +445,10 @@ public static class SeedData
                 MovieCasts =
                 [
                     new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
-                ]
+                ],
+                MoviePath = "4.mp4",
+                PosterPath = "4.jpg",
+                BackdropPath ="4.jpg",
             }
         };
         context.Movies.AddRange(movies);

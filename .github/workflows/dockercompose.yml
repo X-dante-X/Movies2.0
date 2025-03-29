@@ -19,6 +19,9 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
+      - name: Fix permissions for MinIO init script
+        run: chmod +x ./init-minio.sh || true
+
       - name: Build and run Docker Compose
         run: |
           docker compose up --build -d

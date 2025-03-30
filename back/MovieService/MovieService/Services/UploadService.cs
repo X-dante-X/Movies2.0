@@ -42,7 +42,7 @@ public class UploadService : IUploadService
         using var call = _uploadClient.UploadMoviePoster();
         using var fileStream = file.OpenReadStream();
 
-        byte[] buffer = new byte[1024 * 1024];
+        byte[] buffer = new byte[1024 * 1024 * 100];
         int bytesRead;
 
         while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
@@ -66,7 +66,7 @@ public class UploadService : IUploadService
         using var call = _uploadClient.UploadMovieBackdrop();
         using var fileStream = file.OpenReadStream();
 
-        byte[] buffer = new byte[1024 * 1024];
+        byte[] buffer = new byte[1024 * 1024 * 100];
         int bytesRead;
 
         while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
@@ -90,7 +90,7 @@ public class UploadService : IUploadService
         using var call = _uploadClient.UploadCompanyLogo();
         using var fileStream = file.OpenReadStream();
 
-        byte[] buffer = new byte[1024 * 1024];
+        byte[] buffer = new byte[1024 * 1024 * 100];
         int bytesRead;
 
         while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
@@ -114,7 +114,7 @@ public class UploadService : IUploadService
         using var call = _uploadClient.UoloadPersonPhoto();
         using var fileStream = file.OpenReadStream();
 
-        byte[] buffer = new byte[1024 * 1024];
+        byte[] buffer = new byte[1024 * 1024 * 100];
         int bytesRead;
 
         while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)

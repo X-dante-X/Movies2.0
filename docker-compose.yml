@@ -98,6 +98,7 @@ services:
       - POSTGESQL=Host=postgresauth;Port=5432;Database=user;Username=postgres;Password=postgres;
     depends_on:
       - postgresuser
+      - rabbitmq
 
   processfileservice:
     build:

@@ -20,7 +20,8 @@ builder.Services.AddGrpcClient<FileUpload.FileUploadClient>(o =>
 });
 
 builder.Services.AddSingleton<IUploadService, UploadService>();
-builder.Services.AddHostedService<RabbitMQConnectionFactor>();
+builder.Services.AddSingleton<RabbitMqService>();
+builder.Services.AddHostedService<RabbitMqListenerService>();
 
 builder.Services.AddDbContext<Context>();
 

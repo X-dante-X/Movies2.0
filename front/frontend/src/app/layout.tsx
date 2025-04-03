@@ -3,11 +3,12 @@
 //import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/Header";
+import { Header } from "@/components/header/Header";
 import { apolloClient } from "@/lib/apolloClient";
 import { ApolloProvider } from "@apollo/client";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { useState } from 'react'
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
+import { LazyMotion, domAnimation } from "framer-motion";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,15 +30,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [queryClient] = useState(() => new QueryClient())
+  const [queryClient] = useState(() => new QueryClient());
 
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <QueryClientProvider client={queryClient}>
-        <Header />
-        <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
-        </QueryClientProvider>
+        <LazyMotion features={domAnimation}>
+          <QueryClientProvider client={queryClient}>
+            <Header />
+            <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
+          </QueryClientProvider>
+        </LazyMotion>
       </body>
     </html>
   );

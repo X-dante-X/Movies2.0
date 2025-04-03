@@ -6,3 +6,14 @@ export function getServerMinIoUrl(path?: string, defaultImage: string = "empty.j
 export function getClientMinIoUrl(path?: string, defaultImage: string = "empty.jpg"): string {
   return path ? `http://localhost/minio/uploads/${path}` : defaultImage;
 }
+
+export function getBackgroundImage(srcSet = '') {
+  const imageSet = srcSet
+    .split(', ')
+    .map(str => {
+      const [url, dpi] = str.split(' ')
+      return `url("${url}") ${dpi}`
+    })
+    .join(', ')
+  return `image-set(${imageSet})`
+}

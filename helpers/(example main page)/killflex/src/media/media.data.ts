@@ -8,7 +8,7 @@ export const mediaData: IMediaItem[] = [
 		slug: 'loki',
 		year: 2021,
 		rating: 8.2,
-		poster: '/posters/loki.jpg',
+		poster: '/posters/1.jpg',
 		genres: ['Action', 'Adventure', 'Fantasy'],
 		backdrop: '/backdrops/backdrop-1.jpg',
 		seasons
@@ -19,7 +19,7 @@ export const mediaData: IMediaItem[] = [
 		slug: 'the-morning-show',
 		year: 2019,
 		rating: 8.4,
-		poster: '/posters/morning.jpg',
+		poster: '/posters/2.jpg',
 		genres: ['Drama'],
 		backdrop: '/backdrops/backdrop-2.jpg',
 		seasons
@@ -30,7 +30,7 @@ export const mediaData: IMediaItem[] = [
 		slug: 'you',
 		year: 2018,
 		rating: 7.7,
-		poster: '/posters/you.jpg',
+		poster: '/posters/3.jpg',
 		genres: ['Crime', 'Drama', 'Romance'],
 		backdrop: '/backdrops/backdrop-3.jpg',
 		seasons
@@ -41,7 +41,7 @@ export const mediaData: IMediaItem[] = [
 		slug: 'stranger-things',
 		year: 2016,
 		rating: 8.7,
-		poster: '/posters/stranger.jpg',
+		poster: '/posters/4.jpg',
 		genres: ['Drama', 'Fantasy', 'Horror'],
 		backdrop: '/backdrops/backdrop-4.jpg',
 		seasons
@@ -52,7 +52,7 @@ export const mediaData: IMediaItem[] = [
 		slug: 'bridgerton',
 		year: 2020,
 		rating: 7.3,
-		poster: '/posters/bridgerton.jpg',
+		poster: '/posters/5.jpg',
 		genres: ['Drama', 'Romance'],
 		backdrop: '/backdrops/backdrop-5.jpg',
 		seasons
@@ -63,7 +63,7 @@ export const mediaData: IMediaItem[] = [
 		slug: 'emily-in-paris',
 		year: 2020,
 		rating: 7.1,
-		poster: '/posters/emily.jpg',
+		poster: '/posters/6.jpg',
 		genres: ['Comedy', 'Drama', 'Romance'],
 		backdrop: '/backdrops/backdrop-6.jpg',
 		seasons
@@ -74,7 +74,7 @@ export const mediaData: IMediaItem[] = [
 		slug: 'the-boyes',
 		year: 2019,
 		rating: 8.7,
-		poster: '/posters/the-boys.jpg',
+		poster: '/posters/7.jpg',
 		genres: ['Action', 'Comedy', 'Crime'],
 		backdrop: '/backdrops/backdrop-7.jpg',
 		seasons
@@ -85,7 +85,7 @@ export const mediaData: IMediaItem[] = [
 		slug: 'the-mandalorian',
 		year: 2019,
 		rating: 8.8,
-		poster: '/posters/mandalorian.jpg',
+		poster: '/posters/8.jpg',
 		genres: ['Action', 'Adventure', 'Fantasy'],
 		backdrop: '/backdrops/backdrop-8.jpg',
 		seasons
@@ -96,7 +96,7 @@ export const mediaData: IMediaItem[] = [
 		slug: 'picky-blinders',
 		year: 2013,
 		rating: 8.8,
-		poster: '/posters/blinders.jpg',
+		poster: '/posters/9.jpg',
 		genres: ['Crime', 'Drama'],
 		backdrop: '/backdrops/backdrop-9.jpg',
 		seasons
@@ -107,7 +107,7 @@ export const mediaData: IMediaItem[] = [
 		slug: 'reacher',
 		year: 2022,
 		rating: 8.2,
-		poster: '/posters/reacher.jpg',
+		poster: '/posters/10.jpg',
 		genres: ['Action', 'Adventure', 'Crime'],
 		backdrop: '/backdrops/backdrop-10.jpg',
 		seasons
@@ -118,7 +118,7 @@ export const mediaData: IMediaItem[] = [
 		slug: 'breaking-bad',
 		year: 2008,
 		rating: 9.4,
-		poster: '/posters/breaking-bad.jpg',
+		poster: '/posters/11.jpg',
 		genres: ['Crime', 'Drama', 'Thriller'],
 		backdrop: '/backdrops/backdrop-11.jpg',
 		seasons
@@ -129,7 +129,7 @@ export const mediaData: IMediaItem[] = [
 		slug: 'westworld',
 		year: 2016,
 		rating: 8.6,
-		poster: '/posters/westworld.jpg',
+		poster: '/posters/12.jpg',
 		genres: ['Drama', 'Mystery', 'Sci-Fi'],
 		backdrop: '/backdrops/backdrop-12.jpg',
 		seasons

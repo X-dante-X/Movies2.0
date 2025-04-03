@@ -77,10 +77,11 @@ services:
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-    entrypoint: /etc/minio/init-minio.sh
+    entrypoint: /etc/minio/init.sh
     volumes:
       - minio_data:/data
       - ./config/init-minio.sh:/etc/minio/init-minio.sh
+      - ./config/init.sh:/etc/minio/init.sh
 
   processfileservice:
     build:
@@ -94,13 +95,13 @@ services:
     depends_on:
       - minio
 
-  frontend:
-    build:
-      context: ./front/frontend
-    ports:
-      - "3000:3000"
-    depends_on:
-      - nginx
+  # frontend:
+  #   build:
+  #     context: ./front/frontend
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - nginx
 
   # backend:
   #   build:

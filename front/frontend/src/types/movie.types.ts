@@ -72,8 +72,12 @@ export interface Movie {
     country: Country;
 }
 
+export interface MoviesConnection {
+    nodes: Movie[];
+};
+
 export interface GetMovieDetailsResponse {
-    movies: Movie[];
+    movies: MoviesConnection;
 }
 
 export interface GetCountryDetailsResponse {
@@ -94,4 +98,15 @@ export interface MovieCastDTO {
     characterName?: string;
     characterGender?: string;
     job: string;
+}
+
+export interface IMediaItem {
+    id: number;
+    movieId: number;
+    title: string;
+    popularity: number;
+    posterPath: string;
+    backdropPath: string;
+    releaseDate: string;
+    genre: Genre[];
 }

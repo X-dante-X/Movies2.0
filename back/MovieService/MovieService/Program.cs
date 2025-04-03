@@ -32,7 +32,8 @@ builder.Services.AddGraphQLServer()
     .AddType<UploadType>()
     .AddProjections()
     .AddFiltering()
-    .AddSorting();
+    .AddSorting()
+    .AddPagingArguments();
 
 var app = builder.Build();
 

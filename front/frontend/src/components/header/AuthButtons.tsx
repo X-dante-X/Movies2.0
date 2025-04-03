@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { routes } from "../../src/app/routes";
+import { routes } from "../../app/routes";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/auth.service";
 import { useMutation } from "@tanstack/react-query";
@@ -46,27 +46,31 @@ export function AuthButtons() {
       {user.isAdmin && (
         <Link
           href="/admin"
-          className="text-xl font-semibold hover:underline">
+          className="transition-colors group hover:text-primary relative">
           Admin
+          <span className="absolute left-0 w-full h-0.5 top-8 transition-colors bg-transparent group-hover:bg-primary" />
         </Link>
       )}
       <button
         onClick={handleLogout}
-        className="text-xl font-semibold hover:underline">
+        className="transition-colors group hover:text-primary relative">
         Logout
+        <span className="absolute left-0 w-full h-0.5 top-8 transition-colors bg-transparent group-hover:bg-primary" />
       </button>
     </>
   ) : (
     <>
       <Link
         href={routes.login.pattern}
-        className="text-xl font-semibold hover:underline">
+        className="transition-colors group hover:text-primary relative">
         Login
+        <span className="absolute left-0 w-full h-0.5 top-8 transition-colors bg-transparent group-hover:bg-primary" />
       </Link>
       <Link
         href={routes.register.pattern}
-        className="text-xl font-semibold hover:underline">
+        className="transition-colors group hover:text-primary relative">
         Register
+        <span className="absolute left-0 w-full h-0.5 top-8 transition-colors bg-transparent group-hover:bg-primary" />
       </Link>
     </>
   );

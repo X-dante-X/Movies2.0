@@ -15,7 +15,7 @@ export default function Page() {
       <h1 className="text-3xl font-bold mb-4">Movies</h1>
       <p className="mb-4">All movies</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {data.movies.map((movie: { movieId: string; title: string; description: string; releaseDate: string; posterPath: string }) => (
+        {data.movies.nodes.map((movie: { movieId: string; title: string; description: string; releaseDate: string; posterPath: string }) => (
           <Link
             key={movie.movieId}
             href={`/movies/${movie.movieId}`}>

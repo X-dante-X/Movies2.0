@@ -6,6 +6,7 @@ using Movies;
 using MovieService.Services.Interfaces;
 using MovieService.Services;
 using MovieService;
+using MovieService.RabbitMQService;
 
 
 var builder = WebApplication.CreateBuilder(args);

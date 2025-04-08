@@ -5,6 +5,10 @@ using System.Text;
 using System.Text.Json;
 using DBContext;
 using MovieService.RabbitMQService.Messages;
+using Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace MovieService.Services;
 
 public class RabbitMqService : IAsyncDisposable
 {
@@ -14,11 +18,11 @@ public class RabbitMqService : IAsyncDisposable
     private AsyncEventingBasicConsumer? _consumer;
     private readonly Context _context;
     private readonly Dictionary<int, MovieResponse> _movies = new()
-    {
-        { 1, new("The Matrix", "/images/matrix.jpg") },
-        { 2, new("Inception", "/images/inception.jpg") },
-        { 3, new("Interstellar", "/images/interstellar.jpg") }
-    };
+{
+    { 1, new("The Matrix", "/images/matrix.jpg") },
+    { 2, new("Inception", "/images/inception.jpg") },
+    { 3, new("Interstellar", "/images/interstellar.jpg") }
+};
 
     public RabbitMqService(Context context, string hostName = "rabbitmq", int port = 5672)
     {
@@ -52,44 +56,24 @@ public class RabbitMqService : IAsyncDisposable
         }
     }
 
-    private async Task OnMessageReceivedAsync(object sender, BasicDeliverEventArgs ea)
+    public async Task OnMessageReceivedAsync(object sender, BasicDeliverEventArgs ea)
     {
         var body = ea.Body.ToArray();
         var message = Encoding.UTF8.GetString(body);
-        List<int> favoriteMovies = JsonSerializer.Deserialize<List<int>>(message);
+        List<int> favoriteMovies = JsonSerializer.Deserialize<List<int>>(message)!;
         Console.WriteLine($"Received message: {message}");
-        /*
-        if (int.TryParse(message, out int movieId) && _movies.TryGetValue(movieId, out var movie))
-        {
-            var responseJson = JsonSerializer.Serialize(movie);
-            var responseBytes = Encoding.UTF8.GetBytes(responseJson);
 
-            var properties = new BasicProperties
+        var movies = await _context.Movies
+            .Where(movie => favoriteMovies.Contains(movie.MovieId))
+            .Select(movie => new RabbitMQMovieResponse
             {
-                CorrelationId = ea.BasicProperties.CorrelationId,
-                ReplyTo = ea.BasicProperties.ReplyTo
-            };
+                Title = movie.Title,
+                PosterPath = movie.PosterPath ?? "No image",
+                Description = movie.Description
+            })
+            .ToListAsync();
 
-            await _channel.BasicPublishAsync(
-                exchange: "",
-                routingKey: properties.ReplyTo!,
-                mandatory: true,
-                basicProperties: properties,
-                body: responseBytes
-            );
-        }
-        else
-        {
-            Console.WriteLine($"Invalid movie ID received: {message}");
-        }
-        */
-        List<RabbitMQMovieResponse> rabbitMQMovies = new List<RabbitMQMovieResponse>();
-        foreach (var movie in favoriteMovies)
-        {
-            var movieModel = await MovieResponse(movie);
-            rabbitMQMovies.Add(movieModel);
-        }
-        var responseJson = JsonSerializer.Serialize(rabbitMQMovies);
+        var responseJson = JsonSerializer.Serialize(movies);
         var responseBytes = Encoding.UTF8.GetBytes(responseJson);
 
         var properties = new BasicProperties
@@ -107,20 +91,6 @@ public class RabbitMqService : IAsyncDisposable
         );
     }
 
-    public async Task<RabbitMQMovieResponse> MovieResponse(int id)
-    {
-        var movie = await _context.Movies.FindAsync(id);
-        if (movie == null)
-        {
-            throw new Exception("Not found");
-        }
-        return new RabbitMQMovieResponse
-        {
-            Title = movie.Title,
-            PosterPath = movie.PosterPath == null ? "No image" : movie.PosterPath,
-            Description = movie.Description
-        };
-    }
     public async Task StopConsumingMessagesAsync()
     {
         if (_consumer != null)

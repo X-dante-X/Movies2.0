@@ -1,5 +1,7 @@
 ﻿using MovieService.Services;
 
+namespace MovieService.RabbitMQService;
+
 public class RabbitMqListenerService : IHostedService
 {
     private readonly RabbitMqService _rabbitMqService;

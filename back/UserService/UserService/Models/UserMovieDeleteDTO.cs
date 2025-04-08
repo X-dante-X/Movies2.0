@@ -1,8 +1,7 @@
-﻿namespace UserService.Models
+﻿namespace UserService.Models;
+
+public class UserMovieDeleteDTO
 {
-    public class UserMovieDeleteDTO
-    {
-        public string UserId { get; set; }
-        public int MovieId { get; set; }
-    }
+    public string UserId { get; set; } = null!;
+    public int MovieId { get; set; }
 }

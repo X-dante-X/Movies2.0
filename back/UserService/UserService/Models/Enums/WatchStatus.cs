@@ -1,10 +1,9 @@
-﻿namespace UserService.Models.Enums
+﻿namespace UserService.Models.Enums;
+
+public enum WatchStatus
 {
-    public enum WatchStatus
-    {
-        PlanToWatch,
-        Watching,
-        Completed,
-        Dropped
-    }
+    PlanToWatch,
+    Watching,
+    Completed,
+    Dropped
 }

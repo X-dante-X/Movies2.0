@@ -8,11 +8,17 @@ services:
     depends_on:
       - moviesservice
       - authservice
+      - minio
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
       - "5672:5672"
       - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      retries: 5
 
   postgresmovie:
     image: postgres:16
@@ -25,6 +31,12 @@ services:
       - "5434:5432"
     volumes:
       - postgresmovie_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d movies"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   postgresuser:
     image: postgres:16
@@ -36,7 +48,13 @@ services:
     ports:
       - "5437:5432"
     volumes:
-      - postgresmovie_data:/var/lib/postgresql/data
+      - postgresuser_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d user"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   postgresauth:
     image: postgres:16
@@ -49,18 +67,12 @@ services:
       - "5435:5432"
     volumes:
       - postgresauth_data:/var/lib/postgresql/data
-
-  minio:
-    image: minio/minio
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-    command: server --console-address ":9001" /data
-    volumes:
-      - minio_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d auth"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   moviesservice:
     build:
@@ -72,8 +84,10 @@ services:
       - PROCESSFILESERVICE_URL=http://processfileservice:8081
       - RABBITMQ_HOST=rabbitmq
     depends_on:
-      - postgresmovie
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+      postgresmovie:
+        condition: service_healthy
 
   authservice:
     build:
@@ -83,7 +97,21 @@ services:
     environment:
       - POSTGESQL=Host=postgresauth;Port=5432;Database=auth;Username=postgres;Password=postgres;
     depends_on:
-      - postgresauth
+      postgresauth:
+        condition: service_healthy
+
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    entrypoint: /etc/minio/init-minio.sh
+    volumes:
+      - minio_data:/data
+      - ./config/init-minio.sh:/etc/minio/init-minio.sh
 
   userservice:
     build:
@@ -94,8 +122,10 @@ services:
       - POSTGESQL=Host=postgresauth;Port=5432;Database=user;Username=postgres;Password=postgres;
       - RABBITMQ_HOST=rabbitmq
     depends_on:
-      - postgresuser
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+      postgresuser:
+        condition: service_healthy
 
   processfileservice:
     build:
@@ -114,6 +144,8 @@ services:
       context: ./front/frontend
     ports:
       - "3000:3000"
+    depends_on:
+      - nginx
 
   # backend:
   #   build:
@@ -201,4 +233,5 @@ services:
 volumes:
   postgresmovie_data:
   postgresauth_data:
+  postgresuser_data:
   minio_data:

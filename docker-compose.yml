@@ -44,7 +44,7 @@ services:
     ports:
       - "5437:5432"
     volumes:
-      - postgresmovie_data:/var/lib/postgresql/data
+      - postgresuser_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d user"]
       interval: 10s
@@ -80,7 +80,8 @@ services:
       - PROCESSFILESERVICE_URL=http://processfileservice:8081
       - RABBITMQ_HOST=rabbitmq
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
       postgresmovie:
         condition: service_healthy
 
@@ -117,7 +118,8 @@ services:
       - POSTGESQL=Host=postgresauth;Port=5432;Database=user;Username=postgres;Password=postgres;
       - RABBITMQ_HOST=rabbitmq
     depends_on:
-      - rabbitmq
+      abbitmq:
+        condition: service_healthy
       postgresuser:
         condition: service_healthy
 
@@ -227,4 +229,5 @@ services:
 volumes:
   postgresmovie_data:
   postgresauth_data:
+  postgresuser_data:
   minio_data:

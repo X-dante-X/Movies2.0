@@ -118,7 +118,7 @@ services:
       - POSTGESQL=Host=postgresauth;Port=5432;Database=user;Username=postgres;Password=postgres;
       - RABBITMQ_HOST=rabbitmq
     depends_on:
-      abbitmq:
+      rabbitmq:
         condition: service_healthy
       postgresuser:
         condition: service_healthy

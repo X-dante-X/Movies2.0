@@ -131,17 +131,26 @@ namespace UserService.Services
 
         public async Task<List<UserFavoriteMovie>> GetUserFavoritesAsync(string userId)
         {
-            
+
             var favorites = await _context.UserMovies
-                .Where(um => um.UserId == userId && um.IsFavorite)
-                .Select(um => um.Id)
-                .ToListAsync();
-            List<UserFavoriteMovie> favoriteMovies = new List<UserFavoriteMovie>();
-            foreach (var favorite in favorites)
+            .Where(um => um.UserId == userId && um.IsFavorite)
+            .Select(um => new
             {
-                var movies = await RabbitMqService.GetMovieById(favorites);
-                favoriteMovies.AddRange(movies.Select(x => Mappers.Mapper.MovieResponseToMovieFavorite(x, WatchStatus.Watching, true)));
-            }
+                um.MovieId,
+                um.Status,
+                um.IsFavorite
+            })
+            .ToListAsync();
+            var movieIds = favorites.Select(f => f.MovieId).ToList();
+            var movies = await RabbitMqService.GetMovieById(movieIds);
+            List<UserFavoriteMovie> favoriteMovies = favorites
+            .Join(
+                movies,
+                fav => fav.MovieId,
+                movie => movie.Id, 
+                (fav, movie) => Mappers.Mapper.MovieResponseToMovieFavorite(movie, fav.Status, fav.IsFavorite)
+            )
+            .ToList();
 
             return favoriteMovies;
         }

@@ -5,7 +5,7 @@ namespace UserService.Mappers
 {
     public static class Mapper
     {
-        public static UserFavoriteMovie MovieResponseToMovieFavorite(MovieResponse movie, WatchStatus status, bool isFavorite)
+        public static UserFavoriteMovie MovieResponseToMovieFavorite(MovieResponse movie, WatchStatus? status, bool isFavorite)
         {
             return new UserFavoriteMovie()
             {

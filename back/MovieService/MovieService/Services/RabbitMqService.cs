@@ -116,6 +116,7 @@ public class RabbitMqService : IAsyncDisposable
         }
         return new RabbitMQMovieResponse
         {
+            Id = movie.MovieId,
             Title = movie.Title,
             PosterPath = movie.PosterPath == null ? "No image" : movie.PosterPath,
             Description = movie.Description

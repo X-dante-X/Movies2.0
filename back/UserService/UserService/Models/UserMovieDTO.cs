@@ -1,12 +1,11 @@
 ﻿using UserService.Models.Enums;
 
-namespace UserService.Models
+namespace UserService.Models;
+
+public class UserMovieDto
 {
-    public class UserMovieDto
-    {
-        public string UserId { get; set; }  
-        public int MovieId { get; set; } 
-        public bool IsFavorite { get; set; }
-        public WatchStatus? Status { get; set; }
-    }
+    public string UserId { get; set; } = null!;
+    public int MovieId { get; set; } 
+    public bool IsFavorite { get; set; }
+    public WatchStatus? Status { get; set; }
 }

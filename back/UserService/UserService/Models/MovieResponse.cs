@@ -1,9 +1,8 @@
-﻿namespace UserService.Models
+﻿namespace UserService.Models;
+
+public class MovieResponse
 {
-    public class MovieResponse
-    {
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string PosterPath { get; set; }
-    }
+    public string Title { get; set; } = null!;
+    public string Description { get; set; } = null!;
+    public string PosterPath { get; set; } = null!;
 }

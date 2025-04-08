@@ -1,20 +1,19 @@
 ﻿using UserService.Models;
 using UserService.Models.Enums;
 
-namespace UserService.Mappers
+namespace UserService.Mappers;
+
+public static class Mapper
 {
-    public static class Mapper
+    public static UserFavoriteMovie MovieResponseToMovieFavorite(MovieResponse movie, WatchStatus status, bool isFavorite)
     {
-        public static UserFavoriteMovie MovieResponseToMovieFavorite(MovieResponse movie, WatchStatus status, bool isFavorite)
+        return new UserFavoriteMovie()
         {
-            return new UserFavoriteMovie()
-            {
-                Title = movie.Title,
-                Description = movie.Description,
-                PosterPath = movie.PosterPath,
-                IsFavorite = isFavorite,
-                Status = status
-            };
-        }
+            Title = movie.Title,
+            Description = movie.Description,
+            PosterPath = movie.PosterPath,
+            IsFavorite = isFavorite,
+            Status = status
+        };
     }
 }

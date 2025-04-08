@@ -1,13 +1,16 @@
+import { getServerMinIoUrl } from "@/utils/getMinIoUrl";
 import Image from "next/image";
 
 interface VideoCardProps {
   title: string;
   description: string;
   ReleaseDate: string;
-  avatarUrl?: string;
+  posterFile?: string;
 }
 
-export function Card({ title, description, avatarUrl, ReleaseDate }: VideoCardProps) {
+export function Card({ title, description, posterFile, ReleaseDate }: VideoCardProps) {
+  const posterUrl = getServerMinIoUrl(posterFile);
+
   return (
     <div className="max-w-xs rounded-lg overflow-hidden shadow-lg bg-white hover:shadow-xl transition-shadow duration-300">
       <div className="p-4">
@@ -16,7 +19,7 @@ export function Card({ title, description, avatarUrl, ReleaseDate }: VideoCardPr
         <div className="flex items-center mt-3">
           <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-300">
             <Image
-              src={avatarUrl ? avatarUrl : "/empty.jpg"}
+              src={posterUrl}
               width={50}
               height={50}
               alt="Uploader Avatar"

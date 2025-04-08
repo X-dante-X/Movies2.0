@@ -61,8 +61,11 @@ export interface Movie {
     movieStatus: string;
     voteAverage: number;
     voteCount: number;
+    moviePath: string;
+    backdropPath: string;
     pegi: string;
     genre: Genre[];
+    tags: Tag[];
     movieCasts: MovieCast[];
     productionCompany: ProductionCompany;
     language: Language;

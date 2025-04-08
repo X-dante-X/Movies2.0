@@ -17,12 +17,6 @@ public class RabbitMqService : IAsyncDisposable
     private readonly string _requestQueue = "movie_request";
     private AsyncEventingBasicConsumer? _consumer;
     private readonly Context _context;
-    private readonly Dictionary<int, MovieResponse> _movies = new()
-{
-    { 1, new("The Matrix", "/images/matrix.jpg") },
-    { 2, new("Inception", "/images/inception.jpg") },
-    { 3, new("Interstellar", "/images/interstellar.jpg") }
-};
 
     public RabbitMqService(Context context, string hostName = "rabbitmq", int port = 5672)
     {

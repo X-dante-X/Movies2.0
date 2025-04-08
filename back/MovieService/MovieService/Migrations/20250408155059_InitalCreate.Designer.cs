@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MovieService.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250322115412_InitalCreate")]
+    [Migration("20250408155059_InitalCreate")]
     partial class InitalCreate
     {
         /// <inheritdoc />
@@ -323,7 +323,7 @@ namespace MovieService.Migrations
                         .HasForeignKey("PersonId");
 
                     b.HasOne("Models.ProductionCompany", "ProductionCompany")
-                        .WithMany()
+                        .WithMany("Filmography")
                         .HasForeignKey("ProductionCompanyId");
 
                     b.Navigation("ProductionCompany");
@@ -407,6 +407,11 @@ namespace MovieService.Migrations
                 });
 
             modelBuilder.Entity("Models.Person", b =>
+                {
+                    b.Navigation("Filmography");
+                });
+
+            modelBuilder.Entity("Models.ProductionCompany", b =>
                 {
                     b.Navigation("Filmography");
                 });

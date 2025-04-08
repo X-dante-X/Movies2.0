@@ -95,13 +95,13 @@ services:
     depends_on:
       - minio
 
-  # frontend:
-  #   build:
-  #     context: ./front/frontend
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - nginx
+  frontend:
+    build:
+      context: ./front/frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - nginx
 
   # backend:
   #   build:

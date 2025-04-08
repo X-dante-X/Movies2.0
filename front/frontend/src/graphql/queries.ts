@@ -12,16 +12,18 @@ export const GET_COUNTRIES = gql`
 
 export const GET_MOVIES = gql`
   query GetMovies {
-    movies {
+    movies(first: 12) { 
       nodes {
         movieId
         title
-        description
+        releaseDate
+        popularity
         posterPath
       }
     }
   }
 `;
+
 
 export const GET_MOVIE_DETAILS = gql`
   query GetMovieDetails($movieId: Int!) {
@@ -80,3 +82,4 @@ export const GET_MOVIE_DETAILS = gql`
     }
   }
 `;
+

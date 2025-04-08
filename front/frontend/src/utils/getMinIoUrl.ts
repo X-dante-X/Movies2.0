@@ -17,3 +17,4 @@ export function getBackgroundImage(srcSet = '') {
     .join(', ')
   return `image-set(${imageSet})`
 }
+

@@ -1,5 +1,6 @@
 import { Movie } from "@/types/movie.types";
 import { m } from "framer-motion";
+import Link from "next/link";
 
 interface Props {
   mediaItem: Movie;
@@ -14,7 +15,7 @@ const getPegiColor = (pegi: string) => {
   if (pegiNumber >= 12) return "bg-yellow-500";
   if (pegiNumber >= 7) return "bg-green-500";
   if (pegiNumber >= 3) return "bg-green-300";
-  return "bg-green-300"; // Для 0 и некорректных значений
+  return "bg-green-300";
 };
 
 export function MediaDetails({ mediaItem }: Props) {
@@ -60,7 +61,9 @@ export function MediaDetails({ mediaItem }: Props) {
         transition={{ duration: 0.7, delay: 1.3 }}
         className="flex items-center gap-6">
         <div className="flex items-center gap-4">
-          <div className="bg-secondary rounded px-2 py-0.5 text-sm font-semibold text-black">{mediaItem.productionCompany.companyName}</div>
+          <div className="bg-secondary rounded px-2 py-0.5 text-sm font-semibold text-black">
+            <Link href={`/company/${mediaItem.productionCompany.companyId}`}>{mediaItem.productionCompany.companyName}</Link>
+          </div>
           <div className="bg-secondary rounded px-2 py-0.5 text-sm font-semibold text-black">{mediaItem.popularity.toFixed(1)}/10</div>
           <div className={`${getPegiColor(mediaItem.pegi)} rounded px-2 py-0.5 text-sm font-semibold text-black`}>
             {parseInt(mediaItem.pegi.replace(/\D/g, ""), 10) || 0}+

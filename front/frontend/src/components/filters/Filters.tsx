@@ -1,11 +1,20 @@
 "use client";
 
 import { twMerge } from "tailwind-merge";
-import { filtersData } from "./filters.data";
+import { filtersData, TFilter } from "./filters.data";
 import { useFilterStore } from "@/stores/filter.store";
 
-export function Filters() {
+interface FiltersProps {
+  onChange: () => void;
+}
+
+export function Filters({ onChange }: FiltersProps) {
   const { currentFilter, setCurrentFilter } = useFilterStore();
+
+  const handleFilterChange = (filter: TFilter) => {
+    setCurrentFilter(filter);
+    onChange();
+  };
 
   return (
     <div className="text-center mt-10 gap-3 border border-yellow-400 w-max mx-auto rounded">
@@ -17,7 +26,7 @@ export function Filters() {
             filter === currentFilter && "bg-yellow-400"
           )}
           type="button"
-          onClick={() => setCurrentFilter(filter)}>
+          onClick={() => handleFilterChange(filter)}>
           {filter}
         </button>
       ))}

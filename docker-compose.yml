@@ -77,11 +77,10 @@ services:
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-    entrypoint: /etc/minio/init.sh
+    entrypoint: /etc/minio/init-minio.sh
     volumes:
       - minio_data:/data
       - ./config/init-minio.sh:/etc/minio/init-minio.sh
-      - ./config/init.sh:/etc/minio/init.sh
 
   processfileservice:
     build:

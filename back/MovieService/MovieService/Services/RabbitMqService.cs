@@ -61,6 +61,7 @@ public class RabbitMqService : IAsyncDisposable
             .Where(movie => favoriteMovies.Contains(movie.MovieId))
             .Select(movie => new RabbitMQMovieResponse
             {
+                Id = movie.MovieId,
                 Title = movie.Title,
                 PosterPath = movie.PosterPath ?? "No image",
                 Description = movie.Description
@@ -85,24 +86,6 @@ public class RabbitMqService : IAsyncDisposable
         );
     }
 
-<<<<<<< HEAD
-    public async Task<RabbitMQMovieResponse> MovieResponse(int id)
-    {
-        var movie = await _context.Movies.FindAsync(id);
-        if (movie == null)
-        {
-            throw new Exception("Not found");
-        }
-        return new RabbitMQMovieResponse
-        {
-            Id = movie.MovieId,
-            Title = movie.Title,
-            PosterPath = movie.PosterPath == null ? "No image" : movie.PosterPath,
-            Description = movie.Description
-        };
-    }
-=======
->>>>>>> 13caaae709cd760fddea1627fdfa01ffabd4b709
     public async Task StopConsumingMessagesAsync()
     {
         if (_consumer != null)

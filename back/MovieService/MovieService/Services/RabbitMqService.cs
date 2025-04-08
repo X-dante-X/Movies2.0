@@ -3,6 +3,8 @@ using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
+using DBContext;
+using MovieService.RabbitMQService.Messages;
 
 public class RabbitMqService : IAsyncDisposable
 {
@@ -10,7 +12,7 @@ public class RabbitMqService : IAsyncDisposable
     private readonly IChannel _channel;
     private readonly string _requestQueue = "movie_request";
     private AsyncEventingBasicConsumer? _consumer;
-
+    private readonly Context _context;
     private readonly Dictionary<int, MovieResponse> _movies = new()
     {
         { 1, new("The Matrix", "/images/matrix.jpg") },
@@ -18,8 +20,9 @@ public class RabbitMqService : IAsyncDisposable
         { 3, new("Interstellar", "/images/interstellar.jpg") }
     };
 
-    public RabbitMqService(string hostName = "rabbitmq", int port = 5672)
+    public RabbitMqService(Context context, string hostName = "rabbitmq", int port = 5672)
     {
+        _context = context;
         Console.WriteLine("Initializing RabbitMqService...");
 
         var factory = new ConnectionFactory() { HostName = hostName, Port = port };
@@ -53,8 +56,9 @@ public class RabbitMqService : IAsyncDisposable
     {
         var body = ea.Body.ToArray();
         var message = Encoding.UTF8.GetString(body);
+        List<int> favoriteMovies = JsonSerializer.Deserialize<List<int>>(message);
         Console.WriteLine($"Received message: {message}");
-
+        /*
         if (int.TryParse(message, out int movieId) && _movies.TryGetValue(movieId, out var movie))
         {
             var responseJson = JsonSerializer.Serialize(movie);
@@ -78,8 +82,45 @@ public class RabbitMqService : IAsyncDisposable
         {
             Console.WriteLine($"Invalid movie ID received: {message}");
         }
+        */
+        List<RabbitMQMovieResponse> rabbitMQMovies = new List<RabbitMQMovieResponse>();
+        foreach (var movie in favoriteMovies)
+        {
+            var movieModel = await MovieResponse(movie);
+            rabbitMQMovies.Add(movieModel);
+        }
+        var responseJson = JsonSerializer.Serialize(rabbitMQMovies);
+        var responseBytes = Encoding.UTF8.GetBytes(responseJson);
+
+        var properties = new BasicProperties
+        {
+            CorrelationId = ea.BasicProperties.CorrelationId,
+            ReplyTo = ea.BasicProperties.ReplyTo
+        };
+
+        await _channel.BasicPublishAsync(
+            exchange: "",
+            routingKey: properties.ReplyTo!,
+            mandatory: true,
+            basicProperties: properties,
+            body: responseBytes
+        );
     }
 
+    public async Task<RabbitMQMovieResponse> MovieResponse(int id)
+    {
+        var movie = await _context.Movies.FindAsync(id);
+        if (movie == null)
+        {
+            throw new Exception("Not found");
+        }
+        return new RabbitMQMovieResponse
+        {
+            Title = movie.Title,
+            PosterPath = movie.PosterPath == null ? "No image" : movie.PosterPath,
+            Description = movie.Description
+        };
+    }
     public async Task StopConsumingMessagesAsync()
     {
         if (_consumer != null)

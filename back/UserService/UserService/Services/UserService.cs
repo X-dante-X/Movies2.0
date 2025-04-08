@@ -2,6 +2,7 @@
 using UserService.Models.Enums;
 using UserService.Context;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.PostgresTypes;
 
 
 namespace UserService.Services
@@ -13,7 +14,7 @@ namespace UserService.Services
         {
             _context = context;
         }
-        public async Task<MovieReviewDto> AddOrUpdateReviewAsync(string userId, MovieReviewDto reviewDto)
+        public async Task<MovieReviewDto> AddOrUpdateReviewAsync(MovieReviewDto reviewDto)
         {
             if (reviewDto.Rating < 1 || reviewDto.Rating > 10)
             {
@@ -21,13 +22,13 @@ namespace UserService.Services
             }
 
             var existingReview = await _context.MovieReviews
-                .FirstOrDefaultAsync(r => r.UserId == userId && r.MovieId == reviewDto.MovieId);
+                .FirstOrDefaultAsync(r => r.UserId == reviewDto.UserId && r.MovieId == reviewDto.MovieId);
 
             if (existingReview == null)
             {
                 var newReview = new MovieReview
                 {
-                    UserId = userId,
+                    UserId = reviewDto.UserId,
                     MovieId = reviewDto.MovieId,
                     Rating = reviewDto.Rating,
                     Comment = reviewDto.Comment,
@@ -48,15 +49,15 @@ namespace UserService.Services
             return reviewDto;
         }
 
-        public async Task<UserMovieDto> AddOrUpdateUserMovieAsync(string userId, UserMovieDto userMovieDto)
+        public async Task<UserMovieDto> AddOrUpdateUserMovieAsync(UserMovieDto userMovieDto)
         {
             var existingUserMovie = await _context.UserMovies
-                .FirstOrDefaultAsync(um => um.UserId == userId && um.MovieId == userMovieDto.MovieId);
+                .FirstOrDefaultAsync(um => um.UserId == userMovieDto.UserId && um.MovieId == userMovieDto.MovieId);
             if (existingUserMovie == null)
             {
                 var newUserMovie = new UserMovie
                 {
-                    UserId = userId,
+                    UserId = userMovieDto.UserId,
                     MovieId = userMovieDto.MovieId,
                     IsFavorite = userMovieDto.IsFavorite,
                     Status = userMovieDto.Status,
@@ -91,6 +92,20 @@ namespace UserService.Services
             }
         }
 
+        public async Task<bool> DeleteFavoriteMovieAsync(UserMovieDeleteDTO deleteDTO)
+        {
+            var review = await _context.MovieReviews
+                            .FirstOrDefaultAsync(r => r.UserId == deleteDTO.UserId && r.MovieId == deleteDTO.MovieId);
+
+            if (review != null)
+            {
+                _context.MovieReviews.Remove(review);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
         public Task<double> GetMovieAverageRatingAsync(int movieId)
         {
             throw new NotImplementedException();
@@ -103,33 +118,34 @@ namespace UserService.Services
 
         public Task<List<MovieReviewDto>> GetMovieReviewsAsync(int movieId)
         {
-            throw new NotImplementedException();
+            var reviews = _context.MovieReviews
+        .Where(x => x.MovieId == movieId).Select(x => new MovieReviewDto
+        {
+            UserId = x.UserId,
+            MovieId = x.MovieId,
+            Comment = x.Comment,    
+            Rating = x.Rating,
+        }).ToListAsync();
+            return reviews;
         }
 
-        public async Task<List<UserMovieDto>> GetUserFavoritesAsync(string userId)
+        public async Task<List<UserFavoriteMovie>> GetUserFavoritesAsync(string userId)
         {
+            
             var favorites = await _context.UserMovies
                 .Where(um => um.UserId == userId && um.IsFavorite)
-                .Select(um => new UserMovieDto
-                {
-                    MovieId = um.MovieId,
-                    IsFavorite = true,
-                    Status = um.Status
-                })
+                .Select(um => um.Id)
                 .ToListAsync();
+            List<UserFavoriteMovie> favoriteMovies = new List<UserFavoriteMovie>();
+            foreach (var favorite in favorites)
+            {
+                var movies = await RabbitMqService.GetMovieById(favorites);
+                favoriteMovies.AddRange(movies.Select(x => Mappers.Mapper.MovieResponseToMovieFavorite(x, WatchStatus.Watching, true)));
+            }
 
-            return favorites;
+            return favoriteMovies;
         }
 
-        public Task<UserMovieDto> GetUserMovieAsync(string userId, int movieId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<UserMovieDto>> GetUserMoviesAsync(string userId)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<List<UserMovieDto>> GetUserMoviesByStatusAsync(string userId, WatchStatus status)
         {
@@ -151,10 +167,6 @@ namespace UserService.Services
             throw new NotImplementedException();
         }
 
-        public Task RemoveUserMovieAsync(string userId, int movieId)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task ToggleFavoriteAsync(string userId, int movieId)
         {

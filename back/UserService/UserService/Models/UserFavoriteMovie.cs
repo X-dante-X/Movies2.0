@@ -2,10 +2,11 @@
 
 namespace UserService.Models
 {
-    public class UserMovieDto
+    public class UserFavoriteMovie
     {
-        public string UserId { get; set; }  
-        public int MovieId { get; set; } 
+        public string Description { get; set; }
+        public string PosterPath { get; set; }
+        public string Title { get; set; }
         public bool IsFavorite { get; set; }
         public WatchStatus? Status { get; set; }
     }

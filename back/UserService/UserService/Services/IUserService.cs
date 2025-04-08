@@ -5,18 +5,15 @@ namespace UserService.Services
 {
     public interface IUserService
     {
-        Task<List<UserMovieDto>> GetUserMoviesAsync(string userId);
-        Task<List<UserMovieDto>> GetUserFavoritesAsync(string userId);
+        Task<List<UserFavoriteMovie>> GetUserFavoritesAsync(string userId);
         Task<List<UserMovieDto>> GetUserMoviesByStatusAsync(string userId, WatchStatus status);
-        Task<UserMovieDto> GetUserMovieAsync(string userId, int movieId);
-        Task<UserMovieDto> AddOrUpdateUserMovieAsync(string userId, UserMovieDto userMovieDto);
+        Task<UserMovieDto> AddOrUpdateUserMovieAsync( UserMovieDto userMovieDto);
         Task ToggleFavoriteAsync(string userId, int movieId);
         Task UpdateWatchStatusAsync(string userId, int movieId, WatchStatus status);
-        Task RemoveUserMovieAsync(string userId, int movieId);
-
+        Task<bool> DeleteFavoriteMovieAsync(UserMovieDeleteDTO movie); 
         Task<List<MovieReviewDto>> GetUserReviewsAsync(string userId);
         Task<MovieReviewDto> GetMovieReviewAsync(string userId, int movieId);
-        Task<MovieReviewDto> AddOrUpdateReviewAsync(string userId, MovieReviewDto reviewDto);
+        Task<MovieReviewDto> AddOrUpdateReviewAsync(MovieReviewDto reviewDto);
         Task DeleteReviewAsync(string userId, int movieId);
 
         Task<double> GetMovieAverageRatingAsync(int movieId);

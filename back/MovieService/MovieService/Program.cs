@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Movies;
 using MovieService.Services.Interfaces;
 using MovieService.Services;
+using MovieService;
+using MovieService.RabbitMQService;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +26,8 @@ builder.Services.AddGrpcClient<FileUpload.FileUploadClient>(o =>
 });
 
 builder.Services.AddSingleton<IUploadService, UploadService>();
+builder.Services.AddSingleton<RabbitMqService>();
+builder.Services.AddHostedService<RabbitMqListenerService>();
 
 builder.Services.AddDbContext<Context>();
 
@@ -33,6 +38,7 @@ builder.Services.AddGraphQLServer()
     .AddProjections()
     .AddFiltering()
     .AddSorting();
+
 
 var app = builder.Build();
 

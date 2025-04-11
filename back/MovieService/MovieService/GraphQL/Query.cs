@@ -7,6 +7,7 @@ namespace GraphQL;
 
 public class Query
 {
+    [UsePaging]
     [UseProjection]
     [UseFiltering]
     [UseSorting]
@@ -28,7 +29,24 @@ public class Query
     [UseSorting]
     public IQueryable<Person> People([Service] Context ctx)
     {
-        return ctx.People;
+        return ctx.People
+            .Select(p => new Person
+            {
+                PersonId = p.PersonId,
+                PersonName = p.PersonName,
+                Gender = p.Gender,
+                PhotoPath = p.PhotoPath,
+                DateOfBirth = p.DateOfBirth,
+                CountryId = p.CountryId,
+                Nationality = p.Nationality,
+                Biography = p.Biography,
+                Filmography = ctx.MovieCasts
+                    .Where(mc => mc.PersonId == p.PersonId)
+                    .OrderByDescending(mc => mc.Movie.Popularity)
+                    .Select(mc => mc.Movie)
+                    .Take(12)
+                    .ToList()
+            });
     }
 
     [UseProjection]
@@ -68,7 +86,21 @@ public class Query
     [UseSorting]
     public IQueryable<ProductionCompany> ProductionCompanies([Service] Context ctx)
     {
-        return ctx.ProductionCompanies;
+        return ctx.ProductionCompanies
+            .Select(pc => new ProductionCompany
+            {
+                CompanyId = pc.CompanyId,
+                CompanyName = pc.CompanyName,
+                LogoPath = pc.LogoPath,
+                CountryId = pc.CountryId,
+                Country = pc.Country,
+                Filmography = ctx.Movies
+                    .Where(m => m.ProductionCompanyId == pc.CompanyId)
+                    .OrderByDescending(m => m.Popularity)
+                    .Take(12)
+                    .ToList()
+            });
     }
+
 }
 

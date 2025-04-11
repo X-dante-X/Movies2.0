@@ -1,54 +1,64 @@
-export default function Page() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+"use client";
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer">
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer">
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer">
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer">
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer">
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+import { Carousel } from "@/components/carousel/Carousel";
+import { Filters } from "@/components/filters/Filters";
+import { useMainAnimationStore } from "@/stores/main-animation.store";
+import { m } from "framer-motion";
+import { useState, useEffect } from "react";
+
+export default function Page() {
+  const { isHideHeading } = useMainAnimationStore();
+  const [isCarouselVisible, setIsCarouselVisible] = useState(true);
+  const [isFiltersChanged, setIsFiltersChanged] = useState(false);
+
+  useEffect(() => {
+    if (isFiltersChanged) {
+      setIsCarouselVisible(false);
+
+      const timeout = setTimeout(() => {
+        setIsFiltersChanged(false);
+        setIsCarouselVisible(true);
+      }, 500);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isFiltersChanged]);
+
+  return (
+    <>
+      <div className="absolute w-full z-0 -mt-20 h-screen bg-gradient-to-br from-gray-900/20 via-indigo-900/20 to-purple-900/20 bg-fixed" />
+      <div className="relative mt-8 z-1 h-[87.5vh] overflow-y-hidden">
+        <m.div
+          initial={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: isHideHeading ? 0 : 1,
+            translateY: isHideHeading ? -100 : 0,
+          }}
+          transition={{
+            duration: 1.8,
+            type: "keyframes",
+            ease: "easeInOut",
+          }}>
+          <h1 className="text-center text-5xl font-bold">Discover Unlimited Content</h1>
+
+          <Filters onChange={() => setIsFiltersChanged(true)} />
+        </m.div>
+
+        <m.div
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: isCarouselVisible ? 1 : 0,
+          }}
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: 1.2,
+            ease: "easeInOut",
+          }}>
+          <Carousel />
+        </m.div>
+      </div>
+    </>
   );
 }

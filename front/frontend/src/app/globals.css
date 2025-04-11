@@ -5,6 +5,14 @@
   --foreground: #171717;
 }
 
+@theme {
+  --color-primary: #7a49fe;
+  --color-secondary: #f6cc1a;
+
+  --default-transition-duration: 0.3s;
+  --default-transition-timing-function: ease;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

@@ -357,7 +357,7 @@ public static class SeedData
                 MovieStatus = "Released",
                 VoteAverage = 8.8m,
                 VoteCount = 22000,
-                PEGI = "PG-13",
+                PEGI = "13",
                 Genre = [genres[4], genres[0]],
                 Tags = [tags[1], tags[3]],
                 ProductionCompany = productionCompanies[0],
@@ -384,7 +384,7 @@ public static class SeedData
                 MovieStatus = "Released",
                 VoteAverage = 8.7m,
                 VoteCount = 20000,
-                PEGI = "R",
+                PEGI = "18",
                 Genre = [genres[4], genres[0]],
                 Tags = [tags[1], tags[3], tags[4]],
                 ProductionCompany = productionCompanies.First(pc => pc.CompanyName == "Warner Bros."),
@@ -410,7 +410,7 @@ public static class SeedData
                 MovieStatus = "Released",
                 VoteAverage = 8.9m,
                 VoteCount = 25000,
-                PEGI = "PG-13",
+                PEGI = "13",
                 Genre = [genres[2], genres[10]],
                 Tags = [tags[2], tags[4]],
                 ProductionCompany = productionCompanies.First(pc => pc.CompanyName == "20th Century Studios"),
@@ -436,7 +436,7 @@ public static class SeedData
                 MovieStatus = "Released",
                 VoteAverage = 9.3m,
                 VoteCount = 18000,
-                PEGI = "PG",
+                PEGI = "18",
                 Genre = [genres[6], genres[11]],
                 Tags = [tags[2], tags[5], tags[12]],
                 ProductionCompany = productionCompanies.First(pc => pc.CompanyName == "Studio Ghibli"),
@@ -449,7 +449,257 @@ public static class SeedData
                 MoviePath = "4.mp4",
                 PosterPath = "4.jpg",
                 BackdropPath ="4.jpg",
-            }
+            },
+            new()
+            {
+                Title = "Spirited Away",
+                ReleaseDate = new DateTime(2001, 7, 20).ToUniversalTime(),
+                Budget = 19000000,
+                Description = "A young girl wanders into a world of spirits and must find her way home.",
+                Popularity = 9.8m,
+                Runtime = 125,
+                MovieStatus = "Released",
+                VoteAverage = 9.3m,
+                VoteCount = 18000,
+                PEGI = "18",
+                Genre = [genres[6], genres[11]],
+                Tags = [tags[2], tags[5], tags[12]],
+                ProductionCompany = productionCompanies.First(pc => pc.CompanyName == "Studio Ghibli"),
+                ProductionLanguage = languages.First(l => l.LanguageName == "Japanese"),
+                ProductionCountry = countries.First(c => c.CountryIsoCode == "JP"),
+                MovieCasts =
+                [
+                    new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
+                ],
+                MoviePath = "5.mp4",
+                PosterPath = "5.jpg",
+                BackdropPath ="5.jpg",
+            },
+            new()
+            {
+                Title = "Spirited Away",
+                ReleaseDate = new DateTime(2001, 7, 20).ToUniversalTime(),
+                Budget = 19000000,
+                Description = "A young girl wanders into a world of spirits and must find her way home.",
+                Popularity = 9.8m,
+                Runtime = 125,
+                MovieStatus = "Released",
+                VoteAverage = 9.3m,
+                VoteCount = 18000,
+                PEGI = "13",
+                Genre = [genres[6], genres[11]],
+                Tags = [tags[2], tags[5], tags[12]],
+                ProductionCompany = productionCompanies.First(pc => pc.CompanyName == "Studio Ghibli"),
+                ProductionLanguage = languages.First(l => l.LanguageName == "Japanese"),
+                ProductionCountry = countries.First(c => c.CountryIsoCode == "JP"),
+                MovieCasts =
+                [
+                    new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
+                ],
+                MoviePath = "4.mp4",
+                PosterPath = "6.jpg",
+                BackdropPath ="6.jpg",
+            },
+            new()
+            {
+                Title = "Spirited Away",
+                ReleaseDate = new DateTime(2001, 7, 20).ToUniversalTime(),
+                Budget = 19000000,
+                Description = "A young girl wanders into a world of spirits and must find her way home.",
+                Popularity = 9.8m,
+                Runtime = 125,
+                MovieStatus = "Released",
+                VoteAverage = 9.3m,
+                VoteCount = 18000,
+                PEGI = "3",
+                Genre = [genres[6], genres[11]],
+                Tags = [tags[2], tags[5], tags[12]],
+                ProductionCompany = productionCompanies.First(pc => pc.CompanyName == "Studio Ghibli"),
+                ProductionLanguage = languages.First(l => l.LanguageName == "Japanese"),
+                ProductionCountry = countries.First(c => c.CountryIsoCode == "JP"),
+                MovieCasts =
+                [
+                    new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
+                ],
+                MoviePath = "4.mp4",
+                PosterPath = "7.jpg",
+                BackdropPath ="7.jpg",
+            },
+            new()
+            {
+                Title = "Spirited Away",
+                ReleaseDate = new DateTime(2001, 7, 20).ToUniversalTime(),
+                Budget = 19000000,
+                Description = "A young girl wanders into a world of spirits and must find her way home.",
+                Popularity = 9.8m,
+                Runtime = 125,
+                MovieStatus = "Released",
+                VoteAverage = 9.3m,
+                VoteCount = 18000,
+                PEGI = "7",
+                Genre = [genres[6], genres[11]],
+                Tags = [tags[2], tags[5], tags[12]],
+                ProductionCompany = productionCompanies.First(pc => pc.CompanyName == "Studio Ghibli"),
+                ProductionLanguage = languages.First(l => l.LanguageName == "Japanese"),
+                ProductionCountry = countries.First(c => c.CountryIsoCode == "JP"),
+                MovieCasts =
+                [
+                    new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
+                ],
+                MoviePath = "4.mp4",
+                PosterPath = "8.jpg",
+                BackdropPath ="8.jpg",
+            },
+            new()
+            {
+                Title = "Spirited Away",
+                ReleaseDate = new DateTime(2001, 7, 20).ToUniversalTime(),
+                Budget = 19000000,
+                Description = "A young girl wanders into a world of spirits and must find her way home.",
+                Popularity = 9.8m,
+                Runtime = 125,
+                MovieStatus = "Released",
+                VoteAverage = 9.3m,
+                VoteCount = 18000,
+                PEGI = "16",
+                Genre = [genres[6], genres[11]],
+                Tags = [tags[2], tags[5], tags[12]],
+                ProductionCompany = productionCompanies.First(pc => pc.CompanyName == "Studio Ghibli"),
+                ProductionLanguage = languages.First(l => l.LanguageName == "Japanese"),
+                ProductionCountry = countries.First(c => c.CountryIsoCode == "JP"),
+                MovieCasts =
+                [
+                    new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
+                ],
+                MoviePath = "4.mp4",
+                PosterPath = "9.jpg",
+                BackdropPath ="9.jpg",
+            },
+            new()
+            {
+                Title = "Spirited Away",
+                ReleaseDate = new DateTime(2001, 7, 20).ToUniversalTime(),
+                Budget = 19000000,
+                Description = "A young girl wanders into a world of spirits and must find her way home.",
+                Popularity = 9.8m,
+                Runtime = 125,
+                MovieStatus = "Released",
+                VoteAverage = 9.3m,
+                VoteCount = 18000,
+                PEGI = "21",
+                Genre = [genres[6], genres[11]],
+                Tags = [tags[2], tags[5], tags[12]],
+                ProductionCompany = productionCompanies.First(pc => pc.CompanyName == "Studio Ghibli"),
+                ProductionLanguage = languages.First(l => l.LanguageName == "Japanese"),
+                ProductionCountry = countries.First(c => c.CountryIsoCode == "JP"),
+                MovieCasts =
+                [
+                    new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
+                ],
+                MoviePath = "4.mp4",
+                PosterPath = "10.jpg",
+                BackdropPath ="10.jpg",
+            },
+            new()
+            {
+                Title = "Spirited Away",
+                ReleaseDate = new DateTime(2001, 7, 20).ToUniversalTime(),
+                Budget = 19000000,
+                Description = "A young girl wanders into a world of spirits and must find her way home.",
+                Popularity = 9.8m,
+                Runtime = 125,
+                MovieStatus = "Released",
+                VoteAverage = 9.3m,
+                VoteCount = 18000,
+                PEGI = "18",
+                Genre = [genres[6], genres[11]],
+                Tags = [tags[2], tags[5], tags[12]],
+                ProductionCompany = productionCompanies.First(pc => pc.CompanyName == "Studio Ghibli"),
+                ProductionLanguage = languages.First(l => l.LanguageName == "Japanese"),
+                ProductionCountry = countries.First(c => c.CountryIsoCode == "JP"),
+                MovieCasts =
+                [
+                    new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
+                ],
+                MoviePath = "4.mp4",
+                PosterPath = "11.jpg",
+                BackdropPath ="11.jpg",
+            },
+            new()
+            {
+                Title = "Spirited Away",
+                ReleaseDate = new DateTime(2001, 7, 20).ToUniversalTime(),
+                Budget = 19000000,
+                Description = "A young girl wanders into a world of spirits and must find her way home.",
+                Popularity = 9.8m,
+                Runtime = 125,
+                MovieStatus = "Released",
+                VoteAverage = 9.3m,
+                VoteCount = 18000,
+                PEGI = "12",
+                Genre = [genres[6], genres[11]],
+                Tags = [tags[2], tags[5], tags[12]],
+                ProductionCompany = productionCompanies.First(pc => pc.CompanyName == "Studio Ghibli"),
+                ProductionLanguage = languages.First(l => l.LanguageName == "Japanese"),
+                ProductionCountry = countries.First(c => c.CountryIsoCode == "JP"),
+                MovieCasts =
+                [
+                    new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
+                ],
+                MoviePath = "4.mp4",
+                PosterPath = "12.jpg",
+                BackdropPath ="12.jpg",
+            },
+            new()
+            {
+                Title = "Spirited Away",
+                ReleaseDate = new DateTime(2001, 7, 20).ToUniversalTime(),
+                Budget = 19000000,
+                Description = "A young girl wanders into a world of spirits and must find her way home.",
+                Popularity = 9.8m,
+                Runtime = 125,
+                MovieStatus = "Released",
+                VoteAverage = 9.3m,
+                VoteCount = 18000,
+                PEGI = "0",
+                Genre = [genres[6], genres[11]],
+                Tags = [tags[2], tags[5], tags[12]],
+                ProductionCompany = productionCompanies.First(pc => pc.CompanyName == "Studio Ghibli"),
+                ProductionLanguage = languages.First(l => l.LanguageName == "Japanese"),
+                ProductionCountry = countries.First(c => c.CountryIsoCode == "JP"),
+                MovieCasts =
+                [
+                    new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
+                ],
+                MoviePath = "4.mp4",
+                PosterPath = "4.jpg",
+                BackdropPath ="4.jpg",
+            },
+            new()
+            {
+                Title = "Spirited Away",
+                ReleaseDate = new DateTime(2001, 7, 20).ToUniversalTime(),
+                Budget = 19000000,
+                Description = "A young girl wanders into a world of spirits and must find her way home.",
+                Popularity = 9.8m,
+                Runtime = 125,
+                MovieStatus = "Released",
+                VoteAverage = 9.3m,
+                VoteCount = 18000,
+                PEGI = "12",
+                Genre = [genres[6], genres[11]],
+                Tags = [tags[2], tags[5], tags[12]],
+                ProductionCompany = productionCompanies.First(pc => pc.CompanyName == "Studio Ghibli"),
+                ProductionLanguage = languages.First(l => l.LanguageName == "Japanese"),
+                ProductionCountry = countries.First(c => c.CountryIsoCode == "JP"),
+                MovieCasts =
+                [
+                    new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
+                ],
+                MoviePath = "4.mp4",
+                PosterPath = "4.jpg",
+                BackdropPath ="4.jpg",
+            },
         };
         context.Movies.AddRange(movies);
         context.SaveChanges();

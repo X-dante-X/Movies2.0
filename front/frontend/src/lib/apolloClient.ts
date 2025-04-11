@@ -20,3 +20,9 @@ export const apolloClient = new ApolloClient({
     link: httpLink,
     cache: new InMemoryCache(),
 });
+
+export const getClient = () =>
+    new ApolloClient({
+        uri: "http://localhost/movie",
+        cache: new InMemoryCache(),
+    });

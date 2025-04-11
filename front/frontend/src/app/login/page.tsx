@@ -1,16 +1,13 @@
 "use client";
 
-import { Button, CircularProgress, Grid, TextField, Typography } from "@mui/material";
-import * as React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/services/auth.service";
 import { IAuthLoginForm } from "@/types/auth.types";
-
-function dataTestAttr(id: string) {
-  return { "data-testid": id };
-}
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
+import { FaGoogle, FaMicrosoft, FaFacebookF } from "react-icons/fa";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -18,79 +15,74 @@ function LoginPage() {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const router = useRouter();
 
-  const { mutate, isPending, isError } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["auth"],
     mutationFn: (data: IAuthLoginForm) => authService.login(data),
-    onSuccess() {
-      router.push("/");
-    },
-    onError(err) {
+    onSuccess: () => router.push("/"),
+    onError: (err) => {
       setErrorMessage(err instanceof Error ? err.message : "An error occurred during login");
     },
   });
 
   function onSubmit() {
     setErrorMessage(undefined);
-    mutate({ email, password } as IAuthLoginForm);
+    mutate({ email, password });
+  }
+
+  function handleOAuthLogin(provider: "google" | "microsoft" | "facebook") {
+    console.log(`Logging in with ${provider}`);
   }
 
   return (
-    <Grid
-      container
-      direction="column"
-      spacing={4}
-      alignItems="center"
-      justifyContent="center"
-      sx={{ minHeight: "100vh" }}>
-      <Grid item>
-        <TextField
-          label="Email"
-          value={email}
-          error={!!errorMessage}
-          helperText={errorMessage}
-          onChange={(e) => setEmail(e.target.value)}
-          disabled={isPending}
-        />
-      </Grid>
-      <Grid item>
-        <TextField
-          label="Password"
-          value={password}
-          type="password"
-          error={!!errorMessage}
-          helperText={errorMessage}
-          onChange={(e) => setPassword(e.target.value)}
-          disabled={isPending}
-        />
-      </Grid>
-      <Grid
-        item
-        container
-        direction="row"
-        justifyContent="center"
-        spacing={4}>
-        <Grid item>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={onSubmit}
+    <div className="flex items-center justify-center -mt-20 h-screen bg-gradient-to-br from-gray-900 to-black">
+      <div className="w-full max-w-md p-8 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-lg">
+        <h2 className="text-3xl font-bold text-white text-center mb-6">Login</h2>
+        <div className="space-y-4">
+          <Input
+            label="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            error={errorMessage}
             disabled={isPending}
-            {...dataTestAttr("login-login-button")}>
-            Log in
-          </Button>
-        </Grid>
-      </Grid>
-      {isPending && (
-        <Grid item>
-          <CircularProgress />
-        </Grid>
-      )}
-      {isError && (
-        <Grid item>
-          <Typography color="error">{errorMessage}</Typography>
-        </Grid>
-      )}
-    </Grid>
+            placeholder="Enter your email"
+            type="email"
+          />
+          <Input
+            label="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error={errorMessage}
+            disabled={isPending}
+            placeholder="Enter your password"
+            type="password"
+          />
+          <div className="pb-4"></div>
+          <div className="flex justify-center">
+            <Button
+              onClick={onSubmit}
+              disabled={isPending}
+              data-testid="login-login-button">
+              {isPending ? "Logging in..." : "Log In"}
+            </Button>
+          </div>
+          {errorMessage && <p className="text-red-500 text-sm text-center">{errorMessage}</p>}
+          <div className="mt-8">
+            <p className="text-white text-center mb-2">Or sign in with</p>
+            <div className="flex gap-4 justify-center">
+              <Button onClick={() => handleOAuthLogin("google")}>
+                <FaGoogle />
+              </Button>
+              <Button onClick={() => handleOAuthLogin("microsoft")}>
+                <FaMicrosoft />
+              </Button>
+              <Button onClick={() => handleOAuthLogin("facebook")}>
+                <FaFacebookF />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

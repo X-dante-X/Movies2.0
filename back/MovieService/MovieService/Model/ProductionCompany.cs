@@ -13,4 +13,5 @@ public class ProductionCompany
     [ForeignKey("Country")]
     public int CountryId { get; set; }
     public Country Country { get; set; } = null!;
+    public List<Movie>? Filmography { get; set; }
 }

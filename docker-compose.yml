@@ -112,6 +112,7 @@ services:
     volumes:
       - minio_data:/data
       - ./config/init-minio.sh:/etc/minio/init-minio.sh
+      - ./helpers/exampleMediaData:/exampleMediaData:ro
 
   userservice:
     build:

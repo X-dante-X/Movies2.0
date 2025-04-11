@@ -216,8 +216,8 @@ public static class SeedData
 
         var productionCompanies = new List<ProductionCompany>
         {
-            new() { CompanyName = "Warner Bros.", Country = countries.First(c => c.CountryIsoCode == "US") },
-            new() { CompanyName = "20th Century Studios", Country = countries.First(c => c.CountryIsoCode == "US") },
+            new() { CompanyName = "Warner Bros.", Country = countries.First(c => c.CountryIsoCode == "US"), LogoPath = "/companylogo/wb.jpg" },
+            new() { CompanyName = "20th Century Studios", Country = countries.First(c => c.CountryIsoCode == "US"), LogoPath = "/companylogo/20thca.jpg" },
             new() { CompanyName = "Paramount Pictures", Country = countries.First(c => c.CountryIsoCode == "US") },
             new() { CompanyName = "Universal Pictures", Country = countries.First(c => c.CountryIsoCode == "US") },
             new() { CompanyName = "Columbia Pictures", Country = countries.First(c => c.CountryIsoCode == "US") },
@@ -233,7 +233,7 @@ public static class SeedData
             new() { CompanyName = "Working Title Films", Country = countries.First(c => c.CountryIsoCode == "GB") },
             new() { CompanyName = "Pinewood Studios", Country = countries.First(c => c.CountryIsoCode == "GB") },
 
-            new() { CompanyName = "Studio Ghibli", Country = countries.First(c => c.CountryIsoCode == "JP") },
+            new() { CompanyName = "Studio Ghibli", Country = countries.First(c => c.CountryIsoCode == "JP"), LogoPath = "/companylogo/sg.jpg" },
             new() { CompanyName = "Toho", Country = countries.First(c => c.CountryIsoCode == "JP") },
             new() { CompanyName = "Sunrise", Country = countries.First(c => c.CountryIsoCode == "JP") },
             new() { CompanyName = "Kyoto Animation", Country = countries.First(c => c.CountryIsoCode == "JP") },
@@ -328,7 +328,8 @@ public static class SeedData
 
         var people = new List<Person>
         {
-            new() { PersonName = "Leonardo DiCaprio", Gender = "Male", DateOfBirth = new DateTime(1974, 11, 11).ToUniversalTime(), Nationality = countries[0], Biography = "Famous actor known for Titanic and Inception" },
+            new() { PersonName = "Leonardo DiCaprio", Gender = "Male", DateOfBirth = new DateTime(1974, 11, 11).ToUniversalTime(), Nationality = countries[0], Biography = "Famous actor known for Titanic and Inception", 
+                PhotoPath = "/personphoto/ldc.jpg" },
             new() { PersonName = "Emma Watson", Gender = "Female", DateOfBirth = new DateTime(1990, 4, 15).ToUniversalTime(), Nationality = countries[2], Biography = "Known for Harry Potter series" },
             new() { PersonName = "Robert Downey Jr.", Gender = "Male", DateOfBirth = new DateTime(1965, 4, 4).ToUniversalTime(), Nationality = countries[0], Biography = "Famous for playing Iron Man" },
             new() { PersonName = "Scarlett Johansson", Gender = "Female", DateOfBirth = new DateTime(1984, 11, 22).ToUniversalTime(), Nationality = countries[0], Biography = "Known for Black Widow in Marvel movies" },
@@ -338,8 +339,10 @@ public static class SeedData
             new() { PersonName = "Christopher Nolan", Gender = "Male", DateOfBirth = new DateTime(1970, 7, 30).ToUniversalTime(), Nationality = countries[2], Biography = "Famous for Inception, Interstellar, and The Dark Knight trilogy" },
             new() { PersonName = "Quentin Tarantino", Gender = "Male", DateOfBirth = new DateTime(1963, 3, 27).ToUniversalTime(), Nationality = countries[0], Biography = "Known for Pulp Fiction, Kill Bill, and Django Unchained" },
             new() { PersonName = "Steven Spielberg", Gender = "Male", DateOfBirth = new DateTime(1946, 12, 18).ToUniversalTime(), Nationality = countries[0], Biography = "Legendary director of Jurassic Park, E.T., and Indiana Jones" },
-            new() { PersonName = "Hayao Miyazaki", Gender = "Male", DateOfBirth = new DateTime(1941, 1, 5).ToUniversalTime(), Nationality = countries[4], Biography = "Japanese animation master, co-founder of Studio Ghibli" },
-            new() { PersonName = "James Cameron", Gender = "Male", DateOfBirth = new DateTime(1954, 8, 16).ToUniversalTime(), Nationality = countries[1], Biography = "Director of Titanic, Avatar, and Terminator" }
+            new() { PersonName = "Hayao Miyazaki", Gender = "Male", DateOfBirth = new DateTime(1941, 1, 5).ToUniversalTime(), Nationality = countries[4], Biography = "Japanese animation master, co-founder of Studio Ghibli",
+            PhotoPath = "/personphoto/hm.jpg" },
+            new() { PersonName = "James Cameron", Gender = "Male", DateOfBirth = new DateTime(1954, 8, 16).ToUniversalTime(), Nationality = countries[1], Biography = "Director of Titanic, Avatar, and Terminator", 
+            PhotoPath = "/personphoto/jc.jpg" }
         };
         context.People.AddRange(people);
         context.SaveChanges();
@@ -369,10 +372,10 @@ public static class SeedData
                     new() { Person = people.First(p => p.PersonName == "Tom Hardy"), CharacterName = "Eames", CharacterGender = "Male", Job = "Actor" },
                     new() { Person = people.First(p => p.PersonName == "Christopher Nolan"), CharacterGender = "Male", Job = "Director" }
                 ],
-                MoviePath = "1.mp4",
-                PosterPath = "1.jpg",
-                BackdropPath ="1.jpg",
-},
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/1.jpg",
+                BackdropPath ="/movie/backdrop/1.jpg",
+            },
             new()
             {
                 Title = "The Matrix",
@@ -395,9 +398,9 @@ public static class SeedData
                     new() { Person = people.First(p => p.PersonName == "Keanu Reeves"), CharacterName = "Neo", CharacterGender = "Male", Job = "Actor" },
                     new() { Person = people.First(p => p.PersonName == "Scarlett Johansson"), CharacterName = "Trinity", CharacterGender = "Female", Job = "Actor" }
                 ],
-                MoviePath = "2.mp4",
-                PosterPath = "2.jpg",
-                BackdropPath ="2.jpg",
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/2.jpg",
+                BackdropPath ="/movie/backdrop/2.jpg",
             },
             new()
             {
@@ -421,9 +424,9 @@ public static class SeedData
                     new() { Person = people.First(p => p.PersonName == "Leonardo DiCaprio"), CharacterName = "Jack Dawson", CharacterGender = "Male", Job = "Actor" },
                     new() { Person = people.First(p => p.PersonName == "James Cameron"), CharacterGender = "Male", Job = "Director" }
                 ],
-                MoviePath = "3.mp4",
-                PosterPath = "3.jpg",
-                BackdropPath ="3.jpg",
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/3.jpg",
+                BackdropPath ="/movie/backdrop/3.jpg",
             },
             new()
             {
@@ -446,9 +449,9 @@ public static class SeedData
                 [
                     new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
                 ],
-                MoviePath = "4.mp4",
-                PosterPath = "4.jpg",
-                BackdropPath ="4.jpg",
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/4.jpg",
+                BackdropPath ="/movie/backdrop/4.jpg",
             },
             new()
             {
@@ -471,9 +474,9 @@ public static class SeedData
                 [
                     new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
                 ],
-                MoviePath = "5.mp4",
-                PosterPath = "5.jpg",
-                BackdropPath ="5.jpg",
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/5.jpg",
+                BackdropPath ="/movie/backdrop/5.jpg",
             },
             new()
             {
@@ -496,9 +499,9 @@ public static class SeedData
                 [
                     new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
                 ],
-                MoviePath = "4.mp4",
-                PosterPath = "6.jpg",
-                BackdropPath ="6.jpg",
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/6.jpg",
+                BackdropPath ="/movie/backdrop/6.jpg",
             },
             new()
             {
@@ -521,9 +524,9 @@ public static class SeedData
                 [
                     new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
                 ],
-                MoviePath = "4.mp4",
-                PosterPath = "7.jpg",
-                BackdropPath ="7.jpg",
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/7.jpg",
+                BackdropPath ="/movie/backdrop/7.jpg",
             },
             new()
             {
@@ -546,9 +549,9 @@ public static class SeedData
                 [
                     new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
                 ],
-                MoviePath = "4.mp4",
-                PosterPath = "8.jpg",
-                BackdropPath ="8.jpg",
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/8.jpg",
+                BackdropPath ="/movie/backdrop/8.jpg",
             },
             new()
             {
@@ -571,9 +574,9 @@ public static class SeedData
                 [
                     new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
                 ],
-                MoviePath = "4.mp4",
-                PosterPath = "9.jpg",
-                BackdropPath ="9.jpg",
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/9.jpg",
+                BackdropPath ="/movie/backdrop/9.jpg",
             },
             new()
             {
@@ -596,9 +599,9 @@ public static class SeedData
                 [
                     new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
                 ],
-                MoviePath = "4.mp4",
-                PosterPath = "10.jpg",
-                BackdropPath ="10.jpg",
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/10.jpg",
+                BackdropPath ="/movie/backdrop/10.jpg",
             },
             new()
             {
@@ -621,9 +624,9 @@ public static class SeedData
                 [
                     new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
                 ],
-                MoviePath = "4.mp4",
-                PosterPath = "11.jpg",
-                BackdropPath ="11.jpg",
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/11.jpg",
+                BackdropPath ="/movie/backdrop/11.jpg",
             },
             new()
             {
@@ -646,9 +649,9 @@ public static class SeedData
                 [
                     new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
                 ],
-                MoviePath = "4.mp4",
-                PosterPath = "12.jpg",
-                BackdropPath ="12.jpg",
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/12.jpg",
+                BackdropPath ="/movie/backdrop/12.jpg",
             },
             new()
             {
@@ -671,9 +674,9 @@ public static class SeedData
                 [
                     new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
                 ],
-                MoviePath = "4.mp4",
-                PosterPath = "4.jpg",
-                BackdropPath ="4.jpg",
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/11.jpg",
+                BackdropPath ="/movie/backdrop/11.jpg",
             },
             new()
             {
@@ -696,9 +699,9 @@ public static class SeedData
                 [
                     new() { Person = people.First(p => p.PersonName == "Hayao Miyazaki"), CharacterGender = "Male", Job = "Director" }
                 ],
-                MoviePath = "4.mp4",
-                PosterPath = "4.jpg",
-                BackdropPath ="4.jpg",
+                MoviePath = "/movie/movie/1.mp4",
+                PosterPath = "/movie/poster/7.jpg",
+                BackdropPath ="/movie/backdrop/7.jpg",
             },
         };
         context.Movies.AddRange(movies);

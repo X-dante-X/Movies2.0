@@ -15,4 +15,9 @@ mc mb myminio/uploads
 mc anonymous set download myminio/uploads
 echo "Bucket policy set to allow anonymous access to uploads bucket."
 
-wait 
+echo "Uploading example media data..."
+mc cp --recursive /exampleMediaData/* myminio/uploads/
+
+echo "Upload complete."
+
+wait

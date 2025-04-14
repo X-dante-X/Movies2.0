@@ -3,39 +3,22 @@ syntax = "proto3";
 package fileupload;
 
 service FileUpload {
-  rpc UploadMovie (stream MovieUploadRequest) returns (Response);
-  rpc UploadMovieBackdrop (stream MovieBackdropUploadRequest) returns (Response);
-  rpc UploadMoviePoster (stream MoviePosterUploadRequest) returns (Response);
-  rpc UploadUserAvatar (stream UserAvatarRequest) returns (Response);
-  rpc UoloadPersonPhoto (stream PersonPhotoRequest) returns (Response);
+  rpc UploadVideo (stream VideoUploadRequest) returns (Response);
+  rpc UploadImage (stream ImageUploadRequest) returns (Response);
 }
 
-message MovieUploadRequest {
-  string movieFilePath = 1;
-  bytes movieData = 2;
+message VideoUploadRequest {
+  string fileName = 1;
+  bytes chunk = 2;
 }
 
-message MovieBackdropUploadRequest {
-  string movieBackdropFilePath = 1;
-  bytes movieBackdropData = 2;
+message ImageUploadRequest {
+  string fileName = 1;
+  string type = 2;
+  bytes chunk = 3;
 }
-
-message MoviePosterUploadRequest {
-  string moviePosterFilePath = 1;
-  bytes moviePosterData = 2;
-}
-
-message UserAvatarRequest {
-  string userAvatarFilePath = 1;
-  bytes userAvatarData = 2;
-}
-
-message PersonPhotoRequest {
-  string personPhotoFilePath = 1;
-  bytes personPhotoData = 2;
-}
-
 
 message Response {
   string message = 1;
+  string absoluteFilePath = 2;
 }

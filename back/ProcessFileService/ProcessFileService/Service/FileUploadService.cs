@@ -15,138 +15,116 @@ public class FileUploadService : FileUpload.FileUploadBase
         _minioClient = minioClient;
     }
 
-    public override async Task<Response> UploadMovie(IAsyncStreamReader<MovieUploadRequest> requestStream, ServerCallContext context)
+    public override async Task<Response> UploadVideo(IAsyncStreamReader<VideoUploadRequest> requestStream, ServerCallContext context)
     {
-        string absoluteFilePath = string.Empty;
+
+        var tempInputPath = Path.GetTempFileName();
+        var hlsOutputDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        Directory.CreateDirectory(hlsOutputDir);
+
+        var movieName = string.Empty;
+
+        await using var outputFile = File.Create(tempInputPath);
 
         await foreach (var request in requestStream.ReadAllAsync())
         {
-            if (string.IsNullOrEmpty(request.MovieFileName) || request.MovieData.Length == 0)
+            if (string.IsNullOrEmpty(request.FileName) || request.Chunk.Length == 0)
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid file data"));
             }
 
-            using var stream = new MemoryStream(request.MovieData.ToByteArray());
-
-            absoluteFilePath = "movie/movie/" + request.MovieFileName + ".mp4";
-
-            var args = new PutObjectArgs()
-                .WithBucket(Bucket)
-                .WithObject(absoluteFilePath)
-                .WithStreamData(stream)
-                .WithObjectSize(request.MovieData.Length);
-
-            await _minioClient.PutObjectAsync(args);
+            movieName = Path.GetFileNameWithoutExtension(request.FileName);
+            await outputFile.WriteAsync(request.Chunk.Memory);
         }
+
+        await outputFile.FlushAsync();
+        outputFile.Close();
+
+        FfmpegService.GenerateMultiBitrateHls(tempInputPath, hlsOutputDir);
+
+        var minioPrefix = $"movie/movie/{movieName}";
+        await UploadDirectoryStreamedAsync(hlsOutputDir, minioPrefix);
+
+        File.Delete(tempInputPath);
+
+        return new Response
+        {
+            Message = "Movie uploaded successfully",
+            AbsoluteFilePath = $"{minioPrefix}/master.m3u8"
+        };
+    }
+
+    public override async Task<Response> UploadImage(IAsyncStreamReader<ImageUploadRequest> requestStream, ServerCallContext context)
+    {
+        string absoluteFilePath = string.Empty;
+
+        string tempInputPath = Path.GetTempFileName();
+        await using var outputFile = File.Create(tempInputPath);
+
+        await foreach (var request in requestStream.ReadAllAsync())
+        {
+            if (string.IsNullOrEmpty(request.FileName) || request.Chunk.Length == 0)
+            {
+                throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid file data"));
+            }
+
+
+            await outputFile.WriteAsync(request.Chunk.Memory);
+
+            absoluteFilePath = GetImagePath(request.Type) + request.FileName + ".jpg";
+        }
+
+        outputFile.Close();
+
+        await UploadFileStreamedAsync(tempInputPath, absoluteFilePath);
 
         return new Response { Message = "Movie uploaded successfully", AbsoluteFilePath = absoluteFilePath };
     }
 
-    public override async Task<Response> UploadMoviePoster(IAsyncStreamReader<MoviePosterUploadRequest> requestStream, ServerCallContext context)
+    private static string GetImagePath(string type)
     {
-        string absoluteFilePath = string.Empty;
-
-        await foreach (var request in requestStream.ReadAllAsync())
+        return type.ToLowerInvariant() switch
         {
-            if (string.IsNullOrEmpty(request.MoviePosterFileName) || request.MoviePosterData.Length == 0)
-            {
-                throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid file data"));
-            }
-
-            using var stream = new MemoryStream(request.MoviePosterData.ToByteArray());
-
-            absoluteFilePath = "movie/poster/" + request.MoviePosterFileName + ".jpg";
-
-            var args = new PutObjectArgs()
-                .WithBucket(Bucket)
-                .WithObject(absoluteFilePath)
-                .WithStreamData(stream)
-                .WithObjectSize(request.MoviePosterData.Length);
-
-            await _minioClient.PutObjectAsync(args);
-        }
-
-        return new Response { Message = "Movie uploaded successfully", AbsoluteFilePath = absoluteFilePath };
+            "poster" => "movie/poster/",
+            "backdrop" => "movie/backdrop/",
+            "logo" => "companylogo/",
+            "personphoto" => "personphoto/",
+            _ => throw new ArgumentOutOfRangeException(nameof(type), $"Unknown image type: {type}")
+        };
     }
 
-    public override async Task<Response> UploadMovieBackdrop(IAsyncStreamReader<MovieBackdropUploadRequest> requestStream, ServerCallContext context)
+    private async Task UploadFileStreamedAsync(string file, string filename)
     {
-        string absoluteFilePath = string.Empty;
+        await using var stream = new FileStream(file, FileMode.Open, FileAccess.Read);
+        await _minioClient.PutObjectAsync(new PutObjectArgs()
+            .WithBucket(Bucket)
+            .WithObject(filename)
+            .WithStreamData(stream)
+            .WithObjectSize(stream.Length)
+            .WithContentType("application/octet-stream"));
 
-        await foreach (var request in requestStream.ReadAllAsync())
-        {
-            if (string.IsNullOrEmpty(request.MovieBackdropFileName) || request.MovieBackdropData.Length == 0)
-            {
-                throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid file data"));
-            }
-
-            using var stream = new MemoryStream(request.MovieBackdropData.ToByteArray());
-
-            absoluteFilePath = "movie/backdrop/" + request.MovieBackdropFileName + ".jpg";
-
-            var args = new PutObjectArgs()
-                .WithBucket(Bucket)
-                .WithObject(absoluteFilePath)
-                .WithStreamData(stream)
-                .WithObjectSize(request.MovieBackdropData.Length);
-
-            await _minioClient.PutObjectAsync(args);
-        }
-
-        return new Response { Message = "Movie uploaded successfully", AbsoluteFilePath = absoluteFilePath };
+        File.Delete(file);
     }
 
-    public override async Task<Response> UploadCompanyLogo(IAsyncStreamReader<CompanyLogoUploadRequest> requestStream, ServerCallContext context)
+    private async Task UploadDirectoryStreamedAsync(string directory, string prefix)
     {
-        string absoluteFilePath = string.Empty;
+        var files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories);
 
-        await foreach (var request in requestStream.ReadAllAsync())
+        foreach (var file in files)
         {
-            if (string.IsNullOrEmpty(request.CompanyLogoFileName) || request.CompanyLogoData.Length == 0)
-            {
-                throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid file data"));
-            }
+            string objectName = Path.Combine(prefix, Path.GetRelativePath(directory, file)).Replace("\\", "/");
 
-            using var stream = new MemoryStream(request.CompanyLogoData.ToByteArray());
+            Console.WriteLine($"[UploadDirectoryStreamedAsync] Загрузка файла: {file} -> {objectName}");
 
-            absoluteFilePath = "companylogo/" + request.CompanyLogoFileName + ".jpg";
-
-            var args = new PutObjectArgs()
+            await using var stream = new FileStream(file, FileMode.Open, FileAccess.Read);
+            await _minioClient.PutObjectAsync(new PutObjectArgs()
                 .WithBucket(Bucket)
-                .WithObject(absoluteFilePath)
+                .WithObject(objectName)
                 .WithStreamData(stream)
-                .WithObjectSize(request.CompanyLogoData.Length);
-
-            await _minioClient.PutObjectAsync(args);
+                .WithObjectSize(stream.Length)
+                .WithContentType("application/octet-stream"));
         }
 
-        return new Response { Message = "Movie uploaded successfully", AbsoluteFilePath = absoluteFilePath };
-    }
-
-    public override async Task<Response> UoloadPersonPhoto(IAsyncStreamReader<PersonPhotoUploadRequest> requestStream, ServerCallContext context)
-    {
-        string absoluteFilePath = string.Empty;
-
-        await foreach (var request in requestStream.ReadAllAsync())
-        {
-            if (string.IsNullOrEmpty(request.PersonPhotoFileName) || request.PersonPhotoData.Length == 0)
-            {
-                throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid file data"));
-            }
-
-            using var stream = new MemoryStream(request.PersonPhotoData.ToByteArray());
-
-            absoluteFilePath = "personphoto/" + request.PersonPhotoFileName + ".jpg";
-
-            var args = new PutObjectArgs()
-                .WithBucket(Bucket)
-                .WithObject(absoluteFilePath)
-                .WithStreamData(stream)
-                .WithObjectSize(request.PersonPhotoData.Length);
-
-            await _minioClient.PutObjectAsync(args);
-        }
-
-        return new Response { Message = "Movie uploaded successfully", AbsoluteFilePath = absoluteFilePath };
+        Directory.Delete(directory, recursive: true);
     }
 }

@@ -19,9 +19,9 @@ public class Mutation
 
         var movieFileName = ExtractFileName.ExtractMovieFileName(movieDTO);
 
-        var moviePath = await uploadService.UploadMovieAsync(movieFileName, movieDTO.Movie);
-        var posterPath = await uploadService.UploadPosterAsync(movieFileName, movieDTO.Poster);
-        var backdropPath = await uploadService.UploadBackdropAsync(movieFileName, movieDTO.Backdrop);
+        var moviePath = await uploadService.UploadVideoAsync(movieFileName, movieDTO.Movie);
+        var posterPath = await uploadService.UploadImageAsync(movieFileName, "poster", movieDTO.Poster);
+        var backdropPath = await uploadService.UploadImageAsync(movieFileName, "backdrop", movieDTO.Backdrop);
 
 
         var movie = Mapper.MovieDTOToMovie(movieDTO, moviePath, posterPath, backdropPath, genres, tags);
@@ -63,7 +63,7 @@ public class Mutation
     {
         var photoName = ExtractFileName.ExtractPhotoFileName(personDTO);
 
-        var photoPath = await uploadService.UploadPersonPhotoAsync(photoName, personDTO.Photo);
+        var photoPath = await uploadService.UploadImageAsync(photoName, "personPhoto", personDTO.Photo);
 
         var person = Mapper.PersonDTOToPerson(personDTO, photoPath);
 
@@ -100,7 +100,7 @@ public class Mutation
     {
         var logoName = ExtractFileName.ExtractLogoFileName(productionCompanyDTO);
 
-        var logoPath = await uploadService.UploadLogoAsync(logoName, productionCompanyDTO.Logo);
+        var logoPath = await uploadService.UploadImageAsync(logoName, "logo", productionCompanyDTO.Logo);
 
         var productionCompany = Mapper.ProductionCompanyDTOToProductionCompany(productionCompanyDTO, logoPath);
 

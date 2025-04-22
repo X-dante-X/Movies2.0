@@ -94,12 +94,12 @@ public class UserService : IUserService
 
     public async Task<bool> DeleteFavoriteMovieAsync(UserMovieDeleteDTO deleteDTO)
     {
-        var review = await _context.MovieReviews
+        var review = await _context.UserMovies
                         .FirstOrDefaultAsync(r => r.UserId == deleteDTO.UserId && r.MovieId == deleteDTO.MovieId);
 
         if (review != null)
         {
-            _context.MovieReviews.Remove(review);
+            _context.UserMovies.Remove(review);
             await _context.SaveChangesAsync();
             return true;
         }

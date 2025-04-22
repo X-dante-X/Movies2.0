@@ -57,6 +57,13 @@ export function AuthButtons() {
         Logout
         <span className="absolute left-0 w-full h-0.5 top-8 transition-colors bg-transparent group-hover:bg-primary" />
       </button>
+
+      <Link
+          href="/user"
+          className="transition-colors group hover:text-primary relative">
+          User
+          <span className="absolute left-0 w-full h-0.5 top-8 transition-colors bg-transparent group-hover:bg-primary" />
+      </Link>
     </>
   ) : (
     <>

@@ -4,6 +4,7 @@ namespace UserService.Models;
 
 public class UserFavoriteMovie
 {
+    public int Id { get; set; }  
     public string Description { get; set; } = null!;
     public string PosterPath { get; set; } = null!;
     public string Title { get; set; } = null!;

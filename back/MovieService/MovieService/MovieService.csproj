@@ -13,6 +13,7 @@
     <PackageReference Include="Grpc.AspNetCore.Server.ClientFactory" Version="2.70.0" />
     <PackageReference Include="Grpc.Net.ClientFactory" Version="2.70.0" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="15.0.3" />
+    <PackageReference Include="HotChocolate.Execution" Version="15.0.3" />
     <PackageReference Include="HotChocolate.Data" Version="15.0.3" />
     <PackageReference Include="HotChocolate.Subscriptions.Redis" Version="15.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.0" />

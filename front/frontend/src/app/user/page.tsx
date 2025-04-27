@@ -28,10 +28,9 @@ const UserFilmPage: React.FC = () => {
         if (!token) {
           throw new Error('No authentication token found');
         }
-        console.log(jwtDecode(token))
         const decodedToken = jwtDecode(token) as { nameid: string };
         const userId = decodedToken.nameid;
-        console.log(userId)
+        // should change it 
         const response = await fetch(`http://localhost:5005/favorites/${userId}`, {
           headers: {
             'Authorization': `Bearer ${token}`

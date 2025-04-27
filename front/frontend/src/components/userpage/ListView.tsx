@@ -1,6 +1,5 @@
 "use client"
 import React from 'react';
-import { List, Box, Typography } from '@mui/material';
 import FilmCard from './FilmCard';
 import { Film } from './types';
 
@@ -12,26 +11,26 @@ interface ListViewProps {
 const ListView: React.FC<ListViewProps> = ({ films, error = null }) => {
   if (error) {
     return (
-      <Box sx={{ p: 2, textAlign: 'center' }}>
-        <Typography color="error">Error: {error}</Typography>
-      </Box>
+      <div className="p-8 text-center">
+        <p className="text-red-500">Error: {error}</p>
+      </div>
     );
   }
 
   if (films.length === 0) {
     return (
-      <Box sx={{ p: 2, textAlign: 'center' }}>
-        <Typography>No favorites found.</Typography>
-      </Box>
+      <div className="p-8 text-center">
+        <p className="text-gray-500">No favorites found.</p>
+      </div>
     );
   }
 
   return (
-    <List sx={{ p: 2 }}>
+    <ul className="p-8 space-y-4">
       {films.map((film) => (
         <FilmCard key={film.id} film={film} />
       ))}
-    </List>
+    </ul>
   );
 };
 

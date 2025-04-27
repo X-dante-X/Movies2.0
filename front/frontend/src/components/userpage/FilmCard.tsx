@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card, CardMedia, CardContent, Box, Typography, IconButton } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 interface Film {
@@ -35,57 +34,47 @@ const FilmCard: React.FC<FilmCardProps> = ({ film }) => {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
-    return `${day}.${month}.${year}`; // will then edit model on backend to list proper date idk
+    return `${day}.${month}.${year}`;
   };
 
   return (
-    <Card 
-      sx={{ 
-        display: 'flex',
-        mb: 2,
-        background: 'linear-gradient(to bottom, #2e2e4f, #3a3c5a)',
-        borderRadius: 2,
-        color: '#e0e0f0',
-        transition: 'transform 0.2s ease, box-shadow 0.3s ease',
-        '&:hover': {
-          transform: 'scale(1.02)',
-          boxShadow: '0 6px 20px rgba(0,0,0,0.3)',
-        },
-      }}
-    >
-      <CardMedia
-        component="img"
-        sx={{ width: 100, height: 140, objectFit: 'cover' }}
-        image={`/images/${film.posterPath}`} 
-        alt={film.title}
-      />
-      <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <CardContent sx={{ flex: '1 0 auto', pb: 1 }}>
-          <Typography component="div" variant="h6" sx={{ color: 'white' }}>
+    <div className="flex mb-2 rounded-lg overflow-hidden bg-gradient-to-b from-[#2e2e4f] to-[#3a3c5a] text-[#e0e0f0] transition-all duration-200 ease-in-out hover:transform hover:scale-102 hover:shadow-lg">
+      <div className="w-[100px] h-[140px] flex-shrink-0">
+        <img 
+          src={`/images/${film.posterPath}`}
+          alt={film.title}
+          className="w-full h-full object-cover"
+        />
+      </div>
+      
+      <div className="flex flex-col flex-grow">
+        <div className="p-4 pb-1 flex-grow">
+          <h6 className="text-white text-lg font-medium">
             {film.title}
-          </Typography>
+          </h6>
           
-          <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
+          <p className="text-blue-400 mt-1 text-sm">
             {getStatusText(film.status)}
-          </Typography>
+          </p>
           
-          <Typography variant="body2" color="text.secondary" sx={{ color: '#aaa', mt: 1 }}>
+          <p className="text-[#aaa] mt-1 text-sm">
             {film.description.length > 100 
               ? `${film.description.substring(0, 97)}...` 
               : film.description}
-          </Typography>
-        </CardContent>
-      </Box>
-      <Box sx={{ display: 'flex', alignItems: 'flex-start', p: 2 }}>
-        <Typography variant="caption" color="text.secondary" sx={{ color: '#aaa' }}>
+          </p>
+        </div>
+      </div>
+      
+      <div className="flex items-start p-2">
+        <div className="text-[#aaa] text-xs">
           Added<br />
-          {getCurrentDate()} 
-        </Typography>
-        <IconButton size="small" sx={{ ml: 1, color: 'white' }}>
-          <MoreVertIcon />
-        </IconButton>
-      </Box>
-    </Card>
+          {getCurrentDate()}
+        </div>
+        <button className="ml-1 text-white p-1">
+          <MoreVertIcon fontSize="small" />
+        </button>
+      </div>
+    </div>
   );
 };
 

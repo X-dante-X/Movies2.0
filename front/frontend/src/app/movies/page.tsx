@@ -47,9 +47,15 @@ export default function Page() {
     return { [s.field]: s.direction };
   }
 
-  function buildWhere(f: SelectedFilters) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const where: any = {};
+  interface WhereInput {
+    genre?: { some: { genreId: { in: SelectedFilters["genreIds"] } } };
+    tags?: { some: { tagId: { in: SelectedFilters["tagIds"] } } };
+    productionCountry?: { countryId: { in: SelectedFilters["countryIds"] } };
+    productionCompany?: { companyId: { in: SelectedFilters["companyIds"] } };
+  }
+
+  function buildWhere(f: SelectedFilters): WhereInput {
+    const where: WhereInput = {};
 
     if (f.genreIds.length) {
       where.genre = f.strictGenres ? { some: { genreId: { in: f.genreIds } } } : { some: { genreId: { in: f.genreIds } } };
@@ -59,8 +65,12 @@ export default function Page() {
       where.tags = f.strictTags ? { some: { tagId: { in: f.tagIds } } } : { some: { tagId: { in: f.tagIds } } };
     }
 
-    if (f.countryIds.length) where.productionCountry = { countryId: { in: f.countryIds } };
-    if (f.companyIds.length) where.productionCompany = { companyId: { in: f.companyIds } };
+    if (f.countryIds.length) {
+      where.productionCountry = { countryId: { in: f.countryIds } };
+    }
+    if (f.companyIds.length) {
+      where.productionCompany = { companyId: { in: f.companyIds } };
+    }
 
     return where;
   }

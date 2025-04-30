@@ -24,7 +24,7 @@ const FilmCard: React.FC<FilmCardProps> = ({ film }) => {
         return 'Completed';
       case 4:
         return 'Dropped';
-      default:
+    default:
         return 'Unknown';
     }
   };

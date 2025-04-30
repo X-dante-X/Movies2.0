@@ -16,7 +16,7 @@ export interface Film {
     favorite: number;
   }
   
-  export type CategoryType = 0 | 1 | 2 | 3| 4 | 5;
+  export type CategoryType = 0 | 1 | 2 | 3| 4 ;
 
   export const CATEGORY_MAPPING = {
     0: 'all',
@@ -24,7 +24,6 @@ export interface Film {
     2: 'plan',
     3: 'completed',
     4: 'dropped',
-    5: 'favorite'
   } as const;
 
   

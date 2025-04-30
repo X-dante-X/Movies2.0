@@ -10,6 +10,7 @@ public interface IUserService
     Task<UserMovieDto> AddOrUpdateUserMovieAsync( UserMovieDto userMovieDto);
     Task ToggleFavoriteAsync(string userId, int movieId);
     Task UpdateWatchStatusAsync(string userId, int movieId, WatchStatus status);
+    Task<List<UserFavoriteMovie>> GetAllUserMovies(string userId);
     Task<bool> DeleteFavoriteMovieAsync(UserMovieDeleteDTO movie); 
     Task<List<MovieReviewDto>> GetUserReviewsAsync(string userId);
     Task<MovieReviewDto> GetMovieReviewAsync(string userId, int movieId);

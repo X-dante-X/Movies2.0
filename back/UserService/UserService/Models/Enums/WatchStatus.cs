@@ -5,5 +5,6 @@ public enum WatchStatus
     PlanToWatch,
     Watching,
     Completed,
-    Dropped
+    Dropped,
+    Favorite
 }

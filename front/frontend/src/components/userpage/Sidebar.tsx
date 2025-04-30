@@ -9,7 +9,6 @@ const getCategoryKey = (category: CategoryType): keyof CategoryCounts => {
     case 2: return 'plan';
     case 3: return 'completed';
     case 4: return 'dropped';
-    case 5: return 'favorite';
     default: return 'all';
   }
 };

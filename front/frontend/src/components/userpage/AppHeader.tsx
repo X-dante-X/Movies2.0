@@ -5,7 +5,8 @@ interface AppHeaderProps {
   onSearch?: (query: string) => void;
 }
 
-const AppHeader: React.FC<AppHeaderProps> = ({ onSearch }) => {
+function AppHeader(props: AppHeaderProps) {
+  const { onSearch } = props;
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +38,6 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onSearch }) => {
       </div>
     </header>
   );
-};
+}
 
 export default AppHeader;

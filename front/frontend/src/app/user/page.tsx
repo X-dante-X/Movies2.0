@@ -34,7 +34,8 @@ const UserFilmPage: React.FC = () => {
         const response = await fetch(`http://localhost:5005/favorites/${userId}`, {
           headers: {
             'Authorization': `Bearer ${token}`
-          }
+          },
+          cache: 'no-store'
         });
         
         if (!response.ok) {
@@ -42,6 +43,7 @@ const UserFilmPage: React.FC = () => {
         }
         
         const data = await response.json();
+        console.log(data)
         setFilms(data);
       } catch (err) {
         console.error('Error fetching films:', err);

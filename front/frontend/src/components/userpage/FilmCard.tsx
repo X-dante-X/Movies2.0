@@ -16,15 +16,15 @@ interface FilmCardProps {
 const FilmCard: React.FC<FilmCardProps> = ({ film }) => {
   const getStatusText = (status: number) => {
     switch (status) {
+      case 0:
+        return 'Plan to Watch';
       case 1:
         return 'Watching';
       case 2:
-        return 'Plan to Watch';
-      case 3:
         return 'Completed';
-      case 4:
+      case 3:
         return 'Dropped';
-    default:
+      default:
         return 'Unknown';
     }
   };
@@ -46,17 +46,17 @@ const FilmCard: React.FC<FilmCardProps> = ({ film }) => {
           className="w-full h-full object-cover"
         />
       </div>
-      
+
       <div className="flex flex-col flex-grow">
         <div className="p-4 pb-1 flex-grow">
           <h6 className="text-white text-lg font-medium">
             {film.title}
           </h6>
-          
+
           <p className="text-blue-400 mt-1 text-sm">
             {getStatusText(film.status)}
           </p>
-          
+
           <p className="text-[#aaa] mt-1 text-sm">
             {film.description.length > 100 
               ? `${film.description.substring(0, 97)}...` 
@@ -64,7 +64,7 @@ const FilmCard: React.FC<FilmCardProps> = ({ film }) => {
           </p>
         </div>
       </div>
-      
+
       <div className="flex items-start p-2">
         <div className="text-[#aaa] text-xs">
           Added<br />

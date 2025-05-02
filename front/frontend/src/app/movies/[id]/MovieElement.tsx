@@ -8,7 +8,7 @@ import { MediaDetails } from "@/components/media/MediaDetails";
 import { getImageProps } from "next/image";
 import { CSSProperties } from "react";
 import Link from "next/link";
-import { FavoriteButton } from "@/components/ui/favoriteButton"; // Import the new component
+import FavoriteButton from "@/components/FavoriteButton";
 
 interface MovieElementProps {
   id: number;
@@ -103,7 +103,7 @@ export function MovieElement({ id }: MovieElementProps) {
           <div className="absolute bottom-0 left-0 z-1 flex w-full items-end justify-between p-8">
             <MediaDetails mediaItem={movie} />
             {/* Add the Favorite Button in the top right of the backdrop */}
-            <div className="relative top-6 right-6">
+            <div className="absolute right-6">
               <FavoriteButton movieId={movieId} />
             </div>
           </div>

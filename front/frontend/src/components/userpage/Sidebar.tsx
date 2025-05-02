@@ -4,11 +4,11 @@ import { CategoryCounts, CategoryType, ViewModeType } from './types';
 
 const getCategoryKey = (category: CategoryType): keyof CategoryCounts => {
   switch(category) {
-    case 0: return 'all';
+    case 'all': return 'all';
+    case 0: return 'plan';
     case 1: return 'watching';
-    case 2: return 'plan';
-    case 3: return 'completed';
-    case 4: return 'dropped';
+    case 2: return 'completed';
+    case 3: return 'dropped';
     default: return 'all';
   }
 };
@@ -33,20 +33,19 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className="p-4">
         <h2 className="text-xl font-medium">Lists</h2>
       </div>
-      
+
       <div className="h-px bg-[#333]"></div>
-      
+
       <ul>
         {Object.entries(CATEGORIES).map(([key, value]) => {
-          const numericValue = Number(value) as CategoryType;
-          const categoryKey = getCategoryKey(numericValue);
+          const categoryKey = getCategoryKey(value);
           const IconComponent = CATEGORY_ICONS[value];
-          
+
           return (
-            <li key={value}>
+            <li key={String(value)}>
               <button
-                className={`flex items-center w-full px-4 py-2 hover:bg-[#333] ${selectedCategory === numericValue ? 'bg-[#333]' : ''}`}
-                onClick={() => onCategoryChange(numericValue)}
+                className={`flex items-center w-full px-4 py-2 hover:bg-[#333] ${selectedCategory === value ? 'bg-[#333]' : ''}`}
+                onClick={() => onCategoryChange(value)}
               >
                 <span className="text-white mr-4">
                   <IconComponent />
@@ -62,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       </ul>
 
       <div className="h-px bg-[#333] mt-4"></div>
-      
+
       <div className="p-4">
         <h3 className="text-sm font-medium text-[#aaa]">View</h3>
         <ul>
@@ -83,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       <div className="h-px bg-[#333]"></div>
-      
+
       <div className="p-4">
         <h3 className="text-sm font-medium text-[#aaa]">Sort By</h3>
         <ul>

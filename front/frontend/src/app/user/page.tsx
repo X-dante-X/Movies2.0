@@ -11,7 +11,7 @@ import { jwtDecode} from 'jwt-decode';
 import { getAccessToken } from '@/services/auth-token.service';
 
 const UserFilmPage: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<CategoryType>(0);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryType>('all');
   const [viewMode, setViewMode] = useState<ViewModeType>('list');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [films, setFilms] = useState<Film[]>([]);
@@ -30,12 +30,10 @@ const UserFilmPage: React.FC = () => {
         }
         const decodedToken = jwtDecode(token) as { nameid: string };
         const userId = decodedToken.nameid;
-        // should change it 
         const response = await fetch(`http://localhost:5005/favorites/${userId}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           },
-          cache: 'no-store'
         });
         
         if (!response.ok) {

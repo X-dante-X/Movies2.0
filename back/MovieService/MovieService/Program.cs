@@ -7,7 +7,9 @@ using MovieService.Services.Interfaces;
 using MovieService.Services;
 using MovieService;
 using MovieService.RabbitMQService;
-
+using HotChocolate.Execution.Options;
+using HotChocolate.Execution.Configuration;
+using HotChocolate.Execution;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,10 +40,17 @@ builder.Services.AddGraphQLServer()
     .AddProjections()
     .AddFiltering()
     .AddSorting()
-    .AddPagingArguments();
+    .AddPagingArguments()
+    .ModifyCostOptions(o =>
+    {
+        o.DefaultResolverCost = 10000;
+        o.MaxFieldCost = 50000;
+        o.MaxTypeCost = 50000;
+    });
 
 
-var app = builder.Build();
+
+    var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {

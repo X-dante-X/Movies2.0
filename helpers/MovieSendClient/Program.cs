@@ -2,8 +2,6 @@
 using Google.Protobuf;
 using Fileupload;
 
-using System.Threading.Channels;
-
 class Program
 {
     static async Task Main(string[] args)
@@ -22,18 +20,18 @@ class Program
 
     static async Task UploadMovieAsync(FileUpload.FileUploadClient client, string filePath)
     {
-        using var call = client.UploadMovie();
+        using var call = client.UploadVideo();
         using var fileStream = File.OpenRead(filePath);
 
-        byte[] buffer = new byte[1024 * 1024 * 100];
+        byte[] buffer = new byte[1024];
         int bytesRead;
 
-        while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+        while ((bytesRead = await fileStream.ReadAsync(buffer)) > 0)
         {
-            var request = new MovieUploadRequest
+            var request = new VideoUploadRequest
             {
-                MovieFilePath = filePath,
-                MovieData = ByteString.CopyFrom(buffer, 0, bytesRead),
+                FileName = filePath,
+                Chunk = ByteString.CopyFrom(buffer, 0, bytesRead),
             };
 
             await call.RequestStream.WriteAsync(request);
@@ -46,18 +44,19 @@ class Program
 
     static async Task UploadPosterAsync(FileUpload.FileUploadClient client, string filePath)
     {
-        using var call = client.UploadMoviePoster();
+        using var call = client.UploadImage();
         using var fileStream = File.OpenRead(filePath);
 
-        byte[] buffer = new byte[1024 * 1024];
+        byte[] buffer = new byte[1024];
         int bytesRead;
 
-        while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+        while ((bytesRead = await fileStream.ReadAsync(buffer)) > 0)
         {
-            var request = new MoviePosterUploadRequest
+            var request = new ImageUploadRequest
             {
-                MoviePosterFilePath = filePath,
-                MoviePosterData = ByteString.CopyFrom(buffer, 0, bytesRead),
+                FileName = filePath,
+                Type = "poster",
+                Chunk = ByteString.CopyFrom(buffer, 0, bytesRead),
             };
 
             await call.RequestStream.WriteAsync(request);
@@ -70,18 +69,19 @@ class Program
 
     static async Task UploadBackdropAsync(FileUpload.FileUploadClient client, string filePath)
     {
-        using var call = client.UploadMovieBackdrop();
+        using var call = client.UploadImage();
         using var fileStream = File.OpenRead(filePath);
 
-        byte[] buffer = new byte[1024*1024];
+        byte[] buffer = new byte[1024];
         int bytesRead;
 
-        while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+        while ((bytesRead = await fileStream.ReadAsync(buffer)) > 0)
         {
-            var request = new MovieBackdropUploadRequest
+            var request = new ImageUploadRequest
             {
-                MovieBackdropFilePath = filePath,
-                MovieBackdropData = ByteString.CopyFrom(buffer, 0, bytesRead),
+                FileName = filePath,
+                Type = "backdrop",
+                Chunk = ByteString.CopyFrom(buffer, 0, bytesRead),
             };
 
             await call.RequestStream.WriteAsync(request);

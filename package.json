@@ -4,6 +4,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
+    "hls.js": "^1.6.2",
     "lucide-react": "^0.503.0"
   }
 }

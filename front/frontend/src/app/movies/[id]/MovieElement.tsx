@@ -8,7 +8,7 @@ import { MediaDetails } from "@/components/media/MediaDetails";
 import { getImageProps } from "next/image";
 import { CSSProperties } from "react";
 import Link from "next/link";
-import FavoriteButton from "@/components/FavoriteButton";
+import { VideoPlayer } from "@/components/videoplayer/VideoPlayer";
 
 interface MovieElementProps {
   id: number;
@@ -204,18 +204,12 @@ export function MovieElement({ id }: MovieElementProps) {
               </div>
             </div>
 
-            {/* Movie (видео) на всю ширину контейнера, но по центру и с ограничением */}
+            {/* Movie */}
             <m.div
               {...sectionAnimation}
               className="w-full p-8 rounded-2xl shadow-xl backdrop-blur-md bg-white/10 border border-white/20 text-white text-center">
               <h3 className="text-3xl font-semibold pb-3 mb-4">Movie</h3>
-              <div className="relative mx-auto w-full max-w-4xl aspect-video">
-                <video
-                  className="w-full h-full rounded-xl shadow-xl object-cover"
-                  controls
-                  src={getClientMinIoUrl(movie.moviePath)}
-                />
-              </div>
+              <VideoPlayer src={getClientMinIoUrl(movie.moviePath)} />
             </m.div>
           </div>
         </div>

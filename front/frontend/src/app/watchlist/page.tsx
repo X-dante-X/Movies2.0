@@ -29,7 +29,7 @@ export default function Page() {
         }
         const decodedToken = jwtDecode(token) as { nameid: string }; 
         const userId = decodedToken.nameid;
-        const response = await fetch(`http://localhost:5005/favorites/${userId}`, {
+        const response = await fetch(`http://localhost/favorites/${userId}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           },

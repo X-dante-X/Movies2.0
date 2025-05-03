@@ -44,7 +44,7 @@ export default function FavoriteButton({ movieId }: FavoriteButtonProps) {
     //const isFavorite = statusValue === 4; is it necessary?
     
     try {
-      const response = await fetch('http://localhost:5005/favorites', {
+      const response = await fetch('http://localhost/favorites', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

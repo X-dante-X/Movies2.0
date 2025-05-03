@@ -1,6 +1,7 @@
 import React from 'react';
 import { CATEGORIES, CATEGORY_ICONS, SORT_OPTIONS } from './constants';
 import { CategoryCounts, CategoryType, ViewModeType } from './types';
+import { Menu } from 'lucide-react';
 
 const getCategoryKey = (category: CategoryType): keyof CategoryCounts => {
   switch(category) {
@@ -71,9 +72,9 @@ export function Sidebar({
               onClick={() => onViewModeChange('list')}
             >
               <span className="text-white mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                </svg>
+              <div className="relative">
+                <Menu className="h-5 w-5 text-current" />
+              </div>
               </span>
               <span>List</span>
             </button>

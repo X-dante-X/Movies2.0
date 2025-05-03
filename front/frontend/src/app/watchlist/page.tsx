@@ -27,7 +27,7 @@ export default function Page() {
         if (!token) {
           throw new Error('No authentication token found');
         }
-        const decodedToken = jwtDecode(token) as { nameid: string }; // will change l8r
+        const decodedToken = jwtDecode(token) as { nameid: string }; 
         const userId = decodedToken.nameid;
         const response = await fetch(`http://localhost:5005/favorites/${userId}`, {
           headers: {

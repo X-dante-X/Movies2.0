@@ -20,10 +20,10 @@ export type CategoryType = 'all' | 0 | 1 | 2 | 3;
 
 export const CATEGORY_MAPPING = {
   'all': 'all',
-  0: 'plan',       // Plan to watch
-  1: 'watching',   // Watching
-  2: 'completed',  // Completed
-  3: 'dropped',    // Dropped
+  0: 'plan',       
+  1: 'watching',   
+  2: 'completed',  
+  3: 'dropped',    
 } as const;
 
 export type ViewModeType = 'list';

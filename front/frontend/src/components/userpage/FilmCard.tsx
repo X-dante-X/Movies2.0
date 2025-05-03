@@ -1,5 +1,7 @@
 import React from 'react';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Image from 'next/image';
+import { MoreVertical } from 'lucide-react';
+import { getServerMinIoUrl } from '@/utils/getMinIoUrl';
 
 interface Film {
   title: string;
@@ -13,7 +15,7 @@ interface FilmCardProps {
   film: Film;
 }
 
-const FilmCard: React.FC<FilmCardProps> = ({ film }) => {
+export function FilmCard({ film }: FilmCardProps) {
   const getStatusText = (status: number) => {
     switch (status) {
       case 0:
@@ -40,9 +42,11 @@ const FilmCard: React.FC<FilmCardProps> = ({ film }) => {
   return (
     <div className="flex mb-2 rounded-lg overflow-hidden bg-gradient-to-b from-[#2e2e4f] to-[#3a3c5a] text-[#e0e0f0] transition-all duration-200 ease-in-out hover:transform hover:scale-102 hover:shadow-lg">
       <div className="w-[100px] h-[140px] flex-shrink-0">
-        <img 
-          src={`/images/${film.posterPath}`}
+        <Image
+          src={getServerMinIoUrl(film.posterPath)}
           alt={film.title}
+          width={100}
+          height={140}
           className="w-full h-full object-cover"
         />
       </div>
@@ -71,11 +75,9 @@ const FilmCard: React.FC<FilmCardProps> = ({ film }) => {
           {getCurrentDate()}
         </div>
         <button className="ml-1 text-white p-1">
-          <MoreVertIcon fontSize="small" />
+          <MoreVertical size={18} />
         </button>
       </div>
     </div>
   );
-};
-
-export default FilmCard;
+}

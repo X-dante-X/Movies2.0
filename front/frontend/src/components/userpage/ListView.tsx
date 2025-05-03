@@ -1,6 +1,7 @@
 "use client"
 import React from 'react';
-import FilmCard from './FilmCard';
+import { useRouter } from 'next/navigation';
+import { FilmCard } from './FilmCard';
 import { Film } from './types';
 
 interface ListViewProps {
@@ -8,7 +9,9 @@ interface ListViewProps {
   error?: string | null;
 }
 
-const ListView: React.FC<ListViewProps> = ({ films, error = null }) => {
+export function ListView({ films, error = null }: ListViewProps) {
+  const router = useRouter();
+
   if (error) {
     return (
       <div className="p-8 text-center">
@@ -25,13 +28,21 @@ const ListView: React.FC<ListViewProps> = ({ films, error = null }) => {
     );
   }
 
+  const handleFilmClick = (filmId: number) => {
+    router.push(`/movies/${filmId}`);
+  };
+
   return (
     <ul className="p-8 space-y-4">
       {films.map((film) => (
-        <FilmCard key={film.id} film={film} />
+        <li 
+          key={film.id} 
+          onClick={() => handleFilmClick(film.id)}
+          className="cursor-pointer"
+        >
+          <FilmCard film={film} />
+        </li>
       ))}
     </ul>
   );
-};
-
-export default ListView;
+}

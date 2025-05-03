@@ -1,12 +1,12 @@
 import { 
-  Bookmark as BookmarkIcon,
-  LocalMovies as MoviesIcon,
-  WatchLater as WatchLaterIcon,
-  Cancel as CancelIcon,
-  CheckCircle as CheckCircleIcon,
-} from '@mui/icons-material';
+  Bookmark,
+  Film,
+  Clock,
+  XCircle,
+  CheckCircle,
+  LucideIcon
+} from 'lucide-react';
 import { CategoryType, SortOption, ViewModeType } from './types';
-import { SvgIconComponent } from '@mui/icons-material';
 
 export const CATEGORIES: Record<string, CategoryType> = {
   ALL: 'all',
@@ -16,12 +16,12 @@ export const CATEGORIES: Record<string, CategoryType> = {
   DROPPED: 3,
 };
 
-export const CATEGORY_ICONS: Record<CategoryType | string, SvgIconComponent> = {
-  'all': MoviesIcon,
-  0: BookmarkIcon,    // Plan to watch
-  1: WatchLaterIcon,  // Watching
-  2: CheckCircleIcon, // Completed
-  3: CancelIcon,      // Dropped
+export const CATEGORY_ICONS: Record<CategoryType | string, LucideIcon> = {
+  'all': Film,
+  0: Bookmark,    
+  1: Clock, 
+  2: CheckCircle, 
+  3: XCircle,      
 };
 
 export const VIEW_MODES: Record<string, ViewModeType> = {

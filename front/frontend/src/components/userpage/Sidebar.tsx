@@ -21,13 +21,13 @@ interface SidebarProps {
   onViewModeChange: (mode: ViewModeType) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ 
+export function Sidebar({ 
   selectedCategory, 
   onCategoryChange, 
   categoryCounts, 
   viewMode, 
   onViewModeChange 
-}) => {
+}: SidebarProps) {
   return (
     <div className="hidden sm:block w-60 bg-[#2e2e4f] text-[#e0e0f0] border-r border-[#444] shadow-lg">
       <div className="p-4">
@@ -97,6 +97,4 @@ const Sidebar: React.FC<SidebarProps> = ({
       </div>
     </div>
   );
-};
-
-export default Sidebar;
+}

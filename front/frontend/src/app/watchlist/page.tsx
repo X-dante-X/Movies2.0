@@ -1,16 +1,15 @@
 "use client"
 import React, { useState, useEffect, useMemo } from 'react';
-import { Box } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
-import Sidebar from '../../components/userpage/Sidebar';
+import { Loader } from 'lucide-react';
+import { Sidebar } from '../../components/userpage/Sidebar';
 import AppHeader from '../../components/userpage/AppHeader';
-import ListView from '../../components/userpage/ListView';
+import { ListView } from '../../components/userpage/ListView';
 import { getFilteredFilms, getCategoryCounts } from '../../utils/filterMovies';
 import { CategoryType, ViewModeType, Film } from '../../components/userpage/types';
-import { jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { getAccessToken } from '@/services/auth-token.service';
 
-const UserFilmPage: React.FC = () => {
+export default function Page() {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('all');
   const [viewMode, setViewMode] = useState<ViewModeType>('list');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -28,7 +27,7 @@ const UserFilmPage: React.FC = () => {
         if (!token) {
           throw new Error('No authentication token found');
         }
-        const decodedToken = jwtDecode(token) as { nameid: string };
+        const decodedToken = jwtDecode(token) as { nameid: string }; // will change l8r
         const userId = decodedToken.nameid;
         const response = await fetch(`http://localhost:5005/favorites/${userId}`, {
           headers: {
@@ -69,16 +68,7 @@ const UserFilmPage: React.FC = () => {
   }, [films, selectedCategory, searchQuery]);
 
   return (
-    <Box 
-      sx={{
-        display: 'flex',
-        minHeight: '100vh',
-        color: 'white',
-        bgcolor: 'transparent',
-        backgroundImage: 'linear-gradient(to right, #c3cfe2, #dee2f8, #e2e2f2)',
-        backgroundAttachment: 'fixed'
-      }}
-    >
+    <div className="flex min-h-screen text-white bg-transparent bg-gradient-to-r from-[#c3cfe2] to-[#e2e2f2] bg-fixed">
       <Sidebar 
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
@@ -87,21 +77,19 @@ const UserFilmPage: React.FC = () => {
         onViewModeChange={setViewMode}
       />
 
-      <Box component="main" sx={{ flexGrow: 1 }}>
+      <main className="flex-grow">
         <AppHeader onSearch={setSearchQuery} />
         
         {viewMode === 'list' && 
           (loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
-              <CircularProgress />
-            </Box>
+            <div className="flex justify-center items-center h-[300px]">
+              <Loader className="animate-spin text-gray-700" size={36} />
+            </div>
           ) : (
             <ListView films={filteredFilms} error={error} />
           ))
         }
-      </Box>
-    </Box>
+      </main>
+    </div>
   );
-};
-
-export default UserFilmPage;
+}

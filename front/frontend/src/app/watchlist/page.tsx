@@ -1,49 +1,44 @@
 "use client"
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Loader } from 'lucide-react';
 import { Sidebar } from '../../components/userpage/Sidebar';
 import AppHeader from '../../components/userpage/AppHeader';
 import { ListView } from '../../components/userpage/ListView';
 import { getFilteredFilms, getCategoryCounts } from '../../utils/filterMovies';
 import { CategoryType, ViewModeType, Film } from '../../components/userpage/types';
-import { jwtDecode } from 'jwt-decode';
 import { getAccessToken } from '@/services/auth-token.service';
 import { axiosWithAuth } from '@/api/interceptors';
+import { getUserIdFromToken } from '@/utils/auth';
+
+const fetchFavorites = async (): Promise<Film[]> => {
+  const token = getAccessToken();
+  
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+  
+
+  const userId = getUserIdFromToken();
+  
+  const response = await axiosWithAuth.get(`http://localhost/favorites/${userId}`);
+  return response.data;
+};
 
 export default function Page() {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('all');
   const [viewMode, setViewMode] = useState<ViewModeType>('list');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [films, setFilms] = useState<Film[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   
-  useEffect(() => {
-    const fetchFilms = async () => {
-      try {
-        setLoading(true);
-        
-        const token = getAccessToken()
-        
-        if (!token) {
-          throw new Error('No authentication token found');
-        }
-        const decodedToken = jwtDecode(token) as { nameid: string }; 
-        const userId = decodedToken.nameid;
-        const response = await axiosWithAuth.get(`http://localhost/favorites/${userId}`);
-
-        const data = response.data;
-        setFilms(data);
-      } catch (err) {
-        console.error('Error fetching films:', err);
-        setError(err instanceof Error ? err.message : 'An unknown error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchFilms();
-  }, []);
+  const { 
+    data: films = [] as Film[], 
+    isLoading, 
+    error 
+  } = useQuery<Film[]>({
+    queryKey: ['favorites'],
+    queryFn: fetchFavorites,
+    staleTime: 5 * 60 * 1000, //  5 mins
+  });
 
   const categoryCounts = useMemo(() => getCategoryCounts(films), [films]);
 
@@ -73,12 +68,15 @@ export default function Page() {
         <AppHeader onSearch={setSearchQuery} />
         
         {viewMode === 'list' && 
-          (loading ? (
+          (isLoading ? (
             <div className="flex justify-center items-center h-[300px]">
               <Loader className="animate-spin text-gray-700" size={36} />
             </div>
           ) : (
-            <ListView films={filteredFilms} error={error} />
+            <ListView 
+              films={filteredFilms} 
+              error={error instanceof Error ? error.message : error ? String(error) : null} 
+            />
           ))
         }
       </main>

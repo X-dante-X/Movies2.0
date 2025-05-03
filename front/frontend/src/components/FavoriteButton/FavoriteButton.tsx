@@ -1,5 +1,6 @@
 "use client";
 import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from "@/stores/useAuthStore";
 import { CategoryType } from '../userpage/types';
 import { getUserIdFromToken } from '@/utils/auth';
@@ -15,11 +16,41 @@ interface FavoriteButtonProps {
 export default function FavoriteButton({ movieId }: FavoriteButtonProps) {
   const { user } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   
   const userId = getUserIdFromToken();
+  const queryClient = useQueryClient();
+
+  const { mutate: updateFavorite, isPending: isLoading } = useMutation({
+    mutationFn: async ({ 
+      userId, 
+      movieId, 
+      status 
+    }: { 
+      userId: string; 
+      movieId: number; 
+      status: CategoryType 
+    }) => {
+      const response = await axiosWithAuth.post('http://localhost/favorites', {
+        UserId: userId,
+        MovieId: movieId,
+        IsFavorite: true,
+        Status: status
+      });
+      
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['favorites'] });
+      setSuccess(true);
+      setIsOpen(false);
+      setTimeout(() => setSuccess(false), 3000);
+    },
+    onError: (err) => {
+      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+    }
+  });
 
   const toggleDropdown = () => {
     if (!user) {
@@ -35,37 +66,11 @@ export default function FavoriteButton({ movieId }: FavoriteButtonProps) {
     }
   };
 
-  const handleSelectStatus = async (statusValue: CategoryType) => {
+  const handleSelectStatus = (statusValue: CategoryType) => {
     if (!user || !userId) return; 
     
-    setIsLoading(true);
     setError(null);
-    
-    const adjustedStatus = statusValue;
-    //const isFavorite = statusValue === 4; is it necessary?
-    
-    try {
-      const response = await axiosWithAuth.post('http://localhost/favorites', {
-        UserId: userId,
-        MovieId: movieId,
-        IsFavorite: true,
-        Status: adjustedStatus
-      });
-
-      if (response.status !== 200 && response.status !== 201) {
-        throw new Error('Failed to update favorite status');
-      }
-
-      setSuccess(true);
-      setIsOpen(false);
-      
-      setTimeout(() => setSuccess(false), 3000);
-      
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
-    } finally {
-      setIsLoading(false);
-    }
+    updateFavorite({ userId, movieId, status: statusValue });
   };
 
   return (

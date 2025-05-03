@@ -6,6 +6,7 @@ import { getUserIdFromToken } from '@/utils/auth';
 import StatusDropdown from './StatusDropdown';
 import NotificationMessage from './NotificationMessage';
 import ButtonContent from './ButtonContent';
+import { axiosWithAuth } from '@/api/interceptors';
 
 interface FavoriteButtonProps {
   movieId: number;
@@ -44,20 +45,14 @@ export default function FavoriteButton({ movieId }: FavoriteButtonProps) {
     //const isFavorite = statusValue === 4; is it necessary?
     
     try {
-      const response = await fetch('http://localhost/favorites', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          UserId: userId,
-          MovieId: movieId,
-          IsFavorite: true,
-          Status: adjustedStatus  
-        }),
+      const response = await axiosWithAuth.post('http://localhost/favorites', {
+        UserId: userId,
+        MovieId: movieId,
+        IsFavorite: true,
+        Status: adjustedStatus
       });
 
-      if (!response.ok) {
+      if (response.status !== 200 && response.status !== 201) {
         throw new Error('Failed to update favorite status');
       }
 

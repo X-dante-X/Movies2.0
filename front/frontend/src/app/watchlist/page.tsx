@@ -8,6 +8,7 @@ import { getFilteredFilms, getCategoryCounts } from '../../utils/filterMovies';
 import { CategoryType, ViewModeType, Film } from '../../components/userpage/types';
 import { jwtDecode } from 'jwt-decode';
 import { getAccessToken } from '@/services/auth-token.service';
+import { axiosWithAuth } from '@/api/interceptors';
 
 export default function Page() {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('all');
@@ -29,18 +30,9 @@ export default function Page() {
         }
         const decodedToken = jwtDecode(token) as { nameid: string }; 
         const userId = decodedToken.nameid;
-        const response = await fetch(`http://localhost/favorites/${userId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch favorites');
-        }
-        
-        const data = await response.json();
-        console.log(data)
+        const response = await axiosWithAuth.get(`http://localhost/favorites/${userId}`);
+
+        const data = response.data;
         setFilms(data);
       } catch (err) {
         console.error('Error fetching films:', err);

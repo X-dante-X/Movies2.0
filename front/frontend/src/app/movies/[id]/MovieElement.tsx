@@ -7,9 +7,9 @@ import { HTMLMotionProps, m } from "framer-motion";
 import { MediaDetails } from "@/components/media/MediaDetails";
 import { getImageProps } from "next/image";
 import { CSSProperties } from "react";
-import FavoriteButton from "@/components/FavoriteButton";
 import Link from "next/link";
 import { VideoPlayer } from "@/components/videoplayer/VideoPlayer";
+import { FavoriteButton } from "@/components/FavoriteButton/FavoriteButton";
 
 interface MovieElementProps {
   id: number;

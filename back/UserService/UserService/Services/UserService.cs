@@ -80,6 +80,19 @@ public class UserService : IUserService
         return userMovieDto;
     }
 
+    public async Task<WatchStatus?> GetUsersWatchStatusAsync(int movieId, string userId)
+    {
+        var userMovie = await _context.UserMovies
+            .FirstOrDefaultAsync(um => um.MovieId == movieId && um.UserId == userId);
+
+        if (userMovie == null)
+        {
+            return null;
+        }
+
+        return userMovie.Status;
+    }
+
     public async Task DeleteReviewAsync(string userId, int movieId)
     {
         var review = await _context.MovieReviews

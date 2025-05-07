@@ -16,7 +16,7 @@ public interface IUserService
     Task<MovieReviewDto> GetMovieReviewAsync(string userId, int movieId);
     Task<MovieReviewDto> AddOrUpdateReviewAsync(MovieReviewDto reviewDto);
     Task DeleteReviewAsync(string userId, int movieId);
-
+    Task<WatchStatus?> GetUsersWatchStatusAsync(int movieId, string userId);
     Task<double> GetMovieAverageRatingAsync(int movieId);
     Task<List<MovieReviewDto>> GetMovieReviewsAsync(int movieId);
 

@@ -9,7 +9,6 @@ import { getFilteredFilms, getCategoryCounts } from '../../utils/filterMovies';
 import { CategoryType, ViewModeType, Film } from '../../components/userpage/types';
 import { getAccessToken } from '@/services/auth-token.service';
 import { axiosWithAuth } from '@/api/interceptors';
-import { getUserIdFromToken } from '@/utils/auth';
 
 const fetchFavorites = async (): Promise<Film[]> => {
   const token = getAccessToken();
@@ -18,10 +17,7 @@ const fetchFavorites = async (): Promise<Film[]> => {
     throw new Error('No authentication token found');
   }
   
-
-  const userId = getUserIdFromToken();
-  
-  const response = await axiosWithAuth.get(`http://localhost/favorites/${userId}`);
+  const response = await axiosWithAuth.get(`http://localhost/favorites`);
   return response.data;
 };
 

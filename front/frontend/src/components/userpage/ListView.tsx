@@ -3,14 +3,17 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { FilmCard } from './FilmCard';
 import { Film } from './types';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ListViewProps {
   films: Film[];
   error?: string | null;
+  onFilmsUpdate?: () => void;
 }
 
-export function ListView({ films, error = null }: ListViewProps) {
+export function ListView({ films, error = null, onFilmsUpdate }: ListViewProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   if (error) {
     return (
@@ -32,15 +35,22 @@ export function ListView({ films, error = null }: ListViewProps) {
     router.push(`/movies/${filmId}`);
   };
 
+  const handleDeleteSuccess = () => {
+    if (onFilmsUpdate) {
+      onFilmsUpdate();
+    }
+  };
+
   return (
     <ul className="p-8 space-y-4">
       {films.map((film) => (
-        <li 
-          key={film.id} 
-          onClick={() => handleFilmClick(film.id)}
-          className="cursor-pointer"
-        >
-          <FilmCard film={film} />
+        <li key={film.id} className="cursor-pointer">
+          <FilmCard 
+            film={film}
+            queryClient={queryClient} 
+            onClick={() => handleFilmClick(film.id)}
+            onDeleteSuccess={handleDeleteSuccess}
+          />
         </li>
       ))}
     </ul>

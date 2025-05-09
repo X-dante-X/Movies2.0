@@ -16,7 +16,7 @@ export interface CategoryCounts {
   favorite: number;
 }
 
-export type CategoryType = 'all' | 0 | 1 | 2 | 3;
+export type CategoryType = 'all' | 0 | 1 | 2 | 3 | "";
 
 export const CATEGORY_MAPPING = {
   'all': 'all',

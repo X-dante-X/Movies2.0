@@ -80,6 +80,19 @@ public class UserService : IUserService
         return userMovieDto;
     }
 
+    public async Task<WatchStatus?> GetUsersWatchStatusAsync(int movieId, string userId)
+    {
+        var userMovie = await _context.UserMovies
+            .FirstOrDefaultAsync(um => um.MovieId == movieId && um.UserId == userId);
+
+        if (userMovie == null)
+        {
+            return null;
+        }
+
+        return userMovie.Status;
+    }
+
     public async Task DeleteReviewAsync(string userId, int movieId)
     {
         var review = await _context.MovieReviews
@@ -94,12 +107,12 @@ public class UserService : IUserService
 
     public async Task<bool> DeleteFavoriteMovieAsync(UserMovieDeleteDTO deleteDTO)
     {
-        var review = await _context.MovieReviews
+        var review = await _context.UserMovies
                         .FirstOrDefaultAsync(r => r.UserId == deleteDTO.UserId && r.MovieId == deleteDTO.MovieId);
 
         if (review != null)
         {
-            _context.MovieReviews.Remove(review);
+            _context.UserMovies.Remove(review);
             await _context.SaveChangesAsync();
             return true;
         }
@@ -119,42 +132,62 @@ public class UserService : IUserService
     public Task<List<MovieReviewDto>> GetMovieReviewsAsync(int movieId)
     {
         var reviews = _context.MovieReviews
-    .Where(x => x.MovieId == movieId).Select(x => new MovieReviewDto
-    {
-        UserId = x.UserId,
-        MovieId = x.MovieId,
-        Comment = x.Comment,    
-        Rating = x.Rating,
-    }).ToListAsync();
+        .Where(x => x.MovieId == movieId).Select(x => new MovieReviewDto
+        {
+            UserId = x.UserId,
+            MovieId = x.MovieId,
+            Comment = x.Comment,    
+            Rating = x.Rating,
+        }).ToListAsync();
         return reviews;
     }
-
-        public async Task<List<UserFavoriteMovie>> GetUserFavoritesAsync(string userId)
-        {
-
-            var favorites = await _context.UserMovies
+    public async Task<List<UserFavoriteMovie>> GetUserFavoritesAsync(string userId)
+    {
+        var favorites = await _context.UserMovies
             .Where(um => um.UserId == userId && um.IsFavorite)
-            .Select(um => new
-            {
-                um.MovieId,
-                um.Status,
-                um.IsFavorite
-            })
-            .ToListAsync();
-            var movieIds = favorites.Select(f => f.MovieId).ToList();
-            var movies = await RabbitMqService.GetMovieById(movieIds);
-            List<UserFavoriteMovie> favoriteMovies = favorites
+                .Select(um => new
+                {
+                    um.MovieId,
+                    um.Status,
+                    um.IsFavorite
+                }).ToListAsync();
+
+    var movieIds = favorites.Select(f => f.MovieId).ToList();
+    var movies = await RabbitMqService.GetMovieById(movieIds);
+    List<UserFavoriteMovie> favoriteMovies = favorites
             .Join(
                 movies,
                 fav => fav.MovieId,
                 movie => movie.Id, 
                 (fav, movie) => Mappers.Mapper.MovieResponseToMovieFavorite(movie, fav.Status, fav.IsFavorite)
-            )
-            .ToList();
-
-        return favoriteMovies;
+            ).ToList();
+       return favoriteMovies;
     }
 
+    public async Task<List<UserFavoriteMovie>> GetAllUserMovies(string userId)
+    {
+
+        var favorites = await _context.UserMovies
+        .Where(um => um.UserId == userId)
+        .Select(um => new
+        {
+            um.MovieId,
+            um.Status,
+            um.IsFavorite
+        })
+        .ToListAsync();
+        var movieIds = favorites.Select(f => f.MovieId).ToList();
+        var movies = await RabbitMqService.GetMovieById(movieIds);
+        List<UserFavoriteMovie> favoriteMovies = favorites
+        .Join(
+            movies,
+            fav => fav.MovieId,
+            movie => movie.Id,
+            (fav, movie) => Mappers.Mapper.MovieResponseToMovieFavorite(movie, fav.Status, fav.IsFavorite)
+        )
+        .ToList();
+        return favoriteMovies;
+    }
 
     public async Task<List<UserMovieDto>> GetUserMoviesByStatusAsync(string userId, WatchStatus status)
     {

@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
     const token = cookies.get(EnumTokens.ACCESS_TOKEN)?.value
     
     const IsAdminPage = url.includes('/admin')
-    const IsUserPage = url.includes('/user/')
+    const IsUserPage = url.includes('/user')
 
     if (IsUserPage && !token) {
         return NextResponse.redirect(new URL("/login", request.url));

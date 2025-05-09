@@ -9,6 +9,7 @@ public static class Mapper
     {
         return new UserFavoriteMovie()
         {
+            Id = movie.Id,
             Title = movie.Title,
             Description = movie.Description,
             PosterPath = movie.PosterPath,

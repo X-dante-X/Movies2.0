@@ -9,6 +9,7 @@ import { getImageProps } from "next/image";
 import { CSSProperties } from "react";
 import Link from "next/link";
 import { VideoPlayer } from "@/components/videoplayer/VideoPlayer";
+import { FavoriteButton } from "@/components/FavoriteButton/FavoriteButton";
 
 interface MovieElementProps {
   id: number;
@@ -90,7 +91,6 @@ export function MovieElement({ id }: MovieElementProps) {
   const { style } = useMediaBackdrop(movie.backdropPath);
   const date = new Date(movie.releaseDate);
 
-  if (!movie) return <p className="text-center text-lg font-semibold">Movie not found</p>;
   return (
     <>
       <div
@@ -103,6 +103,10 @@ export function MovieElement({ id }: MovieElementProps) {
           className="relative left-0 z-0 -mt-25 bg-cover bg-no-repeat">
           <div className="absolute bottom-0 left-0 z-1 flex w-full items-end justify-between p-8">
             <MediaDetails mediaItem={movie} />
+            {/* Add the Favorite Button in the top right of the backdrop */}
+            <div className="absolute right-6">
+              <FavoriteButton movieId={movieId} />
+            </div>
           </div>
         </m.div>
 

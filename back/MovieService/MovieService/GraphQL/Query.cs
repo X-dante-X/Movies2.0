@@ -16,6 +16,14 @@ public class Query
         return ctx.Movies;
     }
 
+    [UsePaging]
+    [UseProjection]
+    public IQueryable<Movie> FindMoviesByTitle([Service] Context ctx, string partOfTitle)
+    {
+        return ctx.Movies
+                  .Where(m => m.Title.ToLower().Contains(partOfTitle.ToLower()));
+    }
+
     [UseProjection]
     [UseFiltering]
     [UseSorting]

@@ -1,9 +1,9 @@
 "use client";
 
-import { Grip, Search } from "lucide-react";
-
+import { Grip } from "lucide-react";
 import { Menu } from "./Menu";
 import { AuthButtons } from "./AuthButtons";
+import { SearchButton } from "./SearchButton";
 
 export function Header() {
   return (
@@ -14,9 +14,10 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-6">
-        <Search className="hover:text-primary transition-colors" />
+        <SearchButton />
         <AuthButtons />
       </div>
     </header>
   );
 }
+  

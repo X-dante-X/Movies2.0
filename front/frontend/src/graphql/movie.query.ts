@@ -18,6 +18,24 @@ export const GET_MOVIES = gql`
   }
 `;
 
+export const FIND_MOVIES_BY_TITLE = gql`
+  query FindMoviesByTitle($first: Int, $after: String, $partOfTitle: String!) {
+    findMoviesByTitle(first: $first, after: $after, partOfTitle: $partOfTitle) {
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+      nodes {
+        movieId
+        title
+        popularity
+        releaseDate
+        posterPath
+      }
+    }
+  }
+`;
+
 export const GET_FILTERS = gql`
   query GetFilters {
     genres {
@@ -55,6 +73,13 @@ export interface PageInfo {
 
 export interface GetMoviesData {
   movies: {
+    pageInfo: PageInfo;
+    nodes: Movie[];
+  };
+}
+
+export interface FindMoviesData {
+  findMoviesByTitle: {
     pageInfo: PageInfo;
     nodes: Movie[];
   };

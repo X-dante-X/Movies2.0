@@ -112,16 +112,6 @@ public static class AuthEndpoints
                 var redirectUrl = $"http://localhost:5173/oauth-callback?accessToken={loginResponse.AccessToken}&email={email}&refreshToken={loginResponse.RefreshToken}&username={loginResponse.Username}&isAdmin={loginResponse.IsAdmin}";
                 return Results.Redirect(redirectUrl);
 
-                // Option 2: Return JSON response (uncomment if you prefer this)
-                // return Results.Ok(new
-                // {
-                //     success = true,
-                //     accessToken = loginResponse.AccessToken,
-                //     refreshToken = loginResponse.RefreshToken,
-                //     username = loginResponse.Username,
-                //     email = email,
-                //     isAdmin = loginResponse.IsAdmin
-                // });
             }
             catch (Exception ex)
             {

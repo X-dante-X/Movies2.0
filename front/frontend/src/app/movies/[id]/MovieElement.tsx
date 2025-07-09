@@ -10,6 +10,7 @@ import { CSSProperties } from "react";
 import Link from "next/link";
 import { VideoPlayer } from "@/components/videoplayer/VideoPlayer";
 import { FavoriteButton } from "@/components/FavoriteButton/FavoriteButton";
+import { MovieReviews } from "@/components/moviereviews/MovieReviews";
 
 interface MovieElementProps {
   id: number;
@@ -212,6 +213,7 @@ export function MovieElement({ id }: MovieElementProps) {
               <h3 className="text-3xl font-semibold pb-3 mb-4">Movie</h3>
               <VideoPlayer src={getClientMinIoUrl(movie.moviePath)} />
             </m.div>
+            <MovieReviews movieId={movieId} movieTitle={movie.title} />
           </div>
         </div>
       </div>

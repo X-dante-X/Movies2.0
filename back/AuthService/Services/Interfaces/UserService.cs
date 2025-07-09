@@ -27,11 +27,13 @@ public class UserService : IUserService
         if (user == null)
             throw new ApplicationException("User not found");
 
-        // Verify password
+        if (user.IsGoogleUser && !user.HasPassword)
+            throw new ApplicationException("Please sign in with Google");
+        if (user.PasswordHash == null || user.PasswordSalt == null)
+            throw new ApplicationException("Password not set for this user");
         if (!VerifyPasswordHash(loginDto.Password, user.PasswordHash, user.PasswordSalt))
             throw new ApplicationException("Password is incorrect");
 
-        // Generate JWT token
         var token = _jwtService.GenerateToken(user);
         var refreshToken = _jwtService.GenerateRefreshToken();
         user.RefreshToken = refreshToken;
@@ -48,6 +50,73 @@ public class UserService : IUserService
             IsAdmin = user.IsAdmin
         };
     }
+
+    public async Task<LoginResponseModel> GoogleAuth(GoogleAuthRequest googleAuthDto)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == googleAuthDto.Email);
+
+        if (user == null)
+        {
+            user = new User
+            {
+                Username = googleAuthDto.Email, 
+                Email = googleAuthDto.Email,
+                FirstName = googleAuthDto.FirstName,
+                LastName = googleAuthDto.LastName,
+                GoogleId = googleAuthDto.GoogleId,
+                PasswordHash = null,
+                PasswordSalt = null,
+                RefreshToken = String.Empty,
+                UserStatus = 0,
+                IsGoogleUser = true, 
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(user.GoogleId))
+            {
+                user.GoogleId = googleAuthDto.GoogleId;
+                user.IsGoogleUser = true;
+            }
+
+            if (!string.IsNullOrEmpty(googleAuthDto.FirstName))
+                user.FirstName = googleAuthDto.FirstName;
+            if (!string.IsNullOrEmpty(googleAuthDto.LastName))
+                user.LastName = googleAuthDto.LastName;
+
+            user.LastLoginAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+        }
+
+        var token = _jwtService.GenerateToken(user);
+        var refreshToken = _jwtService.GenerateRefreshToken();
+
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+        await _context.SaveChangesAsync();
+
+        return new LoginResponseModel
+        {
+            Username = user.Username,
+            AccessToken = token,
+            RefreshToken = refreshToken,
+            Expiration = DateTime.UtcNow.AddMinutes(15),
+            IsAdmin = user.IsAdmin
+        };
+    }
+    public async Task<User?> GetUserByGoogleIdAsync(string googleId)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.GoogleId == googleId);
+    }
+    public async Task<User?> GetUserByEmailAsync(string email)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+    }
+
 
     public Task<bool> Logout()
     {
@@ -129,7 +198,6 @@ public class UserService : IUserService
         if (_context.Users.Any(u => u.Email == userDto.Email))
             throw new ApplicationException("Email already exists");
 
-        // Create password hash and salt
         CreatePasswordHash(userDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
         var user = new User
@@ -145,7 +213,6 @@ public class UserService : IUserService
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        // Generate JWT token
         var token = _jwtService.GenerateToken(user);
         var refreshToken = _jwtService.GenerateRefreshToken();
 

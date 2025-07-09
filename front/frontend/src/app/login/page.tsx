@@ -23,14 +23,25 @@ function LoginPage() {
       setErrorMessage(err instanceof Error ? err.message : "An error occurred during login");
     },
   });
-
+// http://localhost/auth
   function onSubmit() {
     setErrorMessage(undefined);
     mutate({ email, password });
   }
 
   function handleOAuthLogin(provider: "google" | "microsoft" | "facebook") {
-    console.log(`Logging in with ${provider}`);
+     console.log(`Logging in with ${provider}`);
+    
+    if (provider === "google") {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('oauth_redirect_url', window.location.origin);
+        
+        window.location.href = `http://localhost/auth/google/login`;
+      }
+    } else {
+      setErrorMessage(`${provider} login is coming soon!`);
+      setTimeout(() => setErrorMessage(undefined), 3000);
+    }
   }
 
   return (

@@ -36,7 +36,7 @@ function LoginPage() {
       if (typeof window !== 'undefined') {
         localStorage.setItem('oauth_redirect_url', window.location.origin);
         
-        window.location.href = `http://localhost/auth/google/login`;
+        window.location.href = `http://localhost/auth/google/login?returnUrl=localhost`;
       }
     } else {
       setErrorMessage(`${provider} login is coming soon!`);

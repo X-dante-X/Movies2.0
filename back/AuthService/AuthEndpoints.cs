@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 namespace AuthService;
 
@@ -65,25 +67,32 @@ public static class AuthEndpoints
             }
         }).WithOpenApi();
 
-        app.MapGet("/google/login", (HttpContext context) =>
+        app.MapGet("/google/login", ([FromQuery] string returnUrl, [FromServices] LinkGenerator linkGenerator, HttpContext context) =>
         {
-            var props = new AuthenticationProperties
-    {
-        RedirectUri = "http://localhost/auth/google/callback"  
-    };
+            var publicHostUrl = "http://localhost/auth";
 
-            return Results.Challenge(props, new[] { GoogleDefaults.AuthenticationScheme });
+            var callbackPath = linkGenerator.GetPathByName(context, "GoogleLoginCallback") + $"?returnUrl={returnUrl}";
+            var redirectUri = $"{publicHostUrl}{callbackPath}";
+
+            Console.WriteLine(redirectUri);
+            var properties = new AuthenticationProperties
+            {
+                RedirectUri = redirectUri
+            };
+            return Results.Challenge(properties, new[] { "Google" });
+
+
         }).WithOpenApi();
 
-        app.MapGet("/google/callback", async (HttpContext context, IUserService userService) =>
+        app.MapGet("/google/callback", async ([FromQuery] string returnUrl, HttpContext context, IUserService userService) =>
         {
             try
             {
-                var result = await context.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                var result = await context.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
                 if (!result.Succeeded)
                 {
                     Console.WriteLine("Authentication failed");
-                    return Results.BadRequest("Google authentication failed");
+                    return Results.Unauthorized();
                 }
 
                 var claims = result.Principal?.Claims;
@@ -118,7 +127,7 @@ public static class AuthEndpoints
                 Console.WriteLine("OAuth callback error: " + ex.ToString());
                 return Results.Problem("Internal server error during Google callback.");
             }
-        }).WithOpenApi();
+        }).WithOpenApi().WithName("GoogleLoginCallback");
 
 
         app.MapGet("/hello", () => {

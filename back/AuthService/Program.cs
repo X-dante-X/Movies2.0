@@ -20,6 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
+builder.Configuration.AddUserSecrets<Program>();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]!);
@@ -36,11 +37,10 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.KnownProxies.Clear();
     options.KnownNetworks.Clear();
 });
-var googleClientSecret = "test";
-var googleClientId = "sdasdas";
-if (!string.IsNullOrEmpty(googleClientId) && !string.IsNullOrEmpty(googleClientSecret))
-{
-    builder.Services.AddAuthentication(options =>
+
+
+
+builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
@@ -54,72 +54,24 @@ if (!string.IsNullOrEmpty(googleClientId) && !string.IsNullOrEmpty(googleClientS
     })
     .AddGoogle(options =>
     {
-        options.ClientId = googleClientId;
-        options.ClientSecret = googleClientSecret;
-        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.CallbackPath = "/google/callback";
+        var clientId = "";
 
-        options.CorrelationCookie.SameSite = SameSiteMode.Lax;
-        options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-
-        options.Events.OnRedirectToAuthorizationEndpoint = context =>
+        if (clientId == null)
         {
-            try
-            {
-                var uri = new Uri(context.RedirectUri);
-                var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            throw new ArgumentNullException(nameof(clientId));
+        }
 
-                var redirectUri = query["redirect_uri"];
-                if (redirectUri != null)
-                {
-                    var newRedirectUri = redirectUri
-                        .Replace("http://auth_service/google/callback", "http://localhost/auth/google/callback")
-                        .Replace("http://authservice/google/callback", "http://localhost/auth/google/callback");
+        var clientSecret = "";
 
-                    query["redirect_uri"] = newRedirectUri;
-
-                    var uriBuilder = new UriBuilder(uri)
-                    {
-                        Query = query.ToString()
-                    };
-
-                    var finalUri = uriBuilder.ToString();
-
-                    Console.WriteLine($"Original redirect_uri: {redirectUri}");
-                    Console.WriteLine($"Fixed redirect_uri: {newRedirectUri}");
-                    Console.WriteLine($"Final URI: {finalUri}");
-
-                    context.Response.Redirect(finalUri);
-                    return Task.CompletedTask;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error in redirect: {ex.Message}");
-            }
-
-            return Task.CompletedTask;
-        };
-
-        options.Events.OnRemoteFailure = context =>
+        if (clientSecret == null)
         {
-            if (context.Failure?.Message.Contains("Correlation failed") == true ||
-                context.Failure?.Message.Contains("oauth state was missing") == true)
-            {
-                Console.WriteLine($"OAuth remote failure: {context.Failure.Message}");
-                Console.WriteLine("Redirecting back to login");
-                context.SkipHandler();
-                context.Response.Redirect("/google/login");
-                return Task.CompletedTask;
-            }
+            throw new ArgumentNullException(nameof(clientSecret));
+        }
 
-            Console.WriteLine($"Unhandled OAuth failure: {context.Failure?.Message}");
-            return Task.CompletedTask;
-        };
-
-        options.Scope.Add("openid");
-        options.Scope.Add("profile");
-        options.Scope.Add("email");
+        options.ClientId = clientId;
+        options.ClientSecret = clientSecret;
+        options.CallbackPath = "/auth/google/callback";
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme; 
     })
     .AddJwtBearer(x =>
     {
@@ -134,41 +86,17 @@ if (!string.IsNullOrEmpty(googleClientId) && !string.IsNullOrEmpty(googleClientS
             ClockSkew = TimeSpan.Zero
         };
     });
-}
-else
-{
-    Console.WriteLine("Google OAuth credentials not found. Only JWT authentication available.");
-
-    builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(x =>
-    {
-        x.RequireHttpsMetadata = false;
-        x.SaveToken = true;
-        x.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ClockSkew = TimeSpan.Zero
-        };
-    });
-}
 
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
-
+app.UsePathBase("/auth");
 // Use forwarded headers BEFORE other middleware
 app.UseForwardedHeaders();
 
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI();
 

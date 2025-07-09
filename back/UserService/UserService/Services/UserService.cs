@@ -60,7 +60,7 @@ public class UserService : IUserService
                 MovieId = x.MovieId,
                 Rating = x.Rating,
             })
-            .ToList();
+            .ToListAsync();
 
         return reviews;
     }

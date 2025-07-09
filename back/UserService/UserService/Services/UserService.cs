@@ -51,7 +51,7 @@ public class UserService : IUserService
 
     public async Task<List<MovieReviewDto>> GetUserReviews(string userId)
     {
-        var reviews = _context.MovieReviews
+        var reviews = await _context.MovieReviews
             .Where(x => x.UserId == userId)
             .Select(x => new MovieReviewDto
             {

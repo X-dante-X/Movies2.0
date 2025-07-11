@@ -49,6 +49,22 @@ public class UserService : IUserService
         return reviewDto;
     }
 
+    public async Task<List<MovieReviewDto>> GetUserReviews(string userId)
+    {
+        var reviews = await _context.MovieReviews
+            .Where(x => x.UserId == userId)
+            .Select(x => new MovieReviewDto
+            {
+                UserId = x.UserId,
+                Comment = x.Comment,
+                MovieId = x.MovieId,
+                Rating = x.Rating,
+            })
+            .ToListAsync();
+
+        return reviews;
+    }
+
     public async Task<UserMovieDto> AddOrUpdateUserMovieAsync(UserMovieDto userMovieDto)
     {
         var existingUserMovie = await _context.UserMovies

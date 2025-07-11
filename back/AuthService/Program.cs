@@ -8,6 +8,8 @@ using AuthService.Services.Interfaces;
 using AuthService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
+using AuthService.Services;
+using AuthService.RabbitMQService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,9 @@ builder.Configuration.AddUserSecrets<Program>();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]!);
+
+builder.Services.AddSingleton<RabbitMqService>();
+builder.Services.AddHostedService<RabbitMqListenerService>();
 
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -68,8 +73,8 @@ builder.Services.AddAuthentication(options =>
             throw new ArgumentNullException(nameof(clientSecret));
         }
 
-        options.ClientId = clientId;
-        options.ClientSecret = clientSecret;
+        options.ClientId = "";
+        options.ClientSecret = "";
         options.CallbackPath = "/auth/google/callback";
         options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme; 
     })

@@ -49,6 +49,25 @@ public class UserService : IUserService
         return reviewDto;
     }
 
+    public async Task<List<UserMovieReview>> GetAllReviewsForMovie (int movieId)
+    {
+        var movieReviews = await _context.MovieReviews.Where(x => x.MovieId == movieId).ToListAsync();
+        foreach (var movieReview in movieReviews)
+        {
+            Console.WriteLine($"{movieReview.Id} {movieReview.UserId} {movieReview.Comment}");
+        }
+        var userIds = movieReviews.Select(x => x.UserId).ToList();
+        var usernames = await RabbitMqService.GetUserNameById(userIds);
+
+        var userMovieReviews = movieReviews.Select(review => new UserMovieReview
+        {
+            UserName = usernames.FirstOrDefault(u => u.Id == review.UserId)?.UserName ?? "Unknown User",
+            Comment = review.Comment
+        }).ToList();
+
+        return userMovieReviews;
+    }
+
     public async Task<List<MovieReviewDto>> GetUserReviews(string userId)
     {
         var reviews = await _context.MovieReviews
@@ -168,16 +187,16 @@ public class UserService : IUserService
                     um.IsFavorite
                 }).ToListAsync();
 
-    var movieIds = favorites.Select(f => f.MovieId).ToList();
-    var movies = await RabbitMqService.GetMovieById(movieIds);
-    List<UserFavoriteMovie> favoriteMovies = favorites
-            .Join(
-                movies,
-                fav => fav.MovieId,
-                movie => movie.Id, 
-                (fav, movie) => Mappers.Mapper.MovieResponseToMovieFavorite(movie, fav.Status, fav.IsFavorite)
-            ).ToList();
-       return favoriteMovies;
+        var movieIds = favorites.Select(f => f.MovieId).ToList();
+        var movies = await RabbitMqService.GetMovieById(movieIds);
+        List<UserFavoriteMovie> favoriteMovies = favorites
+                .Join(
+                    movies,
+                    fav => fav.MovieId,
+                    movie => movie.Id, 
+                    (fav, movie) => Mappers.Mapper.MovieResponseToMovieFavorite(movie, fav.Status, fav.IsFavorite)
+                ).ToList();
+           return favoriteMovies;
     }
 
     public async Task<List<UserFavoriteMovie>> GetAllUserMovies(string userId)

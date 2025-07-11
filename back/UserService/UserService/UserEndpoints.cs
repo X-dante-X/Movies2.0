@@ -17,6 +17,12 @@ public static class UserEndpoints
     {
         app.MapGet("/test", () => Results.Ok("Hello")).WithOpenApi();
 
+        app.MapGet("/favorites/movieReviews/{movieId:int}", async (HttpContext httpContext, IUserService userService, int movieId) =>
+        {
+            var reviews = await userService.GetAllReviewsForMovie(movieId);
+            return Results.Ok(reviews);
+        }).WithOpenApi();
+
         app.MapGet("/favorites", async (HttpContext httpContext, IUserService userService) =>
         {
             var authHeader = httpContext.Request.Headers.Authorization.FirstOrDefault();
@@ -40,6 +46,12 @@ public static class UserEndpoints
 
             var favorites = await userService.GetUserFavoritesAsync($"{userId}");
             return Results.Ok(favorites);
+        }).WithOpenApi();
+
+        app.MapPost("/favorites/review", async (IUserService userService, MovieReviewDto reviewDto) =>
+        {
+            var review = await userService.AddOrUpdateReviewAsync(reviewDto);   
+            return Results.Ok(review);
         }).WithOpenApi();
 
         app.MapPost("/favorites", async (IUserService userService, UserMovieDto movieDto) =>

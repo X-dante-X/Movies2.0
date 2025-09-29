@@ -3,7 +3,7 @@ using AuthService.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
-
+using AuthService.Services.Email;
 using System.Text;
 
 namespace AuthService.Services.Interfaces;
@@ -13,12 +13,14 @@ public class UserService : IUserService
     private readonly AppDbContext _context;
     private readonly IJwtService _jwtService;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly EmailService _emailService;
 
-    public UserService(AppDbContext context, IJwtService jwtService, IHttpContextAccessor httpContextAccessor)
+    public UserService(AppDbContext context, IJwtService jwtService, IHttpContextAccessor httpContextAccessor, EmailService emailService)
     {
         _context = context;
         _jwtService = jwtService;
         _httpContextAccessor = httpContextAccessor; 
+        _emailService = emailService;
     }
 
     public async Task<LoginResponseModel> Login(LoginRequestModel loginDto)
@@ -220,6 +222,7 @@ public class UserService : IUserService
         user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7); 
         await _context.SaveChangesAsync();
 
+        await _emailService.Execute(userDto.Email);
 
 
         return new LoginResponseModel

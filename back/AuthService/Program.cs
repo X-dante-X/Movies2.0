@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
 using AuthService.Services;
 using AuthService.RabbitMQService;
+using Resend;
+using AuthService.Services.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,7 @@ var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]!);
 
 builder.Services.AddSingleton<RabbitMqService>();
 builder.Services.AddHostedService<RabbitMqListenerService>();
+builder.Services.AddScoped<EmailService>();
 
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -44,7 +47,18 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 });
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
+});
 
+/*
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -91,8 +105,29 @@ builder.Services.AddAuthentication(options =>
             ClockSkew = TimeSpan.Zero
         };
     });
+*/
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"]!)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddOptions();
+builder.Services.Configure<ResendClientOptions>(o =>
+{
+    o.ApiToken = Environment.GetEnvironmentVariable("RESEND_APITOKEN")!;
+});
+builder.Services.AddHttpClient<ResendClient>();
+builder.Services.AddTransient<IResend, ResendClient>();
 
 var app = builder.Build();
 app.UsePathBase("/auth");
@@ -100,6 +135,7 @@ app.UsePathBase("/auth");
 app.UseForwardedHeaders();
 
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+app.UseCors("AllowFrontend");
 
 // app.UseHttpsRedirection();
 app.UseSwagger();

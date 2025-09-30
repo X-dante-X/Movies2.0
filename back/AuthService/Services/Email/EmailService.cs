@@ -20,7 +20,7 @@ namespace AuthService.Services.Email
         {
             var message = new EmailMessage();
             message.From = "Acme <onboarding@resend.dev>";
-            message.To.Add("okresnwo@gmail.com");
+            message.To.Add("t");
             message.Subject = "Hii";
             message.HtmlBody = "<strong>sdadas</strong>";
             await _resend.EmailSendAsync(message);

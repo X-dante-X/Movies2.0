@@ -196,9 +196,10 @@ public class UserService : IUserService
     {
         if (_context.Users.Any(u => u.Username == userDto.Username))
             throw new ApplicationException("Username already exists");
-
+    
         if (_context.Users.Any(u => u.Email == userDto.Email))
             throw new ApplicationException("Email already exists");
+        
 
         CreatePasswordHash(userDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
 

@@ -31,7 +31,6 @@ var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]!);
 
 builder.Services.AddSingleton<RabbitMqService>();
 builder.Services.AddHostedService<RabbitMqListenerService>();
-builder.Services.AddScoped<EmailService>();
 
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -124,10 +123,12 @@ builder.Services.AddAuthorization();
 builder.Services.AddOptions();
 builder.Services.Configure<ResendClientOptions>(o =>
 {
-    o.ApiToken = Environment.GetEnvironmentVariable("RESEND_APITOKEN")!;
+    o.ApiToken = "HERE API KEY";
 });
 builder.Services.AddHttpClient<ResendClient>();
 builder.Services.AddTransient<IResend, ResendClient>();
+
+builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();
 app.UsePathBase("/auth");

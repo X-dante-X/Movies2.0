@@ -1,0 +1,72 @@
+﻿@model AuthService.Models.WelcomeEmailModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .email-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4CAF50;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="email-content">
+            <div class="header">
+                <h1>Welcome to Movies2.0!</h1>
+            </div>
+            <p>Hi <strong>@Model.Name</strong>,</p>
+            <p>Thank you for joining us! We're excited to have you on board.</p>
+            <p>@Model.Message</p>
+            <div style="text-align: center;">
+                <a href="@Model.ActionUrl" class="button">Get Started</a>
+            </div>
+            <div class="footer">
+                <p>© 2025 Movies2.0 Inc. All rights reserved.</p>
+                <p>This email was sent to @Model.Email</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -12,6 +12,7 @@ using AuthService.Services;
 using AuthService.RabbitMQService;
 using Resend;
 using AuthService.Services.Email;
+using AuthService.Services.RazorViewToStringRenderer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,7 @@ var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]!);
 
 builder.Services.AddSingleton<RabbitMqService>();
 builder.Services.AddHostedService<RabbitMqListenerService>();
+builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -56,6 +58,10 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddRazorPages();
+builder.Services.AddScoped<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
 
 /*
 builder.Services.AddAuthentication(options =>
@@ -123,7 +129,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddOptions();
 builder.Services.Configure<ResendClientOptions>(o =>
 {
-    o.ApiToken = "HERE API KEY";
+    o.ApiToken = "PASTE API KEY";
 });
 builder.Services.AddHttpClient<ResendClient>();
 builder.Services.AddTransient<IResend, ResendClient>();

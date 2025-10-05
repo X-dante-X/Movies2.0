@@ -84,6 +84,20 @@ public static class AuthEndpoints
 
         }).WithOpenApi();
 
+        app.MapGet("/verify-email", async (IUserService userService, [FromQuery] string id) =>
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                return Results.BadRequest("Missing token.");
+
+           var verified = await userService.ValidateToken(id);
+           if (verified) 
+           { 
+                var redirectUrl = "https://localhost:30000/email-verified";
+                return Results.Redirect(redirectUrl);
+            }
+            return Results.BadRequest("Invalid or expired verification link.");
+        }).WithOpenApi();
+
         app.MapGet("/google/callback", async ([FromQuery] string returnUrl, HttpContext context, IUserService userService) =>
         {
             try

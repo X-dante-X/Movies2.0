@@ -21,7 +21,7 @@ namespace AuthService.Services.Email
         }
 
 
-        public async Task Execute(string email, string name)
+        public async Task Execute(string email, string name, string id)
         {
 
             var emailModel = new WelcomeEmailModel
@@ -29,7 +29,7 @@ namespace AuthService.Services.Email
                 Name = name,
                 Email = email,
                 Message = "Your account has been successfully created. Start exploring our platform with movies today!",
-                ActionUrl = "https://localhost:30000/dashboard"
+                ActionUrl = $"https://localhost:30000/verify-email?id=${id}"
             };
             var htmlBody = await _razorRenderer.RenderViewToStringAsync("~/Views/Emails/Welcome.cshtml", emailModel);
 

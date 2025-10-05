@@ -11,6 +11,6 @@ public interface IUserService
     Task<LoginResponseModel> GoogleAuth(GoogleAuthRequest googleAuthDto); 
     Task<User?> GetUserByGoogleIdAsync(string googleId);
     Task<User?> GetUserByEmailAsync(string email); 
-
+    Task<bool> ValidateToken(string token);
     Task<bool> Logout();
 }

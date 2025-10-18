@@ -23,4 +23,6 @@ public class User
     public DateTime RefreshTokenExpiry { get; set; } = DateTime.UtcNow;
 
     public bool HasPassword => PasswordHash != null && PasswordSalt != null;
+    public string? EmailToken { get; set; } = null!;
+    public bool IsVerified { get; set; } = false;
 }

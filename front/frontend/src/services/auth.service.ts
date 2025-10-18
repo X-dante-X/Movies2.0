@@ -18,7 +18,10 @@ export const authService = {
 	},
 
 	async register(data: IAuthRegisterForm) {
-		const response = await axiosClassic.post<IAuthResponse>("/register", data)
+		const response = await axiosClassic.post<IAuthResponse>("/register", data);
+		console.log(data)
+		console.log(response.data)
+		console.log(response)
 		if (response.data) {
 			useAuthStore.getState().setUser({
 				userName: response.data.userName,

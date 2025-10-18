@@ -6,21 +6,36 @@ public class RabbitMqListenerService : IHostedService
 {
     private readonly RabbitMqService _rabbitMqService;
     private CancellationTokenSource? _cancellationTokenSource;
+    private Task? _consumingTask;
 
     public RabbitMqListenerService(RabbitMqService rabbitMqService)
     {
         _rabbitMqService = rabbitMqService;
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
-        Console.WriteLine("Starting RabbitMQ listener...");
+        Console.WriteLine("Starting RabbitMQ listener service...");
 
-        _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        try
+        {
+            // Initialize the connection first
+            await _rabbitMqService.InitializeAsync(cancellationToken);
 
-        Task.Run(() => StartConsumingMessages(_cancellationTokenSource.Token), cancellationToken);
+            _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
-        return Task.CompletedTask;
+            // Start consuming in background
+            _consumingTask = Task.Run(
+                () => StartConsumingMessages(_cancellationTokenSource.Token),
+                cancellationToken);
+
+            Console.WriteLine("✓ RabbitMQ listener service started successfully");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"✗ Failed to start RabbitMQ listener: {ex.Message}");
+            throw;
+        }
     }
 
     private async Task StartConsumingMessages(CancellationToken cancellationToken)
@@ -34,14 +49,33 @@ public class RabbitMqListenerService : IHostedService
         {
             Console.WriteLine("RabbitMQ message consumption was canceled.");
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in message consumption: {ex.Message}");
+        }
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
+    public async Task StopAsync(CancellationToken cancellationToken)
     {
-        Console.WriteLine("Stopping RabbitMQ listener...");
+        Console.WriteLine("Stopping RabbitMQ listener service...");
 
         _cancellationTokenSource?.Cancel();
 
-        return _rabbitMqService.StopConsumingMessagesAsync();
+        if (_consumingTask != null)
+        {
+            try
+            {
+                await _consumingTask;
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected when cancelling
+            }
+        }
+
+        await _rabbitMqService.StopConsumingMessagesAsync();
+        await _rabbitMqService.DisposeAsync();
+
+        Console.WriteLine("✓ RabbitMQ listener service stopped");
     }
 }

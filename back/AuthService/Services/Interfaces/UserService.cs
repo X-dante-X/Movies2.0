@@ -3,7 +3,7 @@ using AuthService.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
-
+using AuthService.Services.Email;
 using System.Text;
 
 namespace AuthService.Services.Interfaces;
@@ -13,12 +13,14 @@ public class UserService : IUserService
     private readonly AppDbContext _context;
     private readonly IJwtService _jwtService;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly EmailService _emailService;
 
-    public UserService(AppDbContext context, IJwtService jwtService, IHttpContextAccessor httpContextAccessor)
+    public UserService(AppDbContext context, IJwtService jwtService, IHttpContextAccessor httpContextAccessor, EmailService emailService)
     {
         _context = context;
         _jwtService = jwtService;
         _httpContextAccessor = httpContextAccessor; 
+        _emailService = emailService;
     }
 
     public async Task<LoginResponseModel> Login(LoginRequestModel loginDto)
@@ -190,15 +192,33 @@ public class UserService : IUserService
         };
     }
 
+    public async Task<bool> ValidateToken(string id)
+    {
+        var existing = _context.Users.FirstOrDefault(u => u.EmailToken == id && u.IsVerified == false);
+        if (existing is not null)
+        {
+            existing.IsVerified = true;
+            existing.EmailToken = null; 
+            await _context.SaveChangesAsync();
+            return true; 
+        }
+
+        return false;
+    }
+
     public async Task<LoginResponseModel> Register(RegisterRequest userDto)
     {
+
+        var existingUser = _context.Users.FirstOrDefault(u => u.Email == userDto.Email);
+ 
         if (_context.Users.Any(u => u.Username == userDto.Username))
             throw new ApplicationException("Username already exists");
-
+    
         if (_context.Users.Any(u => u.Email == userDto.Email))
             throw new ApplicationException("Email already exists");
 
         CreatePasswordHash(userDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
+        var emailVerificationId = Guid.NewGuid().ToString();
 
         var user = new User
         {
@@ -207,7 +227,8 @@ public class UserService : IUserService
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
             RefreshToken = String.Empty,
-            UserStatus = 0 
+            UserStatus = 0,
+            EmailToken = emailVerificationId,
         };
 
         _context.Users.Add(user);
@@ -220,6 +241,7 @@ public class UserService : IUserService
         user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7); 
         await _context.SaveChangesAsync();
 
+        await _emailService.Execute(userDto.Email, user.Username, emailVerificationId);
 
 
         return new LoginResponseModel

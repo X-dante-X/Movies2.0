@@ -1,0 +1,107 @@
+﻿@model AuthService.Models.WelcomeEmailModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .email-box {
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+            .header h1 {
+                margin: 0;
+                font-size: 24px;
+                font-weight: 600;
+            }
+
+        .content {
+            padding: 30px;
+        }
+
+            .content p {
+                margin: 15px 0;
+            }
+
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 14px 32px;
+            background-color: #4CAF50;
+            color: white !important;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .footer {
+            background: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+
+            .footer p {
+                margin: 5px 0;
+            }
+
+        a {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="email-box">
+            <div class="header">
+                <h1>Email Verification</h1>
+            </div>
+            <div class="content">
+                <p>Hi <strong>@Model.Name</strong>,</p>
+                <p>@Model.Message</p>
+                <p>Please verify your email address by clicking the button below:</p>
+                <div class="button-container">
+                    <a href="@Model.ActionUrl" class="button">Verify Email</a>
+                </div>
+                <p>If the button above doesn’t work, copy and paste this link into your browser:</p>
+                <p><a href="@Model.ActionUrl">@Model.ActionUrl</a></p>
+                <p>If you didn’t create an account, you can safely ignore this email.</p>
+            </div>
+            <div class="footer">
+                <p>© 2025 Movies2.0 Inc. All rights reserved.</p>
+                <p>This email was sent to @Model.Email</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

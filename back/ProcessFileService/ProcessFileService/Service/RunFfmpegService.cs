@@ -2,10 +2,19 @@
 
 namespace ProcessFileService.Service;
 
+/// <summary>
+/// Provides helper methods to run FFmpeg for transcoding and generating HLS outputs.
+/// </summary>
 public static class FfmpegService
 {
+    /// <summary>
+    /// Represents a video quality variant used for multi-bitrate HLS.
+    /// </summary>
     public record Quality(string Name, int Width, int Height, int Bitrate);
 
+    /// <summary>
+    /// Preset resolutions and bitrates used for generating HLS variants.
+    /// </summary>
     public static readonly Quality[] Qualities =
     [
         new("1080p", 1920, 1080, 5000000),
@@ -14,13 +23,22 @@ public static class FfmpegService
         new("360p", 640, 360, 800000),
     ];
 
+    /// <summary>
+    /// Converts any input video to a standard MP4 with H.264/AAC encoding.
+    /// </summary>
+    /// <param name="input">Path to input video file.</param>
+    /// <param name="output">Destination output file path.</param>
     public static void ConvertToMp4(string input, string output)
     {
         string args = $"-i \"{input}\" -c:v libx264 -crf 23 -preset fast -c:a aac -strict -2 \"{output}\"";
         RunFfmpeg(args);
     }
 
-
+    /// <summary>
+    /// Generates multiple HLS variants (480p/720p/etc.) and a master playlist for adaptive streaming.
+    /// </summary>
+    /// <param name="input">Input video file.</param>
+    /// <param name="outputDir">Directory where HLS files will be generated.</param>
     public static void GenerateMultiBitrateHls(string input, string outputDir)
     {
         Directory.CreateDirectory(outputDir);
@@ -40,7 +58,6 @@ public static class FfmpegService
                           $"\"{variantM3u8}\"";
 
             RunFfmpeg(args);
-
             variantPlaylists.Add(new(quality.Name, quality.Width, quality.Height, quality.Bitrate));
         }
 
@@ -48,6 +65,9 @@ public static class FfmpegService
         GenerateMasterPlaylist(masterPlaylistPath, variantPlaylists);
     }
 
+    /// <summary>
+    /// Writes a HLS master playlist (.m3u8) referencing all generated variant playlists.
+    /// </summary>
     private static void GenerateMasterPlaylist(string path, List<Quality> variants)
     {
         using var writer = new StreamWriter(path);
@@ -58,12 +78,15 @@ public static class FfmpegService
             writer.WriteLine($"#EXT-X-STREAM-INF:BANDWIDTH={quality.Bitrate},RESOLUTION={quality.Width}x{quality.Height}");
             writer.WriteLine($"./{quality.Name}/index.m3u8");
         }
-
     }
 
+    /// <summary>
+    /// Runs FFmpeg synchronously and throws if it exits with a non-zero code.
+    /// </summary>
+    /// <param name="arguments">Command line arguments passed to FFmpeg.</param>
+    /// <exception cref="Exception">Thrown if ffmpeg process fails.</exception>
     private static void RunFfmpeg(string arguments)
     {
-
         var process = new Process
         {
             StartInfo = new ProcessStartInfo

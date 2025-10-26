@@ -1,4 +1,10 @@
-﻿/// <summary>
+﻿using DBContext;
+using Models;
+using Tag = Models.Tag;
+
+namespace GraphQL;
+
+/// <summary>
 /// GraphQL query root that exposes read access to domain data.
 /// Includes Movies, People, Countries, Tags, Genres, Languages and ProductionCompanies.
 /// Supports filtering, sorting, projections and paging (where appropriate).

@@ -1,43 +1,48 @@
-﻿using DBContext;
-using Models;
-using Tag = Models.Tag;
-
-
-namespace GraphQL;
-
+﻿/// <summary>
+/// GraphQL query root that exposes read access to domain data.
+/// Includes Movies, People, Countries, Tags, Genres, Languages and ProductionCompanies.
+/// Supports filtering, sorting, projections and paging (where appropriate).
+/// </summary>
 public class Query
 {
+    /// <summary>
+    /// Returns all movies with support for paging, filtering, sorting and projection.
+    /// </summary>
     [UsePaging]
     [UseProjection]
     [UseFiltering]
     [UseSorting]
     public IQueryable<Movie> Movies([Service] Context ctx)
-    {
-        return ctx.Movies;
-    }
+        => ctx.Movies;
 
+    /// <summary>
+    /// Finds movies containing the specified text in their title.
+    /// Supports paging and projection.
+    /// </summary>
     [UsePaging]
     [UseProjection]
     public IQueryable<Movie> FindMoviesByTitle([Service] Context ctx, string partOfTitle)
-    {
-        return ctx.Movies
-                  .Where(m => m.Title.ToLower().Contains(partOfTitle.ToLower()));
-    }
+        => ctx.Movies
+              .Where(m => m.Title.ToLower().Contains(partOfTitle.ToLower()));
 
+    /// <summary>
+    /// Returns all countries with filtering, sorting and projection.
+    /// </summary>
     [UseProjection]
     [UseFiltering]
     [UseSorting]
     public IQueryable<Country> Countries([Service] Context ctx)
-    {
-        return ctx.Countries;
-    }
+        => ctx.Countries;
 
+    /// <summary>
+    /// Returns all people, projecting their top 12 most popular movies as filmography.
+    /// Supports filtering, sorting and projection.
+    /// </summary>
     [UseProjection]
     [UseFiltering]
     [UseSorting]
     public IQueryable<Person> People([Service] Context ctx)
-    {
-        return ctx.People
+        => ctx.People
             .Select(p => new Person
             {
                 PersonId = p.PersonId,
@@ -55,40 +60,47 @@ public class Query
                     .Take(12)
                     .ToList()
             });
-    }
 
+    /// <summary>
+    /// Returns all movie casts with filtering, sorting and projection.
+    /// </summary>
     [UseProjection]
     [UseFiltering]
     [UseSorting]
     public IQueryable<MovieCast> MovieCasts([Service] Context ctx)
-    {
-        return ctx.MovieCasts;
-    }
+        => ctx.MovieCasts;
 
+    /// <summary>
+    /// Returns all genres with filtering, sorting and projection.
+    /// </summary>
     [UseProjection]
     [UseFiltering]
     [UseSorting]
     public IQueryable<Genre> Genres([Service] Context ctx)
-    {
-        return ctx.Genres;
-    }
+        => ctx.Genres;
 
+    /// <summary>
+    /// Returns all languages with filtering, sorting and projection.
+    /// </summary>
     [UseProjection]
     [UseFiltering]
     [UseSorting]
     public IQueryable<Language> Languages([Service] Context ctx)
-    {
-        return ctx.Languages;
-    }
+        => ctx.Languages;
 
+    /// <summary>
+    /// Returns all tags with filtering, sorting and projection.
+    /// </summary>
     [UseProjection]
     [UseFiltering]
     [UseSorting]
     public IQueryable<Tag> Tags([Service] Context ctx)
-    {
-        return ctx.Tags;
-    }
+        => ctx.Tags;
 
+    /// <summary>
+    /// Returns all production companies with their top 12 most popular movies in filmography.
+    /// Supports filtering, sorting and projection.
+    /// </summary>
     [UseProjection]
     [UseFiltering]
     [UseSorting]
@@ -109,6 +121,4 @@ public class Query
                     .ToList()
             });
     }
-
 }
-

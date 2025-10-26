@@ -18,7 +18,7 @@ namespace MovieService.Services;
 public class RabbitMqService : IAsyncDisposable
 {
     private readonly IConnection _connection;
-    private readonly IModel _channel;
+    private readonly IChannel _channel;
     private readonly string _requestQueue = "movie_request";
     private AsyncEventingBasicConsumer? _consumer;
     private readonly Context _context;
@@ -41,7 +41,7 @@ public class RabbitMqService : IAsyncDisposable
         _connection = Task.Run(() => factory.CreateConnectionAsync()).Result;
         Console.WriteLine("RabbitMQ connection established.");
 
-        _channel = Task.Run(() => _connection.CreateModelAsync()).Result;
+        _channel = Task.Run(() => _connection.CreateChannelAsync()).Result;
         Console.WriteLine("Channel created.");
     }
 
@@ -136,14 +136,14 @@ public class RabbitMqService : IAsyncDisposable
         if (_channel != null)
         {
             await _channel.CloseAsync();
-            _channel.Dispose();
+            await _channel.DisposeAsync();
             Console.WriteLine("Channel closed and disposed.");
         }
 
         if (_connection != null)
         {
             await _connection.CloseAsync();
-            _connection.Dispose();
+            await _channel.DisposeAsync();
             Console.WriteLine("Connection closed and disposed.");
         }
     }

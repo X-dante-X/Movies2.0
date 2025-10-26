@@ -143,7 +143,7 @@ public class RabbitMqService : IAsyncDisposable
         if (_connection != null)
         {
             await _connection.CloseAsync();
-            await _channel.DisposeAsync();
+            await _connection.DisposeAsync();
             Console.WriteLine("Connection closed and disposed.");
         }
     }

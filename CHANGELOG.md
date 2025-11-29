@@ -26,6 +26,7 @@ This component adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 - Google OAuth2 integration
 - Email confirmation
 - Bug report
+- Observability with OpenTelemetry and grafana stack
 
 ### Changed
 

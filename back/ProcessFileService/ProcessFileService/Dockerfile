@@ -25,5 +25,13 @@ RUN dotnet publish "./ProcessFileService.csproj" -c $BUILD_CONFIGURATION -o /app
 
 FROM base AS final
 WORKDIR /app
+
+USER root
+RUN apt-get update && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/*
+
+RUN curl -sSfL https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/latest/download/otel-dotnet-auto-install.sh -O \
+    && sh ./otel-dotnet-auto-install.sh \
+    && chmod +x $HOME/.otel-dotnet-auto/instrument.sh
+
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ProcessFileService.dll"]
+ENTRYPOINT ["/bin/sh", "-c", ". $HOME/.otel-dotnet-auto/instrument.sh && OTEL_SERVICE_NAME=ProcessFileService OTEL_RESOURCE_ATTRIBUTES=deployment.environment=staging,service.version=1.0.0 dotnet ProcessFileService.dll"]

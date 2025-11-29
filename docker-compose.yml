@@ -85,6 +85,8 @@ services:
       - POSTGESQL=Host=postgresmovie;Port=5432;Database=movies;Username=postgres;Password=postgres;
       - PROCESSFILESERVICE_URL=http://processfileservice:8081
       - RABBITMQ_HOST=rabbitmq
+      - OTEL_SERVICE_NAME=MoviesService
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -98,6 +100,8 @@ services:
       - "5003:8080"
     environment:
       - POSTGESQL=Host=postgresauth;Port=5432;Database=auth;Username=postgres;Password=postgres;
+      - OTEL_SERVICE_NAME=AuthService
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
     depends_on:
       postgresauth:
         condition: service_healthy
@@ -124,6 +128,8 @@ services:
     environment:
       - POSTGESQL=Host=postgresauth;Port=5432;Database=user;Username=postgres;Password=postgres;
       - RABBITMQ_HOST=rabbitmq
+      - OTEL_SERVICE_NAME=UserService
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
     depends_on:
       postgresuser:
         condition: service_healthy
@@ -137,6 +143,8 @@ services:
       - MINIO_URL=http://minio:9000
       - MINIO_ACCESS_KEY=minioadmin
       - MINIO_SECRET_KEY=minioadmin
+      - OTEL_SERVICE_NAME=ProcessFileService
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
     depends_on:
       - minio
 
@@ -148,88 +156,65 @@ services:
     depends_on:
       - nginx
 
-  # backend:
-  #   build:
-  #     context: ./back/WeatherApi/WeatherApi
-  #   ports:
-  #     - "5000:8080"
-  #   environment:
-  #     - OTEL_SERVICE_NAME=WeatherApi
-  #     - MONGODB_URI=mongodb://admin:adminpassword@mongodb:27017/weather?authSource=admin
-  #     - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
-  #   depends_on:
-  #     - mongodb
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.113.0
+    volumes:
+      - ./config/otel-config.yml:/etc/otel/config.yml
+    command: --config /etc/otel/config.yml
+    environment:
+      LOKI_ENDPOINT: "http://loki:3100/loki/api/v1/push"
+      TEMPO_ENDPOINT: "tempo:4317"
+    ports:
+      - "8888:8888" # Prometheus metrics exposed by the collector
+      - "8889:8889" # Prometheus exporter metrics
+      - "13133:13133" # health_check extension
+      - "4317:4317" # OTLP gRPC receiver
+      - "4318:4318" # OTLP HTTP receiver
+      - "55679:55679" # zpages extension
+    depends_on:
+      - tempo
+      - prometheus
+      - loki
 
-  # mongodb:
-  #   image: mongo:latest
-  #   ports:
-  #     - "27017:27017"
-  #   environment:
-  #     - MONGO_INITDB_DATABASE=weather
-  #     - MONGO_INITDB_ROOT_USERNAME=admin
-  #     - MONGO_INITDB_ROOT_PASSWORD=adminpassword
-  #   volumes:
-  #     - mongo-data:/data/db
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./config/prometheus-config.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
 
-  # otel-collector:
-  #   image: otel/opentelemetry-collector-contrib:0.113.0
-  #   volumes:
-  #     - ./config/otel-config.yml:/etc/otel/config.yml
-  #   command: --config /etc/otel/config.yml
-  #   environment:
-  #     LOKI_ENDPOINT: "http://loki:3100/loki/api/v1/push"
-  #     TEMPO_ENDPOINT: "tempo:4317"
-  #   ports:
-  #     - "8888:8888"  # Prometheus metrics exposed by the collector
-  #     - "8889:8889"  # Prometheus exporter metrics
-  #     - "13133:13133" # health_check extension
-  #     - "4317:4317"  # OTLP gRPC receiver
-  #     - "4318:4318"  # OTLP HTTP receiver
-  #     - "55679:55679" # zpages extension
-  #   depends_on:
-  #     - tempo
-  #     - prometheus
-  #     - loki
+  tempo:
+    image: grafana/tempo:latest
+    volumes:
+      - ./config/tempo-config.yml:/etc/tempo/tempo-config.yml
+    command: -config.file=/etc/tempo/tempo-config.yml
+    ports:
+      - "3200:3200"
+      - "4317"
 
-  # prometheus:
-  #   image: prom/prometheus:latest
-  #   volumes:
-  #     - ./config/prometheus-config.yml:/etc/prometheus/prometheus.yml
-  #   ports:
-  #     - "9090:9090"
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
 
-  # tempo:
-  #   image: grafana/tempo:latest
-  #   volumes:
-  #     - ./config/tempo-config.yml:/etc/tempo/tempo-config.yml
-  #   command: -config.file=/etc/tempo/tempo-config.yml
-  #   ports:
-  #     - "3200:3200"
-  #     - "4317"
-
-  # loki:
-  #   image: grafana/loki:latest
-  #   ports:
-  #     - "3100:3100"
-
-  # grafana:
-  #   image: grafana/grafana:latest
-  #   volumes:
-  #     - ./config/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
-  #     - ./config/grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
-  #     - ./monitoring/grafana-dashboard-1.json:/etc/grafana/provisioning/dashboards/grafana-dashboard-1.json
-  #     - ./monitoring/grafana-dashboard-2.json:/etc/grafana/provisioning/dashboards/grafana-dashboard-2.json
-  #     - ./monitoring/grafana-dashboard-3.json:/etc/grafana/provisioning/dashboards/grafana-dashboard-3.json
-  #     - ./monitoring/grafana-dashboard-4.json:/etc/grafana/provisioning/dashboards/grafana-dashboard-4.json
-  #   environment:
-  #     GF_AUTH_ANONYMOUS_ENABLED: "true"
-  #     GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
-  #   ports:
-  #     - "4000:3000"
-  #   depends_on:
-  #     - tempo
-  #     - prometheus
-  #     - loki
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - ./config/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - ./config/grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./monitoring/grafana-dashboard-1.json:/etc/grafana/provisioning/dashboards/grafana-dashboard-1.json
+      - ./monitoring/grafana-dashboard-2.json:/etc/grafana/provisioning/dashboards/grafana-dashboard-2.json
+      - ./monitoring/grafana-dashboard-3.json:/etc/grafana/provisioning/dashboards/grafana-dashboard-3.json
+      - ./monitoring/grafana-dashboard-4.json:/etc/grafana/provisioning/dashboards/grafana-dashboard-4.json
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+    ports:
+      - "4000:3000"
+    depends_on:
+      - tempo
+      - prometheus
+      - loki
 
 volumes:
   postgresmovie_data:

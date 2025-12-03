@@ -210,12 +210,19 @@ public class UserService : IUserService
     {
 
         var existingUser = _context.Users.FirstOrDefault(u => u.Email == userDto.Email);
- 
+
+        if (existingUser != null)
+        {
+            _context.Users.Remove(existingUser);
+            await _context.SaveChangesAsync(); 
+        }
+        /*
         if (_context.Users.Any(u => u.Username == userDto.Username))
             throw new ApplicationException("Username already exists");
     
         if (_context.Users.Any(u => u.Email == userDto.Email))
             throw new ApplicationException("Email already exists");
+        */
 
         CreatePasswordHash(userDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
         var emailVerificationId = Guid.NewGuid().ToString();

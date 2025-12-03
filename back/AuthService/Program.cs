@@ -129,7 +129,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddOptions();
 builder.Services.Configure<ResendClientOptions>(o =>
 {
-    o.ApiToken = "PASTE API KEY";
+    o.ApiToken = "re_3BLpfdg9_MtZYpqVtUfWdLcS8qNo3zfZA";
 });
 builder.Services.AddHttpClient<ResendClient>();
 builder.Services.AddTransient<IResend, ResendClient>();

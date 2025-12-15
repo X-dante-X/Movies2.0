@@ -15,6 +15,9 @@ public class JwtService : IJwtService
     {
         _configuration = configuration;
     }
+    /// <summary>
+    /// Generates a secure JWT Token based on the constant secret.
+    /// </summary>
 
     public string GenerateToken(User user)
     {
@@ -38,6 +41,11 @@ public class JwtService : IJwtService
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
+
+    /// <summary>
+    /// Generates refresh token and returns it in a form of BASE64 string.
+    /// </summary>
+
     public string GenerateRefreshToken()
     {
         var randomNumber = new byte[64];
@@ -45,6 +53,9 @@ public class JwtService : IJwtService
         rng.GetBytes(randomNumber);
         return Convert.ToBase64String(randomNumber);
     }
+    /// <summary>
+    /// Obtains principal information from the token
+    /// </summary>
 
     public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {

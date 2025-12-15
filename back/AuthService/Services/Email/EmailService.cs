@@ -20,6 +20,10 @@ namespace AuthService.Services.Email
             _razorRenderer = razorRenderer;
         }
 
+        /// <summary>
+        /// Asynchronously sends a confirmation email to the user's email address
+        /// using the Resend API.
+        /// </summary>
 
         public async Task Execute(string email, string name, string id)
         {

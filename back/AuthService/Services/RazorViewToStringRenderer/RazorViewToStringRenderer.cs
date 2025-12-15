@@ -30,6 +30,10 @@ namespace AuthService.Services.RazorViewToStringRenderer
             _modelMetadataProvider = modelMetadataProvider;
         }
 
+        /// <summary>
+        /// Returns the view filled with user data in a string form.
+        /// </summary>
+
         public async Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model)
         {
             var actionContext = GetActionContext();
@@ -57,6 +61,9 @@ namespace AuthService.Services.RazorViewToStringRenderer
                 return output.ToString();
             }
         }
+        /// <summary>
+        /// Finds the View of the email template in a form of .cshtml
+        /// </summary>
 
         private IView FindView(ActionContext actionContext, string viewName)
         {
@@ -79,6 +86,9 @@ namespace AuthService.Services.RazorViewToStringRenderer
 
             throw new InvalidOperationException(errorMessage);
         }
+        /// <summary>
+        /// Helper function that enables to use the viewContext Built-in function
+        /// </summary>
 
         private ActionContext GetActionContext()
         {

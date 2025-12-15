@@ -28,6 +28,9 @@ public class RabbitMqService : IAsyncDisposable
 
         Console.WriteLine($"RabbitMqService created. Will connect to {_hostName}:{_port}");
     }
+    /// <summary>
+    /// Initializes the connection with RabbitMQ message broker.
+    /// </summary>
 
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
@@ -74,7 +77,9 @@ public class RabbitMqService : IAsyncDisposable
             }
         }
     }
-
+    /// <summary>
+    /// Starts listening for the incoming messages.
+    /// </summary>
     public async Task StartConsumingMessages(CancellationToken cancellationToken)
     {
         if (_channel == null)
@@ -108,7 +113,9 @@ public class RabbitMqService : IAsyncDisposable
             await Task.Delay(1000, cancellationToken);
         }
     }
-
+    /// <summary>
+    /// Takes an action once the message from the broken is received.
+    /// </summary>
     private async Task OnMessageReceivedAsync(object sender, BasicDeliverEventArgs ea)
     {
         try
@@ -152,15 +159,17 @@ public class RabbitMqService : IAsyncDisposable
                     body: responseBytes
                 );
 
-                Console.WriteLine($"✓ Sent response with {users.Count} users");
+                Console.WriteLine($"Sent response with {users.Count} users");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"✗ Error processing message: {ex.Message}");
+            Console.WriteLine($"Error processing message: {ex.Message}");
         }
     }
-
+    /// <summary>
+    /// Stops listening for the messages
+    /// </summary>
     public async Task StopConsumingMessagesAsync()
     {
         if (_consumer != null && _channel != null)
@@ -176,7 +185,11 @@ public class RabbitMqService : IAsyncDisposable
             }
         }
     }
-
+    /// <summary>
+    /// Asynchronously disposes the RabbitMQ service by closing and releasing
+    /// the channel and connection resources, ensuring proper cleanup and
+    /// preventing resource leaks. Logs any disposal errors encountered.
+    /// </summary>
     public async ValueTask DisposeAsync()
     {
         Console.WriteLine("Disposing RabbitMqService...");

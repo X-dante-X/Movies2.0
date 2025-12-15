@@ -8,6 +8,11 @@ namespace UserService.Services;
 
 public static class RabbitMqService
 {
+    /// <summary>
+    /// Sends a request to a MessageBroker in order to obtain the List of movie objects 
+    /// by their Ids.
+    /// </summary>
+
     public static async Task<List<MovieResponse>> GetMovieById(List<int> favoriteMovies)
     {
         Console.WriteLine("Starting RabbitMQ request...");
@@ -67,7 +72,12 @@ public static class RabbitMqService
         Console.WriteLine("Movie response deserialized.");
         return movies;
     }
-    
+
+    /// <summary>
+    /// Sends a request to a MessageBroker to obtain the List of user names 
+    /// by their Ids.
+    /// </summary>
+
     public static async Task<List<UserResponse>> GetUserNameById(List<string> userIds)
     {
         Console.WriteLine("Starting RabbitMQ request...");

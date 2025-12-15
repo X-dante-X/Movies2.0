@@ -14,6 +14,10 @@ public class UserService : IUserService
     {
         _context = context;
     }
+    /// <summary>
+    /// Creates a new  review entry for a user and the movie if none exists;
+    /// otherwise updates the rating, comment and timestamp.
+    /// </summary>
     public async Task<MovieReviewDto> AddOrUpdateReviewAsync(MovieReviewDto reviewDto)
     {
         if (reviewDto.Rating < 1 || reviewDto.Rating > 10)
@@ -48,7 +52,9 @@ public class UserService : IUserService
         await _context.SaveChangesAsync();
         return reviewDto;
     }
-
+    /// <summary>
+    /// Retrieves the list of reviews based on the provided movieId.
+    /// </summary>
     public async Task<List<UserMovieReview>> GetAllReviewsForMovie (int movieId)
     {
         var movieReviews = await _context.MovieReviews.Where(x => x.MovieId == movieId).ToListAsync();
@@ -67,7 +73,9 @@ public class UserService : IUserService
 
         return userMovieReviews;
     }
-
+    /// <summary>
+    /// Retrieves the list of reviews based on the provided UserId along with the rating for the given movie.
+    /// </summary>
     public async Task<List<MovieReviewDto>> GetUserReviews(string userId)
     {
         var reviews = await _context.MovieReviews
@@ -83,6 +91,10 @@ public class UserService : IUserService
 
         return reviews;
     }
+    /// <summary>
+    /// Adds new entry of the movie to the user favorites list or updates the existing entry's watch status and flag.
+    /// Creates a new record if none exists, else updates the existing and refreshes timestamps.
+    /// </summary>
 
     public async Task<UserMovieDto> AddOrUpdateUserMovieAsync(UserMovieDto userMovieDto)
     {
@@ -114,6 +126,11 @@ public class UserService : IUserService
 
         return userMovieDto;
     }
+    /// <summary>
+    /// Retrieves the watch status of a specific movie for the given user. 
+    /// Returns the corresponding <see cref="WatchStatus"/> value, or null if 
+    /// no record exists for the user and movie.
+    /// </summary>
 
     public async Task<WatchStatus?> GetUsersWatchStatusAsync(int movieId, string userId)
     {
@@ -127,6 +144,10 @@ public class UserService : IUserService
 
         return userMovie.Status;
     }
+    /// <summary>
+    /// Deletes a user's review entry  based on the provided
+    /// user and movie identifiers.
+    /// </summary>
 
     public async Task DeleteReviewAsync(string userId, int movieId)
     {
@@ -139,6 +160,11 @@ public class UserService : IUserService
             await _context.SaveChangesAsync();
         }
     }
+
+    /// <summary>
+    /// Deletes a user's movie entry (favorite or watch status) based on the provided
+    /// user and movie identifiers. Returns true if the record was found and removed.
+    /// </summary>
 
     public async Task<bool> DeleteFavoriteMovieAsync(UserMovieDeleteDTO deleteDTO)
     {
@@ -163,6 +189,9 @@ public class UserService : IUserService
     {
         throw new NotImplementedException();
     }
+    /// <summary>
+    /// Gets the reviews of the movie from the database based on the provided movieId
+    /// </summary>
 
     public Task<List<MovieReviewDto>> GetMovieReviewsAsync(int movieId)
     {
@@ -175,7 +204,10 @@ public class UserService : IUserService
             Rating = x.Rating,
         }).ToListAsync();
         return reviews;
-    }
+    } 
+    /// <summary>
+    /// returns the list of favorite movies added by the user based on the userId
+    /// </summary>
     public async Task<List<UserFavoriteMovie>> GetUserFavoritesAsync(string userId)
     {
         var favorites = await _context.UserMovies
@@ -198,6 +230,12 @@ public class UserService : IUserService
                 ).ToList();
            return favoriteMovies;
     }
+
+    /// <summary>
+    /// Retrieves all movies associated with a user, including their watch status 
+    /// and favorite flag. Fetches movie details from an external service and maps 
+    /// them into a list of <see cref="UserFavoriteMovie"/> objects.
+    /// </summary>
 
     public async Task<List<UserFavoriteMovie>> GetAllUserMovies(string userId)
     {
@@ -224,6 +262,12 @@ public class UserService : IUserService
         return favoriteMovies;
     }
 
+    /// <summary>
+    /// Retrieves all movies for a user filtered by the specified watch status, 
+    /// returning a list of simplified movie DTOs containing movie ID, status, 
+    /// and favorite information.
+    /// </summary>
+
     public async Task<List<UserMovieDto>> GetUserMoviesByStatusAsync(string userId, WatchStatus status)
     {
         var movies = await _context.UserMovies
@@ -249,6 +293,12 @@ public class UserService : IUserService
     {
         throw new NotImplementedException();
     }
+
+    /// <summary>
+    /// Updates the watch status of a user's movie. If the movie entry does not exist,
+    /// a new record is created with the specified status. Otherwise, the existing
+    /// record is updated and timestamp refreshed.
+    /// </summary>
 
     public async Task UpdateWatchStatusAsync(string userId, int movieId, WatchStatus status)
     {

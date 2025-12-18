@@ -32,6 +32,7 @@ const GET_MOVIES = gql`
   }
 `;
 
+// Maps filter types to GraphQL orderBy sorting rules
 const filterToOrderBy: Record<TFilter, { [key: string]: string }[]> = {
     Popular: [{ popularity: "DESC" }],
     Latest: [{ releaseDate: "DESC" }],
@@ -39,6 +40,7 @@ const filterToOrderBy: Record<TFilter, { [key: string]: string }[]> = {
     Recommended: [{ voteCount: "DESC" }],
 };
 
+// Zustand store for managing media (movies) state
 export const useMediaStore = create<IMediaStore>((set) => ({
     mediaItems: [],
     setMediaItems: (items) => set({ mediaItems: items }),
@@ -62,8 +64,9 @@ export const useMediaStore = create<IMediaStore>((set) => ({
     },
 }));
 
+// Refetch movies whenever the selected filter changes
 useFilterStore.subscribe((state) => {
     useMediaStore.getState().fetchMovies(state.currentFilter);
 });
-
+// Initial fetch using the current filter
 useMediaStore.getState().fetchMovies(useFilterStore.getState().currentFilter);

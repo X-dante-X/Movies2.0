@@ -17,6 +17,7 @@ function RegisterPage() {
   const [credentialsError, setCredentialsError] = useState<string | undefined>(undefined);
   const router = useRouter();
 
+  // triggers a function to register the user
   const { mutate, isPending } = useMutation({
     mutationKey: ["auth"],
     mutationFn: (data: IAuthRegisterForm) => authService.register(data),

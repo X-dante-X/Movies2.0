@@ -12,6 +12,7 @@ export function MovieReviews({ movieId, movieTitle }: MovieReviewsProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Fetches the reviews of the movie from the backend
     const fetchReviews = async () => {
       try {
         const response = await fetch(`http://localhost/favorites/movieReviews/${movieId}`);

@@ -22,7 +22,7 @@ export function FilmCard({ film, queryClient, onClick, onDeleteSuccess }: FilmCa
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-
+  // the function allows the admin to delete the movie
   const { mutate: deleteFilm, isPending } = useMutation({
     mutationFn: async () => {
       const response = await axiosWithAuth.post("http://localhost/favorites/delete", {
@@ -56,7 +56,7 @@ export function FilmCard({ film, queryClient, onClick, onDeleteSuccess }: FilmCa
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
+  // Obtains the current watching status of the movie
   const getStatusText = (status: number) => {
     switch (status) {
       case 0:
@@ -71,7 +71,7 @@ export function FilmCard({ film, queryClient, onClick, onDeleteSuccess }: FilmCa
         return 'Unknown';
     }
   };
-
+  // Obtains the current date
   const getCurrentDate = () => {
     const date = new Date();
     const day = String(date.getDate()).padStart(2, '0');

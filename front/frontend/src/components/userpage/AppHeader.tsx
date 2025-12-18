@@ -10,7 +10,7 @@ interface AppHeaderProps {
 function AppHeader(props: AppHeaderProps) {
   const { onSearch } = props;
   const [searchQuery, setSearchQuery] = useState('');
-
+  // updates the search data
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     if (onSearch) {

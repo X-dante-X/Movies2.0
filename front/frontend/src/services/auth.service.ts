@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/useAuthStore'
 
 
 export const authService = {
+	// Enables user to log in to their account
 	async login(data: IAuthLoginForm) {
 		const response = await axiosClassic.post<IAuthResponse>("/login", data)
 		if (response.data) {
@@ -16,7 +17,7 @@ export const authService = {
 		}
 		return response
 	},
-
+	// Enables user to register their account by providing necessary data
 	async register(data: IAuthRegisterForm) {
 		const response = await axiosClassic.post<IAuthResponse>("/register", data);
 		console.log(data)
@@ -31,7 +32,7 @@ export const authService = {
 		}
 		return response
 	},
-
+	// Gets new access tokens
 	async getNewTokens() {
 		const response = await axiosClassic.post<IAuthResponse>(
 			'/access-token'
@@ -41,7 +42,7 @@ export const authService = {
 
 		return response
 	},
-
+	// logs the user out and cuts the session.
 	async logout() {
 		const response = await axiosClassic.post<boolean>("/logout")
 		if (response.data) {

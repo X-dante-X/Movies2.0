@@ -7,6 +7,7 @@ export class ApiClient {
     console.log(`Initialized ApiClient for ${baseUrl}`);
   }
 
+  // Base function for sending the requests to the backend
   private async baseRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
     const token = getAccessToken();
     const { headers, ...otherOptions } = options;
@@ -33,7 +34,7 @@ export class ApiClient {
       return null as unknown as T;
     }
   }
-
+  // function that allows the user to log in
   async logIn(email: string, password: string): Promise<LoginResponse> {
     const response = await this.baseRequest<LoginResponse>(`login`, {
       method: "POST",
@@ -46,14 +47,14 @@ export class ApiClient {
 
     return response;
   }
-
+  // token verification
   async verify(token: string): Promise<verifyResponse> {
     return this.baseRequest<verifyResponse>(`validate`, {
       method: "POST",
       body: JSON.stringify({ token }),
     });
   }
-
+  // user registration
   async register(username: string, email: string, password: string, userstatus: number): Promise<LoginResponse> {
     try {
       const response = await this.baseRequest<LoginResponse>(`register`, {
@@ -78,6 +79,7 @@ export class ApiClient {
       throw err;
     }
   }
+  // allows user to obtain new tokens
   async getNewTokens() {
     const response = await this.baseRequest<LoginResponse>("access-token");
 
@@ -85,7 +87,7 @@ export class ApiClient {
 
     return response;
   }
-
+  // allows user to log out 
   async logout() {
     const token = getAccessToken()
     if (!token) {

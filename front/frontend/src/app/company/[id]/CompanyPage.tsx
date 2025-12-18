@@ -11,6 +11,7 @@ interface IdProps {
 
 export function CompanyPage({ id }: IdProps) {
   const companyId = Number(id);
+  // Gets the details about the company
   const { loading, error, data } = useQuery<GetCompanyDetailsResponse>(GET_COMPANY_DETAILS, {
     variables: { companyId: companyId },
     skip: !id,

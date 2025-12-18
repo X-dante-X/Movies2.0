@@ -21,6 +21,7 @@ export default function Page() {
     if (!tagName) return;
 
     try {
+      // Creates tag with the specified name
       await createTag({ variables: { tagName } });
       setTagName("");
     } catch (err) {

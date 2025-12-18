@@ -56,8 +56,8 @@ builder.Services.AddGraphQLServer()
     .ModifyCostOptions(o =>
     {
         o.DefaultResolverCost = 10000;
-        o.MaxFieldCost = 50000;
-        o.MaxTypeCost = 50000;
+        o.MaxFieldCost = 500000;
+        o.MaxTypeCost = 500000;
     });
 
 

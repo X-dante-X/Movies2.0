@@ -32,6 +32,7 @@ export default function Page() {
 
     try {
       const formattedDateOfBirth = new Date(dateOfBirth + "T00:00:00Z").toISOString();
+      // creates the person that stares in the movie.
       await createPerson({ variables: { personName, gender, photo, dateOfBirth: formattedDateOfBirth, countryId, biography } });
       setPersonName("");
       setGender("");

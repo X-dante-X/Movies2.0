@@ -15,6 +15,7 @@ function LoginPage() {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const router = useRouter();
 
+  // trigger the login function
   const { mutate, isPending } = useMutation({
     mutationKey: ["auth"],
     mutationFn: (data: IAuthLoginForm) => authService.login(data),
@@ -28,7 +29,7 @@ function LoginPage() {
     setErrorMessage(undefined);
     mutate({ email, password });
   }
-
+  // handle the login with oAuth
   function handleOAuthLogin(provider: "google" | "microsoft" | "facebook") {
      console.log(`Logging in with ${provider}`);
     

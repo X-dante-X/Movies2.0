@@ -21,6 +21,7 @@ export default function Page() {
     if (!genreName) return;
 
     try {
+      // Creates the genre for the movies
       await createGenre({ variables: { genreName: genreName } });
       setGenreName("");
     } catch (err) {

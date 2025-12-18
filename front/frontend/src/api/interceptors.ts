@@ -16,7 +16,7 @@ const options: CreateAxiosDefaults = {
 
 const axiosClassic = axios.create(options)
 const axiosWithAuth = axios.create(options)
-
+// sets up the axios requests to use the access token for every outgoing request
 axiosWithAuth.interceptors.request.use(config => {
 	const accessToken = getAccessToken()
 
@@ -25,7 +25,7 @@ axiosWithAuth.interceptors.request.use(config => {
 
 	return config
 })
-
+// handles responses and token refetch on auth errors
 axiosWithAuth.interceptors.response.use(
 	config => config,
 	async error => {

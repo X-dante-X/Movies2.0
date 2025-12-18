@@ -8,6 +8,7 @@ interface AuthState {
   clearUser: () => void;
 }
 
+// Zustand store for authentication state
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({

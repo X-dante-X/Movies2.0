@@ -30,7 +30,7 @@ export function ListView({ films, error = null, onFilmsUpdate }: ListViewProps) 
       </div>
     );
   }
-
+  // redirects the user to the desired movie.
   const handleFilmClick = (filmId: number) => {
     router.push(`/movies/${filmId}`);
   };

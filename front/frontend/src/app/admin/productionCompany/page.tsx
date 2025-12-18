@@ -25,6 +25,7 @@ export default function Page() {
     if (!companyName || !logo || !countryId) return;
 
     try {
+      // creates the production company
       await createProductionCompany({ variables: { companyName, logo, countryId } });
       setCompanyName("");
       setCountryId(null);

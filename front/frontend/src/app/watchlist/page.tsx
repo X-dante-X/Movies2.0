@@ -10,6 +10,7 @@ import { CategoryType, ViewModeType, Film } from '../../components/userpage/type
 import { getAccessToken } from '@/services/auth-token.service';
 import { axiosWithAuth } from '@/api/interceptors';
 
+// Retrieves the list of favorite movies of the user
 const fetchFavorites = async (): Promise<Film[]> => {
   const token = getAccessToken();
   

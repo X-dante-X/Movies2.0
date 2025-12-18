@@ -1,0 +1,697 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Country {
+  countryId: Int!
+  countryIsoCode: String!
+  countryName: String!
+  movies: [Movie!]
+  productionCompanys: [ProductionCompany!]
+}
+
+"A connection to a list of items."
+type FindMoviesByTitleConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [FindMoviesByTitleEdge!]
+  "A flattened list of the nodes."
+  nodes: [Movie!]
+}
+
+"An edge in a connection."
+type FindMoviesByTitleEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Movie!
+}
+
+type Genre {
+  genreId: Int!
+  genreName: String!
+  movies: [Movie!]
+}
+
+type Language {
+  languageId: Int!
+  languageName: String!
+  movies: [Movie!]
+}
+
+type Movie {
+  movieId: Int!
+  title: String!
+  releaseDate: DateTime
+  budget: Int
+  description: String!
+  popularity: Decimal
+  runtime: Int
+  movieStatus: String!
+  voteAverage: Decimal
+  voteCount: Int
+  pegi: String!
+  moviePath: String
+  posterPath: String
+  backdropPath: String
+  tags: [Tag!]!
+  genre: [Genre!]!
+  movieCasts: [MovieCast!]
+  productionCompanyId: Int
+  productionCompany: ProductionCompany
+  languageId: Int!
+  productionLanguage: Language!
+  countryId: Int!
+  productionCountry: Country!
+}
+
+type MovieCast {
+  movieId: Int
+  movie: Movie!
+  personId: Int
+  person: Person!
+  characterName: String
+  characterGender: String
+  job: String!
+}
+
+type MovieCastDTO {
+  personId: Int!
+  characterName: String
+  characterGender: String
+  job: String!
+}
+
+type MovieDTO {
+  title: String!
+  releaseDate: DateTime
+  budget: Int
+  description: String!
+  popularity: Decimal
+  runtime: Int
+  movieStatus: String!
+  voteAverage: Decimal
+  voteCount: Int
+  pegi: String!
+  movie: Upload!
+  poster: Upload!
+  backdrop: Upload!
+  tags: [Int!]!
+  genre: [Int!]!
+  productionCompanyId: Int
+  languageId: Int!
+  countryId: Int!
+  movieCasts: [MovieCastDTO!]
+}
+
+"A connection to a list of items."
+type MoviesConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [MoviesEdge!]
+  "A flattened list of the nodes."
+  nodes: [Movie!]
+}
+
+"An edge in a connection."
+type MoviesEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Movie!
+}
+
+type Mutation {
+  createMovie(movieDTO: MovieDTOInput!): MovieDTO! @cost(weight: "10000")
+  updateMovie(movie: MovieInput!): Movie!
+  deleteMovie(movie: MovieInput!): Movie!
+  createPerson(personDTO: PersonDTOInput!): PersonDTO! @cost(weight: "10000")
+  createGenre(genre: GenreInput!): Genre!
+  createCountry(country: CountryInput!): Country!
+  createLanguage(language: LanguageInput!): Language!
+  createTag(tag: TagInput!): Tag!
+  createProductionCompany(
+    productionCompanyDTO: ProductionCompanyDTOInput!
+  ): ProductionCompanyDTO! @cost(weight: "10000")
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+  "Indicates whether more edges exist following the set defined by the clients arguments."
+  hasNextPage: Boolean!
+  "Indicates whether more edges exist prior the set defined by the clients arguments."
+  hasPreviousPage: Boolean!
+  "When paginating backwards, the cursor to continue."
+  startCursor: String
+  "When paginating forwards, the cursor to continue."
+  endCursor: String
+}
+
+type Person {
+  personId: Int!
+  personName: String!
+  gender: String!
+  photoPath: String
+  dateOfBirth: DateTime!
+  countryId: Int!
+  nationality: Country!
+  biography: String!
+  filmography: [Movie!]
+}
+
+type PersonDTO {
+  personName: String!
+  gender: String!
+  photo: Upload!
+  dateOfBirth: DateTime!
+  countryId: Int!
+  biography: String!
+}
+
+type ProductionCompany {
+  companyId: Int!
+  companyName: String!
+  logoPath: String
+  countryId: Int!
+  country: Country!
+  filmography: [Movie!]
+}
+
+type ProductionCompanyDTO {
+  companyName: String!
+  logo: Upload!
+  countryId: Int!
+}
+
+type Query {
+  movies(
+    "Returns the first _n_ elements from the list."
+    first: Int
+    "Returns the elements in the list that come after the specified cursor."
+    after: String
+    "Returns the last _n_ elements from the list."
+    last: Int
+    "Returns the elements in the list that come before the specified cursor."
+    before: String
+    where: MovieFilterInput @cost(weight: "10")
+    order: [MovieSortInput!] @cost(weight: "10")
+  ): MoviesConnection
+    @listSize(
+      assumedSize: 50
+      slicingArguments: ["first", "last"]
+      slicingArgumentDefaultValue: 10
+      sizedFields: ["edges", "nodes"]
+      requireOneSlicingArgument: false
+    )
+    @cost(weight: "10000")
+  findMoviesByTitle(
+    partOfTitle: String!
+    "Returns the first _n_ elements from the list."
+    first: Int
+    "Returns the elements in the list that come after the specified cursor."
+    after: String
+    "Returns the last _n_ elements from the list."
+    last: Int
+    "Returns the elements in the list that come before the specified cursor."
+    before: String
+  ): FindMoviesByTitleConnection
+    @listSize(
+      assumedSize: 50
+      slicingArguments: ["first", "last"]
+      slicingArgumentDefaultValue: 10
+      sizedFields: ["edges", "nodes"]
+      requireOneSlicingArgument: false
+    )
+    @cost(weight: "10000")
+  countries(
+    where: CountryFilterInput @cost(weight: "10")
+    order: [CountrySortInput!] @cost(weight: "10")
+  ): [Country!]! @cost(weight: "10000")
+  people(
+    where: PersonFilterInput @cost(weight: "10")
+    order: [PersonSortInput!] @cost(weight: "10")
+  ): [Person!]! @cost(weight: "10000")
+  movieCasts(
+    where: MovieCastFilterInput @cost(weight: "10")
+    order: [MovieCastSortInput!] @cost(weight: "10")
+  ): [MovieCast!]! @cost(weight: "10000")
+  genres(
+    where: GenreFilterInput @cost(weight: "10")
+    order: [GenreSortInput!] @cost(weight: "10")
+  ): [Genre!]! @cost(weight: "10000")
+  languages(
+    where: LanguageFilterInput @cost(weight: "10")
+    order: [LanguageSortInput!] @cost(weight: "10")
+  ): [Language!]! @cost(weight: "10000")
+  tags(
+    where: TagFilterInput @cost(weight: "10")
+    order: [TagSortInput!] @cost(weight: "10")
+  ): [Tag!]! @cost(weight: "10000")
+  productionCompanies(
+    where: ProductionCompanyFilterInput @cost(weight: "10")
+    order: [ProductionCompanySortInput!] @cost(weight: "10")
+  ): [ProductionCompany!]! @cost(weight: "10000")
+}
+
+type Tag {
+  tagId: Int!
+  tagName: String!
+  movies: [Movie!]
+}
+
+input CountryFilterInput {
+  and: [CountryFilterInput!]
+  or: [CountryFilterInput!]
+  countryId: IntOperationFilterInput
+  countryIsoCode: StringOperationFilterInput
+  countryName: StringOperationFilterInput
+  movies: ListFilterInputTypeOfMovieFilterInput
+  productionCompanys: ListFilterInputTypeOfProductionCompanyFilterInput
+}
+
+input CountryInput {
+  countryId: Int!
+  countryIsoCode: String!
+  countryName: String!
+  movies: [MovieInput!]
+  productionCompanys: [ProductionCompanyInput!]
+}
+
+input CountrySortInput {
+  countryId: SortEnumType @cost(weight: "10")
+  countryIsoCode: SortEnumType @cost(weight: "10")
+  countryName: SortEnumType @cost(weight: "10")
+}
+
+input DateTimeOperationFilterInput {
+  eq: DateTime @cost(weight: "10")
+  neq: DateTime @cost(weight: "10")
+  in: [DateTime] @cost(weight: "10")
+  nin: [DateTime] @cost(weight: "10")
+  gt: DateTime @cost(weight: "10")
+  ngt: DateTime @cost(weight: "10")
+  gte: DateTime @cost(weight: "10")
+  ngte: DateTime @cost(weight: "10")
+  lt: DateTime @cost(weight: "10")
+  nlt: DateTime @cost(weight: "10")
+  lte: DateTime @cost(weight: "10")
+  nlte: DateTime @cost(weight: "10")
+}
+
+input DecimalOperationFilterInput {
+  eq: Decimal @cost(weight: "10")
+  neq: Decimal @cost(weight: "10")
+  in: [Decimal] @cost(weight: "10")
+  nin: [Decimal] @cost(weight: "10")
+  gt: Decimal @cost(weight: "10")
+  ngt: Decimal @cost(weight: "10")
+  gte: Decimal @cost(weight: "10")
+  ngte: Decimal @cost(weight: "10")
+  lt: Decimal @cost(weight: "10")
+  nlt: Decimal @cost(weight: "10")
+  lte: Decimal @cost(weight: "10")
+  nlte: Decimal @cost(weight: "10")
+}
+
+input GenreFilterInput {
+  and: [GenreFilterInput!]
+  or: [GenreFilterInput!]
+  genreId: IntOperationFilterInput
+  genreName: StringOperationFilterInput
+  movies: ListFilterInputTypeOfMovieFilterInput
+}
+
+input GenreInput {
+  genreId: Int!
+  genreName: String!
+  movies: [MovieInput!]
+}
+
+input GenreSortInput {
+  genreId: SortEnumType @cost(weight: "10")
+  genreName: SortEnumType @cost(weight: "10")
+}
+
+input IntOperationFilterInput {
+  eq: Int @cost(weight: "10")
+  neq: Int @cost(weight: "10")
+  in: [Int] @cost(weight: "10")
+  nin: [Int] @cost(weight: "10")
+  gt: Int @cost(weight: "10")
+  ngt: Int @cost(weight: "10")
+  gte: Int @cost(weight: "10")
+  ngte: Int @cost(weight: "10")
+  lt: Int @cost(weight: "10")
+  nlt: Int @cost(weight: "10")
+  lte: Int @cost(weight: "10")
+  nlte: Int @cost(weight: "10")
+}
+
+input LanguageFilterInput {
+  and: [LanguageFilterInput!]
+  or: [LanguageFilterInput!]
+  languageId: IntOperationFilterInput
+  languageName: StringOperationFilterInput
+  movies: ListFilterInputTypeOfMovieFilterInput
+}
+
+input LanguageInput {
+  languageId: Int!
+  languageName: String!
+  movies: [MovieInput!]
+}
+
+input LanguageSortInput {
+  languageId: SortEnumType @cost(weight: "10")
+  languageName: SortEnumType @cost(weight: "10")
+}
+
+input ListFilterInputTypeOfGenreFilterInput {
+  all: GenreFilterInput @cost(weight: "10")
+  none: GenreFilterInput @cost(weight: "10")
+  some: GenreFilterInput @cost(weight: "10")
+  any: Boolean @cost(weight: "10")
+}
+
+input ListFilterInputTypeOfMovieCastFilterInput {
+  all: MovieCastFilterInput @cost(weight: "10")
+  none: MovieCastFilterInput @cost(weight: "10")
+  some: MovieCastFilterInput @cost(weight: "10")
+  any: Boolean @cost(weight: "10")
+}
+
+input ListFilterInputTypeOfMovieFilterInput {
+  all: MovieFilterInput @cost(weight: "10")
+  none: MovieFilterInput @cost(weight: "10")
+  some: MovieFilterInput @cost(weight: "10")
+  any: Boolean @cost(weight: "10")
+}
+
+input ListFilterInputTypeOfProductionCompanyFilterInput {
+  all: ProductionCompanyFilterInput @cost(weight: "10")
+  none: ProductionCompanyFilterInput @cost(weight: "10")
+  some: ProductionCompanyFilterInput @cost(weight: "10")
+  any: Boolean @cost(weight: "10")
+}
+
+input ListFilterInputTypeOfTagFilterInput {
+  all: TagFilterInput @cost(weight: "10")
+  none: TagFilterInput @cost(weight: "10")
+  some: TagFilterInput @cost(weight: "10")
+  any: Boolean @cost(weight: "10")
+}
+
+input MovieCastDTOInput {
+  personId: Int!
+  characterName: String
+  characterGender: String
+  job: String!
+}
+
+input MovieCastFilterInput {
+  and: [MovieCastFilterInput!]
+  or: [MovieCastFilterInput!]
+  movieId: IntOperationFilterInput
+  movie: MovieFilterInput
+  personId: IntOperationFilterInput
+  person: PersonFilterInput
+  characterName: StringOperationFilterInput
+  characterGender: StringOperationFilterInput
+  job: StringOperationFilterInput
+}
+
+input MovieCastInput {
+  movieId: Int
+  movie: MovieInput!
+  personId: Int
+  person: PersonInput!
+  characterName: String
+  characterGender: String
+  job: String!
+}
+
+input MovieCastSortInput {
+  movieId: SortEnumType @cost(weight: "10")
+  movie: MovieSortInput @cost(weight: "10")
+  personId: SortEnumType @cost(weight: "10")
+  person: PersonSortInput @cost(weight: "10")
+  characterName: SortEnumType @cost(weight: "10")
+  characterGender: SortEnumType @cost(weight: "10")
+  job: SortEnumType @cost(weight: "10")
+}
+
+input MovieDTOInput {
+  title: String!
+  releaseDate: DateTime
+  budget: Int
+  description: String!
+  popularity: Decimal
+  runtime: Int
+  movieStatus: String!
+  voteAverage: Decimal
+  voteCount: Int
+  pegi: String!
+  movie: Upload!
+  poster: Upload!
+  backdrop: Upload!
+  tags: [Int!]!
+  genre: [Int!]!
+  productionCompanyId: Int
+  languageId: Int!
+  countryId: Int!
+  movieCasts: [MovieCastDTOInput!]
+}
+
+input MovieFilterInput {
+  and: [MovieFilterInput!]
+  or: [MovieFilterInput!]
+  movieId: IntOperationFilterInput
+  title: StringOperationFilterInput
+  releaseDate: DateTimeOperationFilterInput
+  budget: IntOperationFilterInput
+  description: StringOperationFilterInput
+  popularity: DecimalOperationFilterInput
+  runtime: IntOperationFilterInput
+  movieStatus: StringOperationFilterInput
+  voteAverage: DecimalOperationFilterInput
+  voteCount: IntOperationFilterInput
+  pegi: StringOperationFilterInput
+  moviePath: StringOperationFilterInput
+  posterPath: StringOperationFilterInput
+  backdropPath: StringOperationFilterInput
+  tags: ListFilterInputTypeOfTagFilterInput
+  genre: ListFilterInputTypeOfGenreFilterInput
+  movieCasts: ListFilterInputTypeOfMovieCastFilterInput
+  productionCompanyId: IntOperationFilterInput
+  productionCompany: ProductionCompanyFilterInput
+  languageId: IntOperationFilterInput
+  productionLanguage: LanguageFilterInput
+  countryId: IntOperationFilterInput
+  productionCountry: CountryFilterInput
+}
+
+input MovieInput {
+  movieId: Int!
+  title: String!
+  releaseDate: DateTime
+  budget: Int
+  description: String!
+  popularity: Decimal
+  runtime: Int
+  movieStatus: String!
+  voteAverage: Decimal
+  voteCount: Int
+  pegi: String!
+  moviePath: String
+  posterPath: String
+  backdropPath: String
+  tags: [TagInput!]!
+  genre: [GenreInput!]!
+  movieCasts: [MovieCastInput!]
+  productionCompanyId: Int
+  productionCompany: ProductionCompanyInput
+  languageId: Int!
+  productionLanguage: LanguageInput!
+  countryId: Int!
+  productionCountry: CountryInput!
+}
+
+input MovieSortInput {
+  movieId: SortEnumType @cost(weight: "10")
+  title: SortEnumType @cost(weight: "10")
+  releaseDate: SortEnumType @cost(weight: "10")
+  budget: SortEnumType @cost(weight: "10")
+  description: SortEnumType @cost(weight: "10")
+  popularity: SortEnumType @cost(weight: "10")
+  runtime: SortEnumType @cost(weight: "10")
+  movieStatus: SortEnumType @cost(weight: "10")
+  voteAverage: SortEnumType @cost(weight: "10")
+  voteCount: SortEnumType @cost(weight: "10")
+  pegi: SortEnumType @cost(weight: "10")
+  moviePath: SortEnumType @cost(weight: "10")
+  posterPath: SortEnumType @cost(weight: "10")
+  backdropPath: SortEnumType @cost(weight: "10")
+  productionCompanyId: SortEnumType @cost(weight: "10")
+  productionCompany: ProductionCompanySortInput @cost(weight: "10")
+  languageId: SortEnumType @cost(weight: "10")
+  productionLanguage: LanguageSortInput @cost(weight: "10")
+  countryId: SortEnumType @cost(weight: "10")
+  productionCountry: CountrySortInput @cost(weight: "10")
+}
+
+input PersonDTOInput {
+  personName: String!
+  gender: String!
+  photo: Upload!
+  dateOfBirth: DateTime!
+  countryId: Int!
+  biography: String!
+}
+
+input PersonFilterInput {
+  and: [PersonFilterInput!]
+  or: [PersonFilterInput!]
+  personId: IntOperationFilterInput
+  personName: StringOperationFilterInput
+  gender: StringOperationFilterInput
+  photoPath: StringOperationFilterInput
+  dateOfBirth: DateTimeOperationFilterInput
+  countryId: IntOperationFilterInput
+  nationality: CountryFilterInput
+  biography: StringOperationFilterInput
+  filmography: ListFilterInputTypeOfMovieFilterInput
+}
+
+input PersonInput {
+  personId: Int!
+  personName: String!
+  gender: String!
+  photoPath: String
+  dateOfBirth: DateTime!
+  countryId: Int!
+  nationality: CountryInput!
+  biography: String!
+  filmography: [MovieInput!]
+}
+
+input PersonSortInput {
+  personId: SortEnumType @cost(weight: "10")
+  personName: SortEnumType @cost(weight: "10")
+  gender: SortEnumType @cost(weight: "10")
+  photoPath: SortEnumType @cost(weight: "10")
+  dateOfBirth: SortEnumType @cost(weight: "10")
+  countryId: SortEnumType @cost(weight: "10")
+  nationality: CountrySortInput @cost(weight: "10")
+  biography: SortEnumType @cost(weight: "10")
+}
+
+input ProductionCompanyDTOInput {
+  companyName: String!
+  logo: Upload!
+  countryId: Int!
+}
+
+input ProductionCompanyFilterInput {
+  and: [ProductionCompanyFilterInput!]
+  or: [ProductionCompanyFilterInput!]
+  companyId: IntOperationFilterInput
+  companyName: StringOperationFilterInput
+  logoPath: StringOperationFilterInput
+  countryId: IntOperationFilterInput
+  country: CountryFilterInput
+  filmography: ListFilterInputTypeOfMovieFilterInput
+}
+
+input ProductionCompanyInput {
+  companyId: Int!
+  companyName: String!
+  logoPath: String
+  countryId: Int!
+  country: CountryInput!
+  filmography: [MovieInput!]
+}
+
+input ProductionCompanySortInput {
+  companyId: SortEnumType @cost(weight: "10")
+  companyName: SortEnumType @cost(weight: "10")
+  logoPath: SortEnumType @cost(weight: "10")
+  countryId: SortEnumType @cost(weight: "10")
+  country: CountrySortInput @cost(weight: "10")
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String @cost(weight: "10")
+  neq: String @cost(weight: "10")
+  contains: String @cost(weight: "20")
+  ncontains: String @cost(weight: "20")
+  in: [String] @cost(weight: "10")
+  nin: [String] @cost(weight: "10")
+  startsWith: String @cost(weight: "20")
+  nstartsWith: String @cost(weight: "20")
+  endsWith: String @cost(weight: "20")
+  nendsWith: String @cost(weight: "20")
+}
+
+input TagFilterInput {
+  and: [TagFilterInput!]
+  or: [TagFilterInput!]
+  tagId: IntOperationFilterInput
+  tagName: StringOperationFilterInput
+  movies: ListFilterInputTypeOfMovieFilterInput
+}
+
+input TagInput {
+  tagId: Int!
+  tagName: String!
+  movies: [MovieInput!]
+}
+
+input TagSortInput {
+  tagId: SortEnumType @cost(weight: "10")
+  tagName: SortEnumType @cost(weight: "10")
+}
+
+enum SortEnumType {
+  ASC
+  DESC
+}
+
+"The purpose of the `cost` directive is to define a `weight` for GraphQL types, fields, and arguments. Static analysis can use these weights when calculating the overall cost of a query or response."
+directive @cost(
+  "The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc."
+  weight: String!
+) on SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM | INPUT_FIELD_DEFINITION
+
+"The purpose of the `@listSize` directive is to either inform the static analysis about the size of returned lists (if that information is statically available), or to point the analysis to where to find that information."
+directive @listSize(
+  "The `assumedSize` argument can be used to statically define the maximum length of a list returned by a field."
+  assumedSize: Int
+  "The `slicingArguments` argument can be used to define which of the field's arguments with numeric type are slicing arguments, so that their value determines the size of the list returned by that field. It may specify a list of multiple slicing arguments."
+  slicingArguments: [String!]
+  "The `slicingArgumentDefaultValue` argument can be used to define a default value for a slicing argument, which is used if the argument is not present in a query."
+  slicingArgumentDefaultValue: Int
+  "The `sizedFields` argument can be used to define that the value of the `assumedSize` argument or of a slicing argument does not affect the size of a list returned by a field itself, but that of a list returned by one of its sub-fields."
+  sizedFields: [String!]
+  "The `requireOneSlicingArgument` argument can be used to inform the static analysis that it should expect that exactly one of the defined slicing arguments is present in a query. If that is not the case (i.e., if none or multiple slicing arguments are present), the static analysis may throw an error."
+  requireOneSlicingArgument: Boolean! = true
+) on FIELD_DEFINITION
+
+"The `@specifiedBy` directive is used within the type system definition language to provide a URL for specifying the behavior of custom scalar definitions."
+directive @specifiedBy(
+  "The specifiedBy URL points to a human-readable specification. This field will only read a result for scalar types."
+  url: String!
+) on SCALAR
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime @specifiedBy(url: "https://www.graphql-scalars.com/date-time")
+
+"The `Decimal` scalar type represents a decimal floating-point number."
+scalar Decimal
+
+"The `Upload` scalar type represents a file upload."
+scalar Upload

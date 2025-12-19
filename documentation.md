@@ -97,7 +97,8 @@ Authenticates user using email and password.
 
 ## Properties
 
-
+| Name | Type | Is required | Description | 
+|-------|------------|------------|------------|
 | **Title** | `string` | No | The title of the movie. |
 | **ReleaseDate** | `DateTime?` | Yes | The official release date of the movie. |
 | **Budget** | `int?` | Yes | The movie's production budget in USD. |
@@ -161,7 +162,8 @@ The `User` model represents an application user with authentication details, pro
 
 ## Properties
 
-
+| Name | Type | Is required | Description | 
+|-------|------------|------------|------------|
 | **Id** | `int` | No | Unique identifier for the user. |
 | **Username** | `string` | No | Display or login username. |
 | **Email** | `string` | No | User's email address. Must be unique. |
@@ -229,7 +231,8 @@ It includes metadata such as the movie title, poster path, a description, whethe
 
 ## Properties
 
-
+| Name | Type | Is required | Description | 
+|-------|------------|------------|------------|
 | **Id** | `int` | No | Unique identifier for the record. |
 | **Description** | `string` | No | Summary or overview of the movie. |
 | **PosterPath** | `string` | No | URL or file path to the movie poster. |

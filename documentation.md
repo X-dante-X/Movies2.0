@@ -327,7 +327,7 @@ This function initializes and starts the application using Docker Compose.
 
 
 # Maintenance 
-To maintain a product and expand it by new functionalities it is recommended to create a separate branch in git for each of the functionality and then make PR to the repo. After the code is reviewed and validated, the new functionality should be merged with the new branch.
+To maintain a product and expand it by new functionalities it is recommended to create a separate branch in git (git checkout -b "name-of-the-branch") for each of the functionality and then after implementing it make PR to the repo. When the code is reviewed and validated, the new functionality should be merged with the new branch.
 
 Versioning should always start with 2.x.y where x can change only when y reaches number higher than 9. With thorough description of what was changed, what was fixed and what new functionalities were added.
 

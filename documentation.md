@@ -1,7 +1,46 @@
-#  Movies2.0 — Technical Documentation
+#  Movies2.0 Documentation
 
 ## Overview
 **Movies2.0** is a cross-platform application that allows users to browse, stream, and manage movies and TV shows. The app supports personalized watchlists, and includes adaptive streaming technology for seamless playback.
+
+
+# User Documentation
+
+## Navigating the website
+
+### Register the account
+In order to register your account on our website, you have to click on the "Register" button visible in the top right corner of the page.
+![RegisterButton](https://i.imgur.com/rigmV6X.png)
+
+Then fill the information.
+![RegisterForm](https://i.imgur.com/zmawzJ9.png)
+
+Once registration is complete, the user confirms their account via the link sent by email
+![EmailConfirmation](https://i.imgur.com/TX7xtxN.png)
+
+### Log in to the account
+In order to register your account on our website, you have to click on the "Login" button visible in the top right corner of the page.
+
+
+![LoginConfirmation](https://i.imgur.com/8Fj00is.png)
+
+On the login page, user needs to put the password and email.
+
+![LoginPage](https://i.imgur.com/fcpY9IP.png)
+
+### Watching the selected movie
+To watch the selected movie, user needs to click on the poster which then will redirect them to the movie page and scroll all the way down to see the player.
+
+### Adding a movie to the favorite list and selecting WatchStatus
+![WatchStatus](https://i.imgur.com/fg2N66H.png)
+
+
+### Filtering favorite movies by watch status
+To find all favorite movies, the user has to click on the UserPanel visible on top of the page. Then while in the panel, they have to select the specific watch status in left menu.
+
+!["UserPanel"](https://i.imgur.com/8vlJOZJ.png)
+
+# Technical Documentation
 
 ## Architecture
 
@@ -272,3 +311,28 @@ public class UserFavoriteMovie
     public WatchStatus? Status { get; set; }
 }
 ```
+
+
+# Deployment procedure
+To successfully deploy the app, it is absolutely necessary to have at least 8GB of RAM, as well as docker installed on your machine. For more information, see: https://docs.docker.com/
+
+When the app is run, the database is automatically filled with mock data in order to emulate the real life scenarios. For production it is recommended to remove the mock data in SeedUsers.cs (AuthService), Seed.cs (MovieService).
+
+Apart from that, no additional data or configs are needed to deploy an app.
+
+## Application Initialization
+This function initializes and starts the application using Docker Compose.
+- `docker compose up --build -d` is used to build and start the containers in detached mode.
+- `docker compose down`: Stops and removes containers, networks, images, and volumes created by `up`.
+
+
+# Maintenance 
+To maintain a product and expand it by new functionalities it is recommended to create a separate branch in git for each of the functionality and then make PR to the repo. After the code is reviewed and validated, the new functionality should be merged with the new branch.
+
+Versioning should always start with 2.x.y where x can change only when y reaches number higher than 9. With thorough description of what was changed, what was fixed and what new functionalities were added.
+
+When the bug is found, the person needs to contact the main developers responsible for expanding the application. Once the bug is fixed, every person who works on the project should be informed about it in the fixing PR.
+
+Backward compatibility is not supported.
+
+For observability operations, application uses Grafana where all the logging such as API calls, throughput are stored.
